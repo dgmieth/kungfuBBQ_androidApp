@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">kungfuBBQ</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="btn_login">Log In</string>
+    <string name="btn_catering">Catering</string>
+    <string name="menu_btn_aboutapp">About</string>
+    <string name="menu_btn_userInfo">User info</string>
+    <string name="btn_calendar">Calendar</string>
+    <string name="edittext_login_username">johndoe@mail.com</string>
+    <string name="edittext_login_password">8 alphanumerical characters</string>
+    <string name="btn_cancel">Cancel</string>
+</resources>
