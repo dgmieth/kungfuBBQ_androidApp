@@ -6,34 +6,65 @@
     android:layout_height="match_parent"
     android:background="@color/i_yellow"
     android:gravity="center"
-    tools:context=".LoginFragment">
+    tools:context=".RegisterFragment">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="1dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.30" />
 
     <TextView
-        android:id="@+id/loginEmailTextView"
+        android:id="@+id/userInfoUserNameLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="96dp"
         android:fontFamily="@font/palatino"
-        android:text="@string/textview_login_email"
+        android:text="@string/edittext_register_inivitationcodelbl"
         android:textColor="@color/i_black"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/loginUserName"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/loginUserName"
+        android:id="@+id/registerInvitationCodeEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/textEditBackgroundColor"
+        android:fontFamily="@font/palatino"
+        android:hint="@string/edittext_register_invitatinocode_hint"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:paddingStart="8dp"
+        android:textColor="@color/i_black"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userInfoUserNameLbl" />
+
+    <TextView
+        android:id="@+id/registerEmailLbl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/edittext_register_emaillbl"
+        android:textColor="@color/i_black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerInvitationCodeEditText" />
+
+    <EditText
+        android:id="@+id/registerEmailEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:background="@color/textEditBackgroundColor"
         android:fontFamily="@font/palatino"
@@ -44,38 +75,60 @@
         android:paddingStart="8dp"
         android:textColor="@color/i_black"
         android:textSize="22sp"
-        app:layout_constraintBaseline_toBottomOf="@id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="190dp" />
+        app:layout_constraintTop_toBottomOf="@+id/registerEmailLbl" />
 
     <TextView
-        android:id="@+id/loginPasswordTextView"
-        android:layout_width="wrap_content"
+        android:id="@+id/registerPasswordLbl"
+        android:layout_width="355dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:fontFamily="@font/palatino"
-        android:text="@string/textview_login_forgot_password"
+        android:text="@string/edittext_register_password"
         android:textColor="@color/i_black"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/loginPassword"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerEmailEditText" />
 
     <EditText
-        android:id="@+id/loginPassword"
+        android:id="@+id/registerPasswordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:background="@color/textEditBackgroundColor"
         android:fontFamily="@font/palatino"
         android:hint="@string/edittext_login_password"
         android:importantForAutofill="no"
         android:inputType="textPassword"
-        android:maxLength="8"
+        android:minHeight="48dp"
+        android:paddingStart="8dp"
+        android:textColor="@color/i_black"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerPasswordLbl" />
+
+    <EditText
+        android:id="@+id/registerConfirmPasswordEditText"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/textEditBackgroundColor"
+        android:fontFamily="@font/palatino"
+        android:hint="@string/edittext_login_password"
+        android:importantForAutofill="no"
+        android:inputType="textPassword"
         android:minHeight="48dp"
         android:paddingStart="8dp"
         android:textColor="@color/i_black"
@@ -83,28 +136,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginUserName" />
+        app:layout_constraintTop_toBottomOf="@+id/registerConfirmPasswordLbl" />
 
-    <Button
-        android:id="@+id/loginRegisterBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="58dp"
+    <TextView
+        android:id="@+id/registerConfirmPasswordLbl"
+        android:layout_width="355dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_weight="1"
-        android:backgroundTint="@color/i_reda"
         android:fontFamily="@font/palatino"
-        android:paddingStart="22dp"
-        android:text="@string/btn_register"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
+        android:text="@string/edittext_register_confirmpassword"
+        android:textColor="@color/i_black"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.416"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/registerPasswordEditText" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -123,7 +172,7 @@
             android:layout_weight=".33" />
 
         <Button
-            android:id="@+id/loginCancelBtn"
+            android:id="@+id/registerCancelBtn"
             android:layout_width="wrap_content"
             android:layout_height="58dp"
             android:layout_weight="1"
@@ -142,7 +191,7 @@
             android:layout_weight=".34" />
 
         <Button
-            android:id="@+id/loginLoginBtn"
+            android:id="@+id/registerRegisterBtn"
             android:layout_width="wrap_content"
             android:layout_height="58dp"
             android:layout_weight="1"
@@ -160,36 +209,5 @@
             android:layout_height="wrap_content"
             android:layout_weight=".33" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/loginResetPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/palatino"
-        android:text="@string/textview_login_forgot_password"
-        android:textColor="@color/i_black"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginPassword" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="96dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/palatino"
-        android:text="@string/textview_login_register"
-        android:textColor="@color/i_black"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginPassword" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

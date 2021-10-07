@@ -7,4 +7,24 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!--KUNGFUBQQ app colors-->
+    <color name="i_yellow">#F5DF27</color>
+    <color name="i_reda">#F00906</color>
+    <color name="i_gray">#7C8480</color>
+    <color name="i_black">#050504</color>
+    <color name="background">#1E1E1E</color>
+    <color name="calendarDayColor">#00F900</color>
+    <!--bootstrap like colors -->
+    <color name="danger">#DC3545</color>    
+    <color name="dark">#343A40</color>
+    <color name="info">#31A2B8</color>
+    <color name="light">#F8F9FA</color>
+    <color name="primary">#3E7CFE</color>
+    <color name="secondary">#6C757D</color>
+    <color name="success">#28A745</color>
+    <color name="warning">#F9C10A</color>
+    <!--other colors-->
+    <color name="fontColor">#FFFFFF</color>
+    <color name="textEditBackgroundColor">#F1F3F3</color>
+
 </resources>

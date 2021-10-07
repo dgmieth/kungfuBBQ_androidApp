@@ -3,11 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/userInfoBtn"
+        android:id="@+id/userInfoMenuBtn"
         android:icon="@drawable/icon_userinfo"
         android:title="@string/menu_btn_userInfo"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/logOutMenuBtn"
+        android:icon="@drawable/ic_logout"
+        android:title="@string/menu_btn_logout"
+        android:visible="false" />
+    <item
+        android:id="@+id/aboutAppMenuBtn"
         android:title="@string/menu_btn_aboutapp"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+
+        />
 </menu>

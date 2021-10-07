@@ -3,11 +3,34 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="btn_login">Log In</string>
-    <string name="btn_catering">Catering</string>
+    <string name="btn_catering">Need catering?</string>
     <string name="menu_btn_aboutapp">About</string>
     <string name="menu_btn_userInfo">User info</string>
     <string name="btn_calendar">Calendar</string>
     <string name="edittext_login_username">johndoe@mail.com</string>
     <string name="edittext_login_password">8 alphanumerical characters</string>
     <string name="btn_cancel">Cancel</string>
+    <string name="menu_btn_logout">Log out</string>
+    <string name="textview_login_email">Inform your e-mail:</string>
+    <string name="textview_login_password">Inform your password:</string>
+    <string name="textview_login_forgot_password">Forgot password?</string>
+    <string name="btn_register">Register here</string>
+    <string name="textview_login_register">Don\'t have an account with us?</string>
+    <string name="edittext_register_inivitationcodelbl">Inform your invitation code:</string>
+    <string name="edittext_register_invitatinocode_hint">KgfBBQ@.......</string>
+    <string name="edittext_register_emaillbl">Informe the e-mail you sent to KungfuBBQ:</string>
+    <string name="edittext_register_password">Create a password:</string>
+    <string name="edittext_register_confirmpassword">Confirm your password:</string>
+    <string name="userinfo_email">E-mail:</string>
+    <string name="userinfo_membersince">Member since:</string>
+    <string name="register_membersince_value_label">May 30 2021</string>
+    <string name="userinfo_name_label">Name:</string>
+    <string name="userinfo_phonenumber_label">Phone:</string>
+    <string name="userinfo_facebookname_label">Facebook name:</string>
+    <string name="userinfo_instagramname_label">Instagram name:</string>
+    <string name="btn_updatepassword">Change password</string>
+    <string name="updatepassword_currentpassword_label">Current password:</string>
+    <string name="updatepassword_newpassword_label">New password:</string>
+    <string name="updatepassword_confirmnewpassword_label">Confirm new password:</string>
+    <string name="btn_save">Save</string>
 </resources>

@@ -3,10 +3,23 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.30625" />
+        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.30625" />
+        <entry key="app/src/main/res/drawable/ic_logout.xml" value="0.234375" />
+        <entry key="app/src/main/res/drawable/ic_logout_background.xml" value="0.30625" />
+        <entry key="app/src/main/res/drawable/icon_userinfo.xml" value="0.234375" />
         <entry key="app/src/main/res/drawable/menu_userInfo.xml" value="0.23802083333333332" />
+        <entry key="app/src/main/res/font/fonts.xml" value="0.24479166666666666" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1831306990881459" />
-        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.45" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/fragment_register.xml" value="0.2871376811594203" />
+        <entry key="app/src/main/res/layout/fragment_updatepassword.xml" value="0.21822916666666667" />
+        <entry key="app/src/main/res/layout/fragment_userinfo.xml" value="0.21510416666666668" />
         <entry key="app/src/main/res/menu/menu_bar.xml" value="0.22135416666666666" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.30625" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_logout.xml" value="0.30625" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_logout_round.xml" value="0.30625" />
       </map>
     </option>
   </component>

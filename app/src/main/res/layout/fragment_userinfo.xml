@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/i_yellow"
+    android:gravity="center"
+    tools:context=".UserInfoFragment">
+    <!--user email-->
+    <TextView
+        android:id="@+id/userInfoUserNameLbl"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/userinfo_email"
+        android:textColor="@color/i_black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/userInfoUserName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/edittext_login_username"
+        android:textColor="@color/i_black"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/userInfoUserNameLbl"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/userInfoUserNameLbl" />
+    <!--member since-->
+    <TextView
+        android:id="@+id/userInfoMemberSinceLbl"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/userinfo_membersince"
+        android:textColor="@color/i_black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userInfoUserNameLbl" />
+    <TextView
+        android:id="@+id/userInfoMemberSince"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/register_membersince_value_label"
+        android:textColor="@color/i_black"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/userInfoMemberSinceLbl"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/userInfoMemberSinceLbl" />
+    <!--user name-->
+    <TextView
+        android:id="@+id/userInfoNameLbl"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/userinfo_name_label"
+        android:textColor="@color/i_black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userInfoMemberSinceLbl" />
+    <EditText
+        android:id="@+id/userInfoName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@android:color/transparent"
+        android:enabled="false"
+        android:fontFamily="@font/palatino"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:paddingStart="8dp"
+        android:textColor="@color/i_black"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="@+id/userInfoNameLbl"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/userInfoNameLbl"
+        tools:text="John Doe" />
+    <!--user phoneNumber-->
+    <TextView
+        android:id="@+id/userInfoPhoneLbl"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/userinfo_phonenumber_label"
+        android:textColor="@color/i_black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userInfoNameLbl" />
+    <EditText
+        android:id="@+id/userInfoPhone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@android:color/transparent"
+        android:enabled="false"
+        android:fontFamily="@font/palatino"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:paddingStart="8dp"
+        android:textColor="@color/i_black"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="@+id/userInfoPhoneLbl"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/userInfoPhoneLbl"
+        tools:text="(000) 000-0000" />
+    <!--user facebook name-->
+    <TextView
+        android:id="@+id/userInfoFacebookNameLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/userinfo_facebookname_label"
+        android:textColor="@color/i_black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userInfoPhoneLbl" />
+
+    <EditText
+        android:id="@+id/userInfoFacebookName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@android:color/transparent"
+        android:enabled="false"
+        android:fontFamily="@font/palatino"
+        android:importantForAutofill="no"
+        android:inputType="text"
+
+        android:minHeight="48dp"
+        android:paddingStart="8dp"
+        android:textColor="@color/i_black"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userInfoFacebookNameLbl"
+        tools:text="John Doe" />
+
+    <!--user facebook name-->
+
+    <TextView
+        android:id="@+id/userInfoInstagramNameLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/userinfo_instagramname_label"
+        android:textColor="@color/i_black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userInfoFacebookName" />
+
+    <EditText
+        android:id="@+id/userInfoInstagramName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@android:color/transparent"
+        android:enabled="false"
+        android:fontFamily="@font/palatino"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:paddingStart="8dp"
+        android:textColor="@color/i_black"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userInfoInstagramNameLbl"
+        tools:text="John Doe" />
+
+    <Button
+        android:id="@+id/userInfoUpdatePasswordBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="58dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1"
+        android:backgroundTint="@color/i_reda"
+        android:fontFamily="@font/palatino"
+        android:paddingStart="22dp"
+        android:text="@string/btn_updatepassword"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userInfoInstagramName" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".33" />
+
+        <Button
+            android:id="@+id/userInfoCancelBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="58dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/secondary"
+            android:fontFamily="@font/palatino"
+            android:paddingStart="22dp"
+            android:text="@string/btn_cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".34" />
+
+        <Button
+            android:id="@+id/userInfoSaveBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="58dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/i_reda"
+            android:fontFamily="@font/palatino"
+            android:paddingStart="22dp"
+            android:text="@string/btn_save"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".33" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
