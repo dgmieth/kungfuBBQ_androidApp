@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:backgroundTint="@color/white"
+    android:gravity="center"
+    tools:context=".CalendarFragment">
+
+    <com.applandeo.materialcalendarview.CalendarView
+        android:id="@+id/calendarCalendar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fitsSystemWindows="true"
+        android:isScrollContainer="true"
+        android:scrollbars="vertical"
+        app:abbreviationsBarColor="@color/i_black"
+        app:abbreviationsLabelsColor="@color/i_reda"
+        app:anotherMonthsDaysLabelsColor="@color/secondary"
+        app:daysLabelsColor="@color/fontColor"
+        app:headerColor="@color/i_black"
+        app:headerLabelColor="@color/i_yellow"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:pagesColor="@color/i_black"
+        app:selectionColor="@color/calendarDayColor"
+        app:selectionLabelColor="@color/i_black"
+        app:todayLabelColor="@color/i_yellow"
+        app:type="classic">
+
+    </com.applandeo.materialcalendarview.CalendarView>
+
+    <TextView
+        android:id="@+id/calendarStatusLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/calendar_status_lbl"
+        android:textColor="@color/i_black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendarDateLbl" />
+
+    <TextView
+        android:id="@+id/calendarMenuLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/calendar_menu_lbl"
+        android:textColor="@color/i_black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendarStatusLbl" />
+
+    <TextView
+        android:id="@+id/calendarStatus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/palatino"
+        android:lines="2"
+        android:textColor="@color/i_black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/calendarStatusLbl"
+        app:layout_constraintTop_toBottomOf="@+id/calendarDate"
+        tools:text="opened to pre-orders" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="1dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.65" />
+    <!--<com.applandeo.materialcalendarview.CalendarView
+        android:id="@+id/calendarCalendar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:nestedScrollingEnabled="true"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <TextView
+        android:id="@+id/calendarDateLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/calendar_date_lbl"
+        android:textColor="@color/i_black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
+
+    <TextView
+        android:id="@+id/calendarDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/palatino"
+        android:textColor="@color/i_black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/calendarDateLbl"
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        tools:text="Jun 16th 2021" />
+
+    <EditText
+        android:id="@+id/calendarMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/i_yellow"
+        android:ems="10"
+        android:fontFamily="@font/palatino"
+
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:maxLines="25"
+        android:minHeight="48dp"
+        android:minLines="2"
+        android:textColor="@color/i_black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/calendarMenuLbl"
+        app:layout_constraintTop_toBottomOf="@+id/calendarStatus"
+        tools:text="Teste" />
+
+    <Button
+        android:id="@+id/calendarPreOrder"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/i_yellow"
+        android:fontFamily="@font/palatino"
+        android:text="@string/btn_preorder"
+        android:textAllCaps="false"
+        android:textColor="@color/i_black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendarMenu" />
+
+    <Button
+        android:id="@+id/calendarUpdateOrder"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/i_yellow"
+        android:fontFamily="@font/palatino"
+        android:text="@string/btn_preorder"
+        android:textAllCaps="false"
+        android:textColor="@color/i_black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendarMenu" />
+
+    <Button
+        android:id="@+id/calendarPayOrder"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/i_yellow"
+        android:fontFamily="@font/palatino"
+        android:text="@string/btn_preorder"
+        android:textAllCaps="false"
+        android:textColor="@color/i_black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendarMenu" />
+
+    <Button
+        android:id="@+id/calendarPaidOrder"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/i_yellow"
+        android:fontFamily="@font/palatino"
+        android:text="@string/btn_preorder"
+        android:textAllCaps="false"
+        android:textColor="@color/i_black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendarMenu" />
+
+
+    <!--<com.shuhart.materialcalendarview.MaterialCalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/i_black"
+        android:theme="@style/CalenderViewCustom"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:mcv_calendarMode="month"
+        app:mcv_dateTextAppearance="@style/CalenderViewDateCustomText"
+        app:mcv_firstDayOfWeek="sunday"
+        app:mcv_headerTextAppearance="@style/CalenderViewDateCustomText"
+        app:mcv_selectionColor="@color/calendarDayColor"
+        app:mcv_showOtherDates="out_of_range"
+        app:mcv_tileHeight="match_parent"
+        app:mcv_tileSize="match_parent"
+        app:mcv_tileWidth="match_parent"
+        app:mcv_weekDayTextAppearance="@style/CalenderViewMohtAppearance" />
+    -->
+    <!-- <CalendarView
+         android:id="@+id/calendarCalendar"
+         android:layout_width="0dp"
+         android:layout_height="wrap_content"
+         android:layout_gravity="center"
+         android:background="@color/i_black"
+         android:theme="@style/CalenderViewCustom"
+         android:dateTextAppearance="@style/CalenderViewDateCustomText"
+         android:weekDayTextAppearance="@style/CalenderViewWeekCustomText"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintHorizontal_bias="0.482"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="parent" />-->
+</androidx.constraintlayout.widget.ConstraintLayout>

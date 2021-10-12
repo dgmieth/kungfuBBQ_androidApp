@@ -6,16 +6,26 @@
         android:id="@+id/userInfoMenuBtn"
         android:icon="@drawable/icon_userinfo"
         android:title="@string/menu_btn_userInfo"
+        android:iconTint="@color/i_yellow"
+        android:iconTintMode="src_in"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/logOutMenuBtn"
         android:icon="@drawable/ic_logout"
         android:title="@string/menu_btn_logout"
-        android:visible="false" />
+        android:visible="false"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/editMenuBtn"
+        android:icon="@drawable/icon_edit"
+        android:iconTint="@color/i_yellow"
+        android:title="Edit"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/aboutAppMenuBtn"
+        android:icon="@drawable/icon_about"
         android:title="@string/menu_btn_aboutapp"
-        app:showAsAction="never"
 
-        />
+        app:showAsAction="ifRoom" />
 </menu>

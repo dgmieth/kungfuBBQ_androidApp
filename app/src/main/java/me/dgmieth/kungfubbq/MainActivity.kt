@@ -8,7 +8,10 @@ import android.view.MenuItem
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
+import androidx.navigation.ui.setupActionBarWithNavController
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
@@ -21,6 +24,8 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         Log.d("MainActivity", "onCreate: navHostFragment")
         navController = navHostFragment.findNavController()
+        setSupportActionBar(toolbar)
+        setupActionBarWithNavController(navController)
         Log.d("MainActivity", "onCreate: end")
 
     }

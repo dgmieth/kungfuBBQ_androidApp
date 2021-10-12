@@ -4,6 +4,8 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.EditText
@@ -18,6 +20,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         var dialogBuilder = AlertDialog.Builder(activity)
+        setHasOptionsMenu(true)
         dialogBuilder.setMessage("In order to register with Kungfu BBQ you need to have an INVITATION CODE. If you don't have one, please message Kungfu BBQ requesting one. IMPORTANT: on the message, you MUST send the e-mail you want to create the account with.")
             .setCancelable(false)
             .setPositiveButton("ok", DialogInterface.OnClickListener{
@@ -30,5 +33,9 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         registerCancelBtn.setOnClickListener {
             requireActivity().onBackPressed()
         }
+    }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.clear()
     }
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/i_yellow</item>
+        <item name="colorPrimaryDark">@color/i_black</item>
+        <item name="colorAccent">@color/i_black</item>
+    </style>
+    <style name="CalenderViewCustom" parent="Theme.AppCompat">
+        <item name="android:textColorPrimary">@color/i_yellow</item>
+        <item name="android:textColorSecondary">@color/i_yellow</item>
+        <item name="colorAccent">@color/calendarDayColor</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+
+    <style name="CalenderViewDateCustomText" parent="android:TextAppearance.Large">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:weekNumberColor">@color/calendarDayColor</item>
+
+    </style>
+    <style name="CalenderViewMohtAppearance" parent="android:TextAppearance.Large">
+        <item name="android:textColor">@color/i_yellow</item>
+        <item name="android:weekNumberColor">@color/calendarDayColor</item>
+
+    </style>
+
+    <style name="CalenderViewWeekCustomText" parent="android:TextAppearance.Large">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/palatino</item>
+
+    </style>
+
+</resources>

@@ -7,21 +7,27 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="me.dgmieth.kungfubbq.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        android:label="Home"
+        tools:layout="@layout/fragment_home">
         <argument
             android:name="loggedIn"
-            app:argType="boolean"
-            android:defaultValue="true" />
+            android:defaultValue="true"
+            app:argType="boolean" />
         <action
             android:id="@+id/callUserInfo"
             app:destination="@id/userInfoFragment" />
+        <action
+            android:id="@+id/callCatering"
+            app:destination="@id/cateringFragment" />
+        <action
+            android:id="@+id/callCalendar"
+            app:destination="@id/calendarFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="me.dgmieth.kungfubbq.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        android:label="Log in"
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/callRegisterFragment"
             app:destination="@id/registerFragment" />
@@ -30,13 +36,13 @@
     <fragment
         android:id="@+id/registerFragment"
         android:name="me.dgmieth.kungfubbq.RegisterFragment"
-        android:label="fragment_register"
+        android:label="Register"
         tools:layout="@layout/fragment_register" />
     <fragment
         android:id="@+id/userInfoFragment"
         android:name="me.dgmieth.kungfubbq.UserInfoFragment"
-        android:label="fragment_userinfo"
-        tools:layout="@layout/fragment_userinfo" >
+        android:label="User information"
+        tools:layout="@layout/fragment_userinfo">
         <action
             android:id="@+id/callUpdatePassword"
             app:destination="@id/updatePasswordFragment" />
@@ -44,6 +50,31 @@
     <fragment
         android:id="@+id/updatePasswordFragment"
         android:name="me.dgmieth.kungfubbq.UpdatePasswordFragment"
-        android:label="fragment_updatepassword"
+        android:label="Change password"
         tools:layout="@layout/fragment_updatepassword" />
+    <fragment
+        android:id="@+id/cateringFragment"
+        android:name="me.dgmieth.kungfubbq.CateringFragment"
+        android:label="Catering order"
+        tools:layout="@layout/fragment_catering" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="me.dgmieth.kungfubbq.AboutFragment"
+        android:label="About this app"
+        tools:layout="@layout/fragment_about" />
+    <action android:id="@+id/callAbout" app:destination="@id/aboutFragment" />
+    <fragment
+        android:id="@+id/calendarFragment"
+        android:name="me.dgmieth.kungfubbq.CalendarFragment"
+        android:label="Calendar"
+        tools:layout="@layout/fragment_calendar" >
+        <action
+            android:id="@+id/callPreOrder"
+            app:destination="@id/preOrderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/preOrderFragment"
+        android:name="me.dgmieth.kungfubbq.PreOrderFragment"
+        android:label="Pre order"
+        tools:layout="@layout/fragment_preorder" />
 </navigation>

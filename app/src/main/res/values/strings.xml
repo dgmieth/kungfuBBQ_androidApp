@@ -33,4 +33,36 @@
     <string name="updatepassword_newpassword_label">New password:</string>
     <string name="updatepassword_confirmnewpassword_label">Confirm new password:</string>
     <string name="btn_save">Save</string>
+    <string name="catering_textview_explanatorytext">You may hire KungfuBBQ for catering. Please, fill out this form with your contact information and tell us briefly about your needs (such as amount of people, date, menu, ...).</string>
+    <string name="userinfo_phonenumber_hint">(000) 000-0000</string>
+    <string name="catering_description_hint">Describe your need:</string>
+    <string name="userinfo_name_hint">John Doe</string>
+    <string name="btn_send">Send</string>
+    <string name="about_appname">Kungfu BBQ app</string>
+    <string name="about_version" >version 1.0</string>
+    <string name="avout_developedby">developed by dgmieth.me</string>
+    <string name="about_copyritght">© 2021</string>
+    <string name="about_visit">Please visit</string>
+    <string name="about_link">https://dgmieth.me</string>
+    <!--Material-Calendar-View-->
+    <string name="material_calendar_monday">M</string>
+    <string name="material_calendar_tuesday">T</string>
+    <string name="material_calendar_wednesday">W</string>
+    <string name="material_calendar_thursday">T</string>
+    <string name="material_calendar_friday">F</string>
+    <string name="material_calendar_saturday">S</string>
+    <string name="material_calendar_sunday">S</string>
+    <string name="calendar_date_lbl">Date:</string>
+    <string name="calendar_status_lbl">Status:</string>
+    <string name="calendar_menu_lbl">Menu:</string>
+    <string name="calendar_location_lbl">Location:</string>
+    <string name="btn_preorder">Place order</string>
+    <string name="preorder_date_lbl">Date:</string>
+    <string name="preorder_status_lbl">Status:</string>
+    <string name="preorder_menu_lbl">Menu:</string>
+    <string name="preorder_location_lbl">Location:</string>
+    <string name="preorder_numberofmeals_lbl">Number of meals:</string>
+    <string name="preorder_mealprice_lbl">Meal price:</string>
+    <string name="preorder_totalprice_lbl">Total price:</string>
+    <string name="btn_preorder_saveorder">Pre-order</string>
 </resources>
