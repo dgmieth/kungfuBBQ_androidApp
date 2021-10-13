@@ -10,13 +10,16 @@ import android.view.View
 import androidx.core.view.get
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_home.*
+import me.dgmieth.kungfubbq.datatabase.KungfuBBQViewModel
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val args : HomeFragmentArgs by navArgs()
+    private val viewModel by lazy { ViewModelProvider(this).get(KungfuBBQViewModel::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +42,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         homeCateringBtn.setOnClickListener { goToCateringFragment() }
         homeCalendarBtn.setOnClickListener { goToCalendarFragment() }
         Log.d("HomeFragment","onViewCreated starts -> end")
-
+        viewModel.loadTasks()
     }
     private fun goToLoginFragment(){
         val action = NavGraphDirections.actionGlobalLoginFragment()
@@ -62,7 +65,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId == R.id.userInfoMenuBtn){
-            val action = HomeFragmentDirections.callUserInfo()
+            val action = HomeFragmentDirections.callUserInfoGlobal()
             findNavController().navigate(action)
             return true
         }else if (item.itemId == R.id.aboutAppMenuBtn) {

@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/userInfoFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/i_yellow"
@@ -21,6 +22,7 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/userInfoUserName"
         android:layout_width="0dp"
@@ -49,6 +51,7 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userInfoUserNameLbl" />
+
     <TextView
         android:id="@+id/userInfoMemberSince"
         android:layout_width="0dp"
@@ -76,6 +79,7 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userInfoMemberSinceLbl" />
+
     <EditText
         android:id="@+id/userInfoName"
         android:layout_width="0dp"
@@ -109,6 +113,7 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userInfoNameLbl" />
+
     <EditText
         android:id="@+id/userInfoPhone"
         android:layout_width="0dp"

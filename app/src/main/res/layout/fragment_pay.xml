@@ -2,120 +2,119 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/updatePasswordFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/i_yellow"
+    android:backgroundTint="@color/i_yellow"
     android:gravity="center"
-    tools:context=".UpdatePasswordFragment">
+    tools:context=".PayFragment">
 
     <TextView
-        android:id="@+id/updatePasswordCurrentPasswordLbl"
-        android:layout_width="355dp"
+        android:id="@+id/payCardNumberLbl"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="120dp"
         android:fontFamily="@font/palatino"
-        android:text="@string/updatepassword_currentpassword_label"
+        android:text="@string/pay_cardnumber_lbl"
         android:textColor="@color/i_black"
-
-        android:textSize="24sp"
+        android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/updatePasswordCurrentPassword"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/payCardCodeLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/pay_cardcode_lbl"
+        android:textColor="@color/i_black"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/payCardNumber" />
+
+    <TextView
+        android:id="@+id/payValidLbl"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/textEditBackgroundColor"
         android:fontFamily="@font/palatino"
-        android:hint="@string/edittext_login_password"
-        android:importantForAutofill="no"
-        android:inputType="textPassword"
+        android:text="@string/pay_validthrough_lbl"
+        android:textColor="@color/i_black"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/payCardCode" />
+
+    <EditText
+        android:id="@+id/payCardNumber"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:background="@color/textEditBackgroundColor"
+        android:ems="10"
+        android:fontFamily="@font/palatino"
+        android:hint="1234 4567 8900 0000 "
+        android:inputType="number"
+        android:maxLength="16"
         android:minHeight="48dp"
-        android:paddingStart="8dp"
+        android:textAlignment="center"
+        android:textColor="@color/i_black"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/payCardNumberLbl" />
+
+    <EditText
+        android:id="@+id/payCardCode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="96dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="96dp"
+        android:background="@color/textEditBackgroundColor"
+        android:ems="10"
+        android:fontFamily="@font/palatino"
+        android:hint="123"
+        android:inputType="number"
+        android:maxLength="4"
+        android:minHeight="48dp"
+        android:textAlignment="center"
         android:textColor="@color/i_black"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updatePasswordCurrentPasswordLbl" />
+        app:layout_constraintTop_toBottomOf="@+id/payCardCodeLbl" />
 
-    <TextView
-        android:id="@+id/updatePasswordNewPasswordLbl"
-        android:layout_width="355dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="64dp"
-        android:fontFamily="@font/palatino"
-        android:text="@string/updatepassword_newpassword_label"
-        android:textColor="@color/i_black"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updatePasswordCurrentPassword" />
-
-    <EditText
-        android:id="@+id/updatePasswordNewPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+    <NumberPicker
+        android:id="@+id/aboutFragment"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="96dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/textEditBackgroundColor"
-        android:fontFamily="@font/palatino"
-        android:hint="@string/edittext_login_password"
-        android:importantForAutofill="no"
-        android:inputType="textPassword"
-        android:minHeight="48dp"
-        android:paddingStart="8dp"
-        android:textColor="@color/i_black"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="12dp"
+        app:layout_constraintEnd_toStartOf="@+id/payMonth"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updatePasswordNewPasswordLbl" />
+        app:layout_constraintTop_toBottomOf="@+id/payValidLbl" />
 
-    <TextView
-        android:id="@+id/updatePasswordNewPasswordConfirmationLbl"
-        android:layout_width="355dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/palatino"
-        android:text="@string/updatepassword_confirmnewpassword_label"
-        android:textColor="@color/i_black"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updatePasswordNewPassword" />
-
-    <EditText
-        android:id="@+id/updatePasswordNewPasswordConfirmation"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
+    <NumberPicker
+        android:id="@+id/payMonth"
+        android:layout_width="75dp"
+        android:layout_height="150dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/textEditBackgroundColor"
-        android:fontFamily="@font/palatino"
-        android:hint="@string/edittext_login_password"
-        android:importantForAutofill="no"
-        android:inputType="textPassword"
-        android:minHeight="48dp"
-        android:paddingStart="8dp"
-        android:textColor="@color/i_black"
-        android:textSize="22sp"
+        android:layout_marginEnd="96dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updatePasswordNewPasswordConfirmationLbl" />
-
-
+        app:layout_constraintTop_toBottomOf="@+id/payValidLbl" />
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -132,7 +131,7 @@
             android:layout_weight=".33" />
 
         <Button
-            android:id="@+id/updatePasswordCancelBtn"
+            android:id="@+id/payCancelBtn"
             android:layout_width="wrap_content"
             android:layout_height="58dp"
             android:layout_weight="1"
@@ -151,14 +150,14 @@
             android:layout_weight=".34" />
 
         <Button
-            android:id="@+id/updatePasswordSaveBtn"
+            android:id="@+id/payPayBtn"
             android:layout_width="wrap_content"
             android:layout_height="58dp"
             android:layout_weight="1"
             android:backgroundTint="@color/i_reda"
             android:fontFamily="@font/palatino"
             android:paddingStart="22dp"
-            android:text="@string/btn_save"
+            android:text="@string/btn_payorder"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="24sp"
@@ -169,5 +168,4 @@
             android:layout_height="wrap_content"
             android:layout_weight=".33" />
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

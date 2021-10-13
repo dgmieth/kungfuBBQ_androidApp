@@ -8,10 +8,10 @@
     android:background="@color/i_yellow"
     android:backgroundTint="@color/i_yellow"
     android:gravity="center"
-    tools:context=".PreOrderFragment">
+    tools:context=".PayOrderFragment">
 
     <TextView
-        android:id="@+id/preOrderDateLbl"
+        android:id="@+id/payOrderDateLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -25,7 +25,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/preOrderStatusLbl"
+        android:id="@+id/payOrderStatusLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -36,10 +36,10 @@
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderDateLbl" />
+        app:layout_constraintTop_toBottomOf="@+id/payOrderDateLbl" />
 
     <TextView
-        android:id="@+id/preOrderMenuLbl"
+        android:id="@+id/payOrderMenuLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -50,10 +50,10 @@
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderStatus" />
+        app:layout_constraintTop_toBottomOf="@+id/payOrderStatus" />
 
     <TextView
-        android:id="@+id/preOrderLocationLbl"
+        android:id="@+id/payOrderLocationLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -64,24 +64,24 @@
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderMenu" />
+        app:layout_constraintTop_toBottomOf="@+id/payOrderMenu" />
 
     <TextView
-        android:id="@+id/preOrderNumberOfMealsLbl"
+        android:id="@+id/payOrderNumberOfMealsLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="42dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/palatino"
         android:text="@string/preorder_numberofmeals_lbl"
         android:textColor="@color/i_black"
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderLocationMap" />
+        app:layout_constraintTop_toBottomOf="@+id/payOrderLocationMap" />
 
     <TextView
-        android:id="@+id/preOrderMealPriceLbl"
+        android:id="@+id/payOrderMealPriceLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -92,10 +92,10 @@
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderNumberOfMeals" />
+        app:layout_constraintTop_toBottomOf="@+id/payOrderNumberOfMealsLbl" />
 
     <TextView
-        android:id="@+id/preOrderTotalPriceLbl"
+        android:id="@+id/payOrderTotalPriceLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -106,10 +106,10 @@
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderMealPriceLbl" />
+        app:layout_constraintTop_toBottomOf="@+id/payOrderMealPriceLbl" />
 
     <TextView
-        android:id="@+id/preOrderDate"
+        android:id="@+id/payOrderDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -118,27 +118,40 @@
         android:textColor="@color/i_black"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/preOrderDateLbl"
+        app:layout_constraintStart_toEndOf="@+id/payOrderDateLbl"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Jun 16th 2021" />
 
     <TextView
-        android:id="@+id/preOrderMealPrice"
+        android:id="@+id/payOrderMealPrice"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/palatino"
         android:textColor="@color/i_black"
         android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="@+id/payOrderMealPriceLbl"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/preOrderMealPriceLbl"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderNumberOfMeals"
+        app:layout_constraintStart_toEndOf="@+id/payOrderMealPriceLbl"
         tools:text="U$ 13.00" />
 
     <TextView
-        android:id="@+id/preOrderTotalPrice"
+        android:id="@+id/payOrderMealPrice2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/palatino"
+        android:textColor="@color/i_black"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="@+id/payOrderNumberOfMealsLbl"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/payOrderNumberOfMealsLbl"
+        tools:text="2" />
+
+    <TextView
+        android:id="@+id/payOrderTotalPrice"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -148,12 +161,12 @@
         android:textColor="@color/i_black"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/preOrderTotalPriceLbl"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderMealPrice"
+        app:layout_constraintStart_toEndOf="@+id/payOrderTotalPriceLbl"
+        app:layout_constraintTop_toBottomOf="@+id/payOrderMealPrice"
         tools:text="U$ 13.00" />
 
     <TextView
-        android:id="@+id/preOrderLocationText"
+        android:id="@+id/payOrderLocationText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -163,23 +176,12 @@
         android:textColor="@color/i_black"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/preOrderLocationLbl"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderMenu"
+        app:layout_constraintStart_toEndOf="@+id/payOrderLocationLbl"
+        app:layout_constraintTop_toBottomOf="@+id/payOrderMenu"
         tools:text="Jun 16th 2021" />
 
-    <NumberPicker
-        android:id="@+id/preOrderNumberOfMeals"
-        android:layout_width="187dp"
-        android:layout_height="95dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="-32dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/preOrderNumberOfMealsLbl"
-        app:layout_constraintTop_toTopOf="@+id/preOrderNumberOfMealsLbl" />
-
     <TextView
-        android:id="@+id/preOrderStatus"
+        android:id="@+id/payOrderStatus"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -190,12 +192,12 @@
         android:textColor="@color/i_black"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/preOrderStatusLbl"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderDate"
+        app:layout_constraintStart_toEndOf="@+id/payOrderStatusLbl"
+        app:layout_constraintTop_toBottomOf="@+id/payOrderDate"
         tools:text="Jun 16th 2021" />
 
     <EditText
-        android:id="@+id/preOrderMenu"
+        android:id="@+id/payOrderMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -211,8 +213,8 @@
         android:text="teste"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/preOrderMenuLbl"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderStatus" />
+        app:layout_constraintStart_toEndOf="@+id/payOrderMenuLbl"
+        app:layout_constraintTop_toBottomOf="@+id/payOrderStatus" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -232,14 +234,14 @@
             android:layout_weight=".33" />
 
         <Button
-            android:id="@+id/preOrderCancelBtn"
+            android:id="@+id/payOrderCancelBtn"
             android:layout_width="wrap_content"
             android:layout_height="58dp"
             android:layout_weight="1"
             android:backgroundTint="@color/secondary"
             android:fontFamily="@font/palatino"
             android:paddingStart="22dp"
-            android:text="@string/btn_cancel"
+            android:text="@string/btn_deleteorder"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="24sp"
@@ -251,14 +253,14 @@
             android:layout_weight=".34" />
 
         <Button
-            android:id="@+id/preOrderPreOrderBtn"
+            android:id="@+id/payOrderPayBtn"
             android:layout_width="wrap_content"
             android:layout_height="58dp"
             android:layout_weight="1"
             android:backgroundTint="@color/i_reda"
             android:fontFamily="@font/palatino"
             android:paddingStart="22dp"
-            android:text="@string/btn_preorder_saveorder"
+            android:text="@string/btn_payorder"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="24sp"
@@ -271,14 +273,14 @@
     </LinearLayout>
 
     <com.google.android.gms.maps.MapView
-        android:id="@+id/preOrderLocationMap"
+        android:id="@+id/payOrderLocationMap"
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/preOrderLocationLbl"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderLocationText"
+        app:layout_constraintStart_toEndOf="@+id/payOrderLocationLbl"
+        app:layout_constraintTop_toBottomOf="@+id/payOrderLocationText"
         tools:ignore="SpeakableTextPresentCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>

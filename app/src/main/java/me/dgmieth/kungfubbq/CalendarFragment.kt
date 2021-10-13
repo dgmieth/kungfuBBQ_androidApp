@@ -76,6 +76,18 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             val action = CalendarFragmentDirections.callPreOrder()
             findNavController().navigate(action)
         }
+        calendarUpdateOrder.setOnClickListener {
+            val action = CalendarFragmentDirections.callUpdateOrder()
+            findNavController().navigate(action)
+        }
+        calendarPayOrder.setOnClickListener {
+            val action = CalendarFragmentDirections.callPayOrder()
+            findNavController().navigate(action)
+        }
+        calendarPaidOrder.setOnClickListener {
+            val action = CalendarFragmentDirections.callPaidOrder()
+            findNavController().navigate(action)
+        }
     }
       override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)

@@ -8,10 +8,10 @@
     android:background="@color/i_yellow"
     android:backgroundTint="@color/i_yellow"
     android:gravity="center"
-    tools:context=".PreOrderFragment">
+    tools:context=".UpdateOrderFragment">
 
     <TextView
-        android:id="@+id/preOrderDateLbl"
+        android:id="@+id/updateOrderDateLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -25,7 +25,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/preOrderStatusLbl"
+        android:id="@+id/updateOrderStatusLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -36,10 +36,10 @@
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderDateLbl" />
+        app:layout_constraintTop_toBottomOf="@+id/updateOrderDateLbl" />
 
     <TextView
-        android:id="@+id/preOrderMenuLbl"
+        android:id="@+id/updateOrderMenuLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -50,10 +50,10 @@
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderStatus" />
+        app:layout_constraintTop_toBottomOf="@+id/updateOrderStatus" />
 
     <TextView
-        android:id="@+id/preOrderLocationLbl"
+        android:id="@+id/updateOrderLocationLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -64,10 +64,10 @@
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderMenu" />
+        app:layout_constraintTop_toBottomOf="@+id/updateOrderMenu" />
 
     <TextView
-        android:id="@+id/preOrderNumberOfMealsLbl"
+        android:id="@+id/updateOrderNumberOfMealsLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -78,10 +78,10 @@
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderLocationMap" />
+        app:layout_constraintTop_toBottomOf="@+id/updateOrderLocationMap" />
 
     <TextView
-        android:id="@+id/preOrderMealPriceLbl"
+        android:id="@+id/updateOrderMealPriceLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -92,10 +92,10 @@
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderNumberOfMeals" />
+        app:layout_constraintTop_toBottomOf="@+id/updateOrderNumberOfMeals" />
 
     <TextView
-        android:id="@+id/preOrderTotalPriceLbl"
+        android:id="@+id/updateOrderTotalPriceLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -106,10 +106,10 @@
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderMealPriceLbl" />
+        app:layout_constraintTop_toBottomOf="@+id/updateOrderMealPriceLbl" />
 
     <TextView
-        android:id="@+id/preOrderDate"
+        android:id="@+id/updateOrderDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -118,12 +118,12 @@
         android:textColor="@color/i_black"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/preOrderDateLbl"
+        app:layout_constraintStart_toEndOf="@+id/updateOrderDateLbl"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Jun 16th 2021" />
 
     <TextView
-        android:id="@+id/preOrderMealPrice"
+        android:id="@+id/updateOrderMealPrice"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -133,12 +133,12 @@
         android:textColor="@color/i_black"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/preOrderMealPriceLbl"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderNumberOfMeals"
+        app:layout_constraintStart_toEndOf="@+id/updateOrderMealPriceLbl"
+        app:layout_constraintTop_toBottomOf="@+id/updateOrderNumberOfMeals"
         tools:text="U$ 13.00" />
 
     <TextView
-        android:id="@+id/preOrderTotalPrice"
+        android:id="@+id/updateOrderTotalPrice"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -148,12 +148,12 @@
         android:textColor="@color/i_black"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/preOrderTotalPriceLbl"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderMealPrice"
+        app:layout_constraintStart_toEndOf="@+id/updateOrderTotalPriceLbl"
+        app:layout_constraintTop_toBottomOf="@+id/updateOrderMealPrice"
         tools:text="U$ 13.00" />
 
     <TextView
-        android:id="@+id/preOrderLocationText"
+        android:id="@+id/updateOrderLocationText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -163,23 +163,23 @@
         android:textColor="@color/i_black"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/preOrderLocationLbl"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderMenu"
+        app:layout_constraintStart_toEndOf="@+id/updateOrderLocationLbl"
+        app:layout_constraintTop_toBottomOf="@+id/updateOrderMenu"
         tools:text="Jun 16th 2021" />
 
     <NumberPicker
-        android:id="@+id/preOrderNumberOfMeals"
+        android:id="@+id/updateOrderNumberOfMeals"
         android:layout_width="187dp"
         android:layout_height="95dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="-32dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/preOrderNumberOfMealsLbl"
-        app:layout_constraintTop_toTopOf="@+id/preOrderNumberOfMealsLbl" />
+        app:layout_constraintStart_toEndOf="@+id/updateOrderNumberOfMealsLbl"
+        app:layout_constraintTop_toTopOf="@+id/updateOrderNumberOfMealsLbl" />
 
     <TextView
-        android:id="@+id/preOrderStatus"
+        android:id="@+id/updateOrderStatus"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -190,12 +190,12 @@
         android:textColor="@color/i_black"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/preOrderStatusLbl"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderDate"
+        app:layout_constraintStart_toEndOf="@+id/updateOrderStatusLbl"
+        app:layout_constraintTop_toBottomOf="@+id/updateOrderDate"
         tools:text="Jun 16th 2021" />
 
     <EditText
-        android:id="@+id/preOrderMenu"
+        android:id="@+id/updateOrderMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -211,8 +211,27 @@
         android:text="teste"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/preOrderMenuLbl"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderStatus" />
+        app:layout_constraintStart_toEndOf="@+id/updateOrderMenuLbl"
+        app:layout_constraintTop_toBottomOf="@+id/updateOrderStatus" />
+
+    <Button
+        android:id="@+id/updateOrderDeleteOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/i_reda"
+        android:fontFamily="@font/palatino"
+        android:scrollbarSize="22sp"
+        android:text="@string/btn_deleteorder"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -222,6 +241,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:orientation="horizontal"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -232,7 +252,7 @@
             android:layout_weight=".33" />
 
         <Button
-            android:id="@+id/preOrderCancelBtn"
+            android:id="@+id/updateOrderCancelBtn"
             android:layout_width="wrap_content"
             android:layout_height="58dp"
             android:layout_weight="1"
@@ -251,7 +271,7 @@
             android:layout_weight=".34" />
 
         <Button
-            android:id="@+id/preOrderPreOrderBtn"
+            android:id="@+id/updateOrderPreOrderBtn"
             android:layout_width="wrap_content"
             android:layout_height="58dp"
             android:layout_weight="1"
@@ -271,14 +291,14 @@
     </LinearLayout>
 
     <com.google.android.gms.maps.MapView
-        android:id="@+id/preOrderLocationMap"
+        android:id="@+id/updateOrderLocationMap"
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/preOrderLocationLbl"
-        app:layout_constraintTop_toBottomOf="@+id/preOrderLocationText"
+        app:layout_constraintStart_toEndOf="@+id/updateOrderLocationLbl"
+        app:layout_constraintTop_toBottomOf="@+id/updateOrderLocationText"
         tools:ignore="SpeakableTextPresentCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>

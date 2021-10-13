@@ -11,11 +11,8 @@
         tools:layout="@layout/fragment_home">
         <argument
             android:name="loggedIn"
-            android:defaultValue="true"
+            android:defaultValue="false"
             app:argType="boolean" />
-        <action
-            android:id="@+id/callUserInfo"
-            app:destination="@id/userInfoFragment" />
         <action
             android:id="@+id/callCatering"
             app:destination="@id/cateringFragment" />
@@ -71,10 +68,44 @@
         <action
             android:id="@+id/callPreOrder"
             app:destination="@id/preOrderFragment" />
+        <action
+            android:id="@+id/callUpdateOrder"
+            app:destination="@id/updateOrderFragment" />
+        <action
+            android:id="@+id/callPayOrder"
+            app:destination="@id/payOrderFragment" />
+        <action
+            android:id="@+id/callPaidOrder"
+            app:destination="@id/paidOrderFragment" />
     </fragment>
     <fragment
         android:id="@+id/preOrderFragment"
         android:name="me.dgmieth.kungfubbq.PreOrderFragment"
-        android:label="Pre order"
+        android:label="Pre-order"
         tools:layout="@layout/fragment_preorder" />
+    <fragment
+        android:id="@+id/updateOrderFragment"
+        android:name="me.dgmieth.kungfubbq.UpdateOrderFragment"
+        android:label="Update order"
+        tools:layout="@layout/fragment_updateorder" />
+    <fragment
+        android:id="@+id/payOrderFragment"
+        android:name="me.dgmieth.kungfubbq.PayOrderFragment"
+        android:label="Pay order"
+        tools:layout="@layout/fragment_payorder" >
+        <action
+            android:id="@+id/callPay"
+            app:destination="@id/payFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/payFragment2"
+        android:name="me.dgmieth.kungfubbq.PayFragment"
+        android:label="Payment"
+        tools:layout="@layout/fragment_pay" />
+    <fragment
+        android:id="@+id/paidOrderFragment"
+        android:name="me.dgmieth.kungfubbq.PaidOrderFragment"
+        android:label="Paid order checkout"
+        tools:layout="@layout/fragment_paidorder" />
+    <action android:id="@+id/callUserInfoGlobal" app:destination="@id/userInfoFragment" />
 </navigation>
