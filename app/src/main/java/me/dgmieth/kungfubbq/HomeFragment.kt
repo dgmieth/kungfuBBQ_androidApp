@@ -8,6 +8,8 @@ import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -15,6 +17,9 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_home.*
 import me.dgmieth.kungfubbq.datatabase.KungfuBBQViewModel
+import me.dgmieth.kungfubbq.datatabase.room.KungfuBBQRoomDatabase
+import me.dgmieth.kungfubbq.datatabase.room.RoomViewModel
+import me.dgmieth.kungfubbq.datatabase.roomEntities.UserDB
 import me.dgmieth.kungfubbq.httpRequets.Endpoints
 import me.dgmieth.kungfubbq.httpRequets.HttpRequestCtrl
 import me.dgmieth.kungfubbq.httpRequets.UserAuthentication
@@ -24,11 +29,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+private const val TAG = "HomeFragment"
+
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val args : HomeFragmentArgs by navArgs()
     //private val viewModel by lazy { ViewModelProvider(this).get(KungfuBBQViewModel::class.java) }
-    private val viewModel: KungfuBBQViewModel by activityViewModels()
+    //private val viewModel: KungfuBBQViewModel by activityViewModels()
+    private var roomViewMode: RoomViewModel? = null
     private val bag = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +60,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         homeCateringBtn.setOnClickListener { goToCateringFragment() }
         homeCalendarBtn.setOnClickListener { goToCalendarFragment() }
         Log.d("HomeFragment","onViewCreated starts -> end")
-        viewModel.loadTasks()
+        roomViewMode = ViewModelProviders.of(this).get(RoomViewModel::class.java)
+        var db = KungfuBBQRoomDatabase.getInstance(requireActivity())
+        roomViewMode?.getDbInstance(db)
+        roomViewMode?.user?.observe(viewLifecycleOwner, Observer {
+            if(!it.email.toString().isNullOrEmpty()){
+                handleIt(it)
+            }else{
+                handleNullCase()
+            }
+        })
+        roomViewMode?.getUser()
+        //viewModel.loadTasks()
         val userCredential = JSONObject()
         userCredential.put("email", "dgmieth@gmail.com")
         userCredential.put("password", "12312345")
@@ -65,6 +84,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 .subscribe({response -> onResponse(response)}, {t -> onFailure(t) })
         )
     }
+
+    private fun handleNullCase() {
+        Log.d(TAG, "no data returned")
+    }
+
+    private fun handleIt(it: UserDB) {
+        Log.d(TAG, "dataReturn was ${it.email} and ${it.userId}")
+    }
+
     private fun onResponse(response: UserResponseValidation?) {
         response?.let{
             Log.d("HttpRequestCtrl", "values are $it")
