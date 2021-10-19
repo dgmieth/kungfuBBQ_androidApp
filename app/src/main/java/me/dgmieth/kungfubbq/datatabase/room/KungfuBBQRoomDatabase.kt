@@ -4,12 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import me.dgmieth.kungfubbq.datatabase.roomEntities.SocialMediaInfo
 import me.dgmieth.kungfubbq.datatabase.roomEntities.UserDB
 
 const val DB_VERSION = 1
 const val DB_NAME = "kungfuBBQapp.db"
 
-@Database(entities = [UserDB::class],version = DB_VERSION)
+@Database(entities = [UserDB::class,SocialMediaInfo::class],version = DB_VERSION)
 abstract class KungfuBBQRoomDatabase:RoomDatabase() {
     abstract fun kungfuBBQRoomDao() : KungfuBBQRoomDAO
     companion object{

@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import me.dgmieth.kungfubbq.datatabase.KungfuBBQViewModel
 import me.dgmieth.kungfubbq.datatabase.room.KungfuBBQRoomDatabase
 import me.dgmieth.kungfubbq.datatabase.room.RoomViewModel
+import me.dgmieth.kungfubbq.datatabase.roomEntities.UserAndSocialMedia
 import me.dgmieth.kungfubbq.datatabase.roomEntities.UserDB
 import me.dgmieth.kungfubbq.httpRequets.Endpoints
 import me.dgmieth.kungfubbq.httpRequets.HttpRequestCtrl
@@ -34,8 +35,6 @@ private const val TAG = "HomeFragment"
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val args : HomeFragmentArgs by navArgs()
-    //private val viewModel by lazy { ViewModelProvider(this).get(KungfuBBQViewModel::class.java) }
-    //private val viewModel: KungfuBBQViewModel by activityViewModels()
     private var roomViewMode: RoomViewModel? = null
     private val bag = CompositeDisposable()
 
@@ -64,7 +63,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         var db = KungfuBBQRoomDatabase.getInstance(requireActivity())
         roomViewMode?.getDbInstance(db)
         roomViewMode?.user?.observe(viewLifecycleOwner, Observer {
-            if(!it.email.toString().isNullOrEmpty()){
+            if(!it.user.email.isNullOrEmpty()){
                 handleIt(it)
             }else{
                 handleNullCase()
@@ -89,8 +88,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         Log.d(TAG, "no data returned")
     }
 
-    private fun handleIt(it: UserDB) {
-        Log.d(TAG, "dataReturn was ${it.email} and ${it.userId}")
+    private fun handleIt(it: UserAndSocialMedia) {
+        Log.d(TAG, "dataReturn was ${it.user.email} and ${it.user.userId}")
     }
 
     private fun onResponse(response: UserResponseValidation?) {

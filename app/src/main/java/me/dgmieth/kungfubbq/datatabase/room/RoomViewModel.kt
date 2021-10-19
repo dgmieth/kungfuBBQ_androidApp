@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import me.dgmieth.kungfubbq.datatabase.roomEntities.UserAndSocialMedia
 import me.dgmieth.kungfubbq.datatabase.roomEntities.UserDB
 
 private const val TAG = "RoomViewModel"
@@ -15,7 +16,7 @@ class RoomViewModel:ViewModel() {
     protected val bag = CompositeDisposable()
     private var db : KungfuBBQRoomDatabase? = null
 
-    var user = MutableLiveData<UserDB>()
+    var user = MutableLiveData<UserAndSocialMedia>()
 
     init {
         Log.d(TAG,"viewModelStarted")
@@ -42,7 +43,7 @@ class RoomViewModel:ViewModel() {
             ?.subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe({
-                          if(!it.toString().isNullOrEmpty()){
+                          if(!it.user.email.isNullOrEmpty()){
                               user.postValue(it)
                               Log.d(TAG, "userReturned with values $user")
                           }
