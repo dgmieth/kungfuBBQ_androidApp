@@ -16,6 +16,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_login.*
 import me.dgmieth.kungfubbq.datatabase.KungfuBBQViewModel
 import me.dgmieth.kungfubbq.datatabase.room.KungfuBBQRoomDatabase
 import me.dgmieth.kungfubbq.datatabase.room.RoomViewModel
@@ -90,6 +91,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun handleIt(it: UserAndSocialMedia) {
         Log.d(TAG, "dataReturn was ${it.user.email} and ${it.user.userId}")
+
     }
 
     private fun onResponse(response: UserResponseValidation?) {

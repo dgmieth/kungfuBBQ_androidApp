@@ -108,4 +108,8 @@
         android:label="Paid order checkout"
         tools:layout="@layout/fragment_paidorder" />
     <action android:id="@+id/callUserInfoGlobal" app:destination="@id/userInfoFragment" />
+    <action
+        android:id="@+id/callHome"
+        app:destination="@id/homeFragment"
+        app:popUpTo="@id/homeFragment" />
 </navigation>

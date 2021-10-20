@@ -33,7 +33,8 @@ data class UserDB (
     }
 }
 
-@Entity(tableName = SocialMediaInfo.TABLE_NAME,primaryKeys = ["socialMedia","userIdFk"])
+@Entity(tableName = SocialMediaInfo.TABLE_NAME,primaryKeys = ["socialMedia","userIdFk"], foreignKeys = arrayOf(
+    ForeignKey(entity = UserDB::class, parentColumns = arrayOf("userId"),childColumns = arrayOf("userIdFk"), onDelete = ForeignKey.CASCADE)))
 data class SocialMediaInfo(
     @ColumnInfo(name = SOCIAL_MEDIA)
     var socialMedia : String,
