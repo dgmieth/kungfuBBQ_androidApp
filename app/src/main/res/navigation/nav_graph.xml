@@ -111,5 +111,6 @@
     <action
         android:id="@+id/callHome"
         app:destination="@id/homeFragment"
-        app:popUpTo="@id/homeFragment" />
+        app:popUpTo="@id/homeFragment"
+        app:popUpToInclusive="true" />
 </navigation>

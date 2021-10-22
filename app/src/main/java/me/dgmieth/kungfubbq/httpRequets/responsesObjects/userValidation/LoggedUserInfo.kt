@@ -2,9 +2,15 @@ package me.dgmieth.kungfubbq.httpRequets.responsesObjects.userValidation
 
 import com.google.gson.annotations.SerializedName
 
-data class UserResponseValidation (
+data class RegisteredUserInfo (
     @SerializedName("hasErrors") var hasErros: Boolean,
-    @SerializedName("data") var data: UserInfo
+    @SerializedName("msg") var msg: UserInfo,
+    @SerializedName("msg") var errorMsg: String
+)
+data class LoggedUserInfo (
+    @SerializedName("hasErrors") var hasErros: Boolean,
+    @SerializedName("data") var data: UserInfo//,
+    //@SerializedName("msg") var msg: UserInfo
 )
 data class UserInfo(
     @SerializedName("id") var id: Int,

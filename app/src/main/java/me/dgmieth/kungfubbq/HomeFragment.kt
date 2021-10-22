@@ -7,29 +7,21 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import android.view.View
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_login.*
-import me.dgmieth.kungfubbq.datatabase.KungfuBBQViewModel
 import me.dgmieth.kungfubbq.datatabase.room.KungfuBBQRoomDatabase
 import me.dgmieth.kungfubbq.datatabase.room.RoomViewModel
 import me.dgmieth.kungfubbq.datatabase.roomEntities.UserAndSocialMedia
-import me.dgmieth.kungfubbq.datatabase.roomEntities.UserDB
-import me.dgmieth.kungfubbq.httpRequets.Endpoints
-import me.dgmieth.kungfubbq.httpRequets.HttpRequestCtrl
-import me.dgmieth.kungfubbq.httpRequets.UserAuthentication
-import me.dgmieth.kungfubbq.httpRequets.responsesObjects.userValidation.UserResponseValidation
+import me.dgmieth.kungfubbq.httpCtrl.HttpCtrl
+import me.dgmieth.kungfubbq.httpRequets.LoginBodyData
+import me.dgmieth.kungfubbq.httpRequets.responsesObjects.userValidation.LoggedUserInfo
+import okhttp3.*
 import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import java.io.IOException
 
 private const val TAG = "HomeFragment"
 
@@ -75,14 +67,25 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val userCredential = JSONObject()
         userCredential.put("email", "dgmieth@gmail.com")
         userCredential.put("password", "12312345")
-        val newUserAuth = UserAuthentication("12312345","dgmieth@gmail.com")
+        val newUserAuth = LoginBodyData("12312345","dgmieth@gmail.com")
         Log.d("HttpRequestCtrl", "jsonObject is $newUserAuth")
-        bag.add(
-            HttpRequestCtrl.buildService((Endpoints::class.java), getString(R.string.kungfuServerUrl)).login(newUserAuth)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({response -> onResponse(response)}, {t -> onFailure(t) })
-        )
+
+
+            HttpCtrl.shared.newCall(HttpCtrl.get("https://gorest.co.in/public/v1/users","")).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    e.printStackTrace()
+                }
+                override fun onResponse(call: Call, response: Response) {
+                    response.use {
+                        if (!response.isSuccessful) throw IOException("Unexpected code $response")
+                        for ((name, value) in response.headers) {
+                            println("$name: $value")
+                        }
+                        val json = JSONObject(response.body!!.string())
+                        println(json.getJSONArray("data").getJSONObject(0).getInt("id")==3878)
+                    }
+                }
+            })
     }
 
     private fun handleNullCase() {
@@ -94,8 +97,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     }
 
-    private fun onResponse(response: UserResponseValidation?) {
-        response?.let{
+    private fun onResponse(responseLogged: LoggedUserInfo?) {
+        responseLogged?.let{
             Log.d("HttpRequestCtrl", "values are $it")
         }
     }

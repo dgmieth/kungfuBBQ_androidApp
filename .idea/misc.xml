@@ -21,7 +21,7 @@
         <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_catering.xml" value="0.2907608695652174" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.375" />
-        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_paidorder.xml" value="0.20364583333333333" />
         <entry key="app/src/main/res/layout/fragment_pay.xml" value="0.20364583333333333" />
         <entry key="app/src/main/res/layout/fragment_payorder.xml" value="0.2078125" />
