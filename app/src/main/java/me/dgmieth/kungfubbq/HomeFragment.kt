@@ -29,7 +29,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val args : HomeFragmentArgs by navArgs()
     private var roomViewMode: RoomViewModel? = null
-    private val bag = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -113,7 +112,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         findNavController().navigate(action)
     }
     private fun goToCateringFragment(){
-        val action = HomeFragmentDirections.callCatering()
+        val action = HomeFragmentDirections.callCatering(args.loggedIn)
         findNavController().navigate(action)
     }
     private fun goToCalendarFragment(){

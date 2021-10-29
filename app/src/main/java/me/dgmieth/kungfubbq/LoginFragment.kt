@@ -13,22 +13,16 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_login.*
+import me.dgmieth.kungfubbq.datatabase.room.Actions
 import me.dgmieth.kungfubbq.datatabase.room.KungfuBBQRoomDatabase
 import me.dgmieth.kungfubbq.datatabase.room.RoomViewModel
 import me.dgmieth.kungfubbq.datatabase.roomEntities.SocialMediaInfo
 import me.dgmieth.kungfubbq.datatabase.roomEntities.UserAndSocialMedia
 import me.dgmieth.kungfubbq.datatabase.roomEntities.UserDB
 import me.dgmieth.kungfubbq.httpCtrl.HttpCtrl
-import me.dgmieth.kungfubbq.httpRequets.Endpoints
-import me.dgmieth.kungfubbq.httpRequets.ForgotPasswordBodyData
-import me.dgmieth.kungfubbq.httpRequets.HttpRequestCtrl
 import me.dgmieth.kungfubbq.httpRequets.LoginBodyData
-import me.dgmieth.kungfubbq.httpRequets.responsesObjects.userValidation.ForgotPasswordResponseValidation
-import me.dgmieth.kungfubbq.httpRequets.responsesObjects.userValidation.LoggedUserInfo
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
@@ -39,15 +33,45 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private val TAG = "LoginFragment"
 
     private var viewModel: RoomViewModel? = null
+    private var bag = CompositeDisposable()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        //view model set up
         viewModel = ViewModelProviders.of(this).get(RoomViewModel::class.java)
         var db = KungfuBBQRoomDatabase.getInstance(requireActivity())
         viewModel?.getDbInstance(db)
+        //rxjava observer
+        viewModel?.returnMsg?.subscribe(
+            {
+                Log.d("ObservableTest", "value is $it")
+                when(it){
+                    Actions.UserComplete ->{
+                        Handler(Looper.getMainLooper()).post{
+                            loginSpinerLayout.visibility = View.INVISIBLE
+                            val action = NavGraphDirections.callHome(true)
+                            findNavController().navigate(action)
+                        }
+                    }
+                    else -> {
+                        Handler(Looper.getMainLooper()).post{
+                            loginSpinerLayout.visibility = View.INVISIBLE
+                            Toast.makeText(requireActivity(),"Log in attempt failed. Please try again in some minutes",Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
+            },
+            {
+                Log.d("ObservableTest", "error value is $it")
+                Handler(Looper.getMainLooper()).post{
+                    loginSpinerLayout.visibility = View.INVISIBLE
+                    Toast.makeText(requireActivity(),"Log in attempt failed. Please try again in some minutes",Toast.LENGTH_LONG).show()
+                }
+            },{})?.let{ bag.add(it)}
+        //android mutable live data observer
         viewModel?.user?.observe(viewLifecycleOwner, Observer {
             if(!it.user.email.isNullOrEmpty()){
                 returnUserFromDBSuccess(it)
@@ -55,13 +79,14 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 returnUserFromDBNull()
             }
         })
+        //db getUser information request
         viewModel?.getUser()
         return super.onCreateView(inflater, container, savedInstanceState)
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-
+        //setting button click observers
         loginResetPassword.setOnClickListener{
             println("clicked")
             callResetPasswordAlert()
@@ -81,13 +106,16 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         super.onCreateOptionsMenu(menu, inflater)
         menu.clear()
     }
+    override fun onDestroy() {
+        super.onDestroy()
+        bag.clear()
+        bag.dispose()
+    }
     //========================================================
     //HTTP REQUEST METHODS
     private fun logUserIn() {
         if(!loginUserEmail.text.toString().isNullOrEmpty()&&!loginPassword.text.toString().isNullOrEmpty()){
             loginSpinerLayout.visibility = View.VISIBLE
-            val newUserAuth = LoginBodyData(loginPassword.text.toString(),loginUserEmail.text.toString())
-            Log.d("HttpRequestCtrl", "jsonObject is $newUserAuth")
             val body = FormBody.Builder()
                 .add("email",loginUserEmail.text.toString())
                 .add("password",loginPassword.text.toString())
@@ -103,14 +131,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 }
                 override fun onResponse(call: Call, response: Response) {
                     response.use {
-                        loginSpinerLayout.visibility = View.INVISIBLE
                         if (!response.isSuccessful) throw IOException("Unexpected code $response")
-                        for ((name, value) in response.headers) {
-                            println("$name: $value")
-                        }
                         val json = JSONObject(response.body!!.string())
                         if(!json.getBoolean("hasErrors")){
-                            println(json)
                             val u = json.getJSONObject("data")
                             val user = UserDB(u.getInt("id"),u.getString("email"),u.getString("memberSince"),u.getString("name"),u.getString("phoneNumber"),u.getString("token"),1)
                             var socialM : MutableList<SocialMediaInfo> = arrayListOf()
@@ -119,7 +142,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                 var sMInfo = SocialMediaInfo(s.getString("socialMedia"),s.getString("socialMediaName"),u.getInt("id"))
                                 socialM.add(sMInfo)
                             }
-                            loginSuccess(user,socialM)
+                            viewModel?.insertAllUserInfo(user,socialM)
                         }else{
                             println(json.getString("msg"))
                            Handler(Looper.getMainLooper()).post{
@@ -138,7 +161,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         val body = FormBody.Builder()
             .add("email",email)
             .build()
-        println(body)
         HttpCtrl.shared.newCall(HttpCtrl.post(getString(R.string.kungfuServerUrl),"/api/user/forgotPassword",body)).enqueue(object :
             Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -151,11 +173,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 response.use {
                     loginSpinerLayout.visibility = View.INVISIBLE
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
-                    for ((name, value) in response.headers) {
-                        println("$name: $value")
-                    }
                     val json = JSONObject(response.body!!.string())
-                    println(json)
                     if(!json.getBoolean("hasErrors")){
                         Handler(Looper.getMainLooper()).post {
                             Toast.makeText(requireActivity(),"Success! ${json.getString("msg")}",Toast.LENGTH_LONG).show()
@@ -179,19 +197,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private fun returnUserFromDBSuccess(it: UserAndSocialMedia) {
         Log.d(TAG, "dataReturn was ${it.user.email} and ${it.user.userId}")
         loginUserEmail.setText(it.user.email)
-    }
-    //========================================================
-    //HTTP RETURN CALLBACKS
-    private fun loginSuccess(user: UserDB, socialMediaInfo: MutableList<SocialMediaInfo>) {
-        loginSpinerLayout.visibility = View.INVISIBLE
-                viewModel?.deleteAllUserInfo()
-                viewModel?.deleteAllSocialMediaInfo()
-                viewModel?.insertUserInfo(user)
-                viewModel?.insertSocialMediaInfo(socialMediaInfo)
-            Handler(Looper.getMainLooper()).post{
-                val action = NavGraphDirections.callHome(true)
-                findNavController().navigate(action)
-            }
     }
     //OTHER UI METHODS
     private fun callResetPasswordAlert(){
@@ -221,6 +226,4 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         alert.setTitle("Password recovery")
         alert.show()
     }
-
-
 }

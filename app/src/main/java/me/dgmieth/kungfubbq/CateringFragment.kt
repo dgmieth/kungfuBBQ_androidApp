@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_catering.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_register.*
@@ -27,7 +28,7 @@ import java.io.IOException
 import java.util.*
 
 class CateringFragment : Fragment(R.layout.fragment_catering) {
-
+    private val args : CateringFragmentArgs by navArgs()
     private val TAG = "CateringFragment"
     private val phoneTextWatcher = object: TextWatcher{
         override fun afterTextChanged(s: Editable?) {
@@ -110,7 +111,7 @@ class CateringFragment : Fragment(R.layout.fragment_catering) {
                             Handler(Looper.getMainLooper()).post{
                             Toast.makeText(requireActivity(),"${json.getString("msg")}",
                                     Toast.LENGTH_LONG).show()
-                                val action = NavGraphDirections.callHome(true)
+                                val action = NavGraphDirections.callHome(args.homeLoggedArgument)
                                 findNavController().navigate(action)
                             }
                         }else{

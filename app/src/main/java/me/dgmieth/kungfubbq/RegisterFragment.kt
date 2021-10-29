@@ -143,8 +143,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private fun registerSuccessful(it: RegisteredUserInfo) {
         if (!it.hasErros) {
             loggedUserInfo = it
-            viewModel?.deleteAllUserInfo()
-            viewModel?.deleteAllSocialMediaInfo()
+//            viewModel?.deleteAllUserInfo()
+//            viewModel?.deleteAllSocialMediaInfo()
 
             val u = it.msg
             val sm = u!!.socialMediaInfo
@@ -154,8 +154,9 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 var sMInfo = SocialMediaInfo(i.socialMedia, i.sociaMediaName, u.id)
                 socialM.add(sMInfo)
             }
-            viewModel?.insertUserInfo(user)
-            viewModel?.insertSocialMediaInfo(socialM)
+//            viewModel?.insertUserInfo(user)
+//            viewModel?.insertSocialMediaInfo(socialM)
+            viewModel?.insertAllUserInfo(user,socialM)
             val action = NavGraphDirections.callHome(true)
             findNavController().navigate(action)
         }

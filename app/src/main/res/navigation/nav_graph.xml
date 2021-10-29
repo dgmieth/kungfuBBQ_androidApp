@@ -53,7 +53,12 @@
         android:id="@+id/cateringFragment"
         android:name="me.dgmieth.kungfubbq.CateringFragment"
         android:label="Catering order"
-        tools:layout="@layout/fragment_catering" />
+        tools:layout="@layout/fragment_catering" >
+        <argument
+            android:name="homeLoggedArgument"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </fragment>
     <fragment
         android:id="@+id/aboutFragment"
         android:name="me.dgmieth.kungfubbq.AboutFragment"
