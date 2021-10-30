@@ -32,11 +32,12 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
     private val TAG = "CalendarFragment"
 
     private val events : MutableList<EventDay> = mutableListOf()
-    private var bag = CompositeDisposable()
     private var cookingDates : List<CookingDateAndCookingDateDishesWithOrder>? = null
     private var datesArray : MutableList<Pair<String,Int>>? = null
+    private var selectedCookingDate = 0
 
     private var viewModel: RoomViewModel? = null
+    private var bag = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,16 +55,16 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         //subscribing to returnMsg
         viewModel?.returnMsg?.subscribe({
             Log.d(TAG,"returnMsg has value of $it")
-                when(it){
-                    Actions.CookingDatesComplete -> {
-                        viewModel?.getCookingDates()
-                    }
-                    else -> {
-                        Handler(Looper.getMainLooper()).post{
-                            Toast.makeText(requireActivity(),"It was not possible to retrieve information from kungfuBBQ server. Please try again later.",Toast.LENGTH_LONG).show()
-                        }
+            when(it){
+                Actions.CookingDatesComplete -> {
+                    viewModel?.getCookingDates()
+                }
+                else -> {
+                    Handler(Looper.getMainLooper()).post{
+                        Toast.makeText(requireActivity(),"It was not possible to retrieve information from kungfuBBQ server. Please try again later.",Toast.LENGTH_LONG).show()
                     }
                 }
+            }
         },{},{})?.let {
             bag.add(it)
         }
@@ -78,44 +79,17 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                     val cal = Calendar.getInstance()
                     var splitDate =
                         (i.cookingDateAndDishes.cookingDate.cookingDate.split(" ")[0]).split("-")
-                    Log.d("CookingDates","split array is $splitDate")
                     cal.set(splitDate[0].toInt(), splitDate[1].toInt()-1, splitDate[2].toInt())
-                    Log.d("CookingDates","calendar is $cal")
                     events.add(EventDay(cal, R.drawable.icon_calendar))
-
                     dArray.add(Pair(cal.time.toString(),i.cookingDateAndDishes.cookingDate.cookingDateId))
                 }
                 datesArray = dArray
-                
                 Handler(Looper.getMainLooper()).post{
+                    ifSelectedDateHasCookingDateMath(calendarCalendar.firstSelectedDate.time.toString())
                     Log.d("CalendarCalendar","set events called")
                     calendarCalendar.setEvents(events)
                     calendarCalendar.setOnDayClickListener { eventDay ->
-                        //Log.d("DatesArray","Teste ${datesArray!!}")
-                        datesArray?.let { it ->
-                            for(i in it){
-                                println(i.first)
-                                if(i.first==eventDay.calendar.time.toString()){
-                                    val cdAr = cookingDates!!.filter {cd ->  cd.cookingDateAndDishes.cookingDate.cookingDateId == i.second }
-                                    val cd = cdAr[0]
-                                    val dates =  i.first.split(" ")
-                                    Log.d("DatesArray","$dates")
-                                    val complement = if (cd.cookingDateAndDishes.cookingDate.complement == "Not informed") "" else ", ${cd.cookingDateAndDishes.cookingDate.complement}"
-                                    var dateAddress = "${dates[1]} ${dates[2]} at ${cd.cookingDateAndDishes.cookingDate.street}${complement}"
-                                    dateAddress.also { calendarDate.text = it }
-                                    calendarStatus.text = cd.cookingDateAndDishes.cookingDate.cookingStatus
-                                    var menu = ""
-                                    var menuIndex = 1
-                                    for(m in cd.cookingDateAndDishes.cookingDateDishes){
-                                        menu = "${menu}${menuIndex}- ${m.dishName} \n"
-                                        menuIndex += 1
-                                    }
-                                    calendarMenu.setText(menu)
-                                }else{
-
-                                }
-                            }
-                        }
+                        ifSelectedDateHasCookingDateMath(eventDay.calendar.time.toString())
                         println(eventDay.calendar.time.toString())
                     }
                 }
@@ -148,14 +122,13 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         val date = (dateFormatter.format(today).toString()).toInt()
         val min = Calendar.getInstance()
         val max = Calendar.getInstance()
-        Log.d("CalendarFragment", "Year $year, Month $month, Date $date")
-        min.set(year,month,date)
-        calendarCalendar.setDate(min)
-        min.set(Calendar.DATE,1)
-        Log.d("CalendarFragment", "$min")
+        val todayCal = Calendar.getInstance()
+        min.set(year,month,1)
+        todayCal.set(year,month,date,0,0,0)
+        calendarCalendar.setDate(todayCal)
         //setting min date in calendar
         calendarCalendar.setMinimumDate(min)
-        month += 2
+        month += 1
         if(month > 11){
             max.set(Calendar.YEAR, year + 1)
             max.set(Calendar.MONTH, 0)
@@ -164,14 +137,11 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             max.set(Calendar.MONTH, month)
         }
         //setting max date
-        max.set(Calendar.DATE, min.getActualMaximum(Calendar.DATE))
-        Log.d("CalendarFragment", "Year $year, Month $month, Date $date")
-        Log.d("CalendarFragment", "$max")
+        max.set(Calendar.DATE, max.getActualMaximum(Calendar.DATE))
         calendarCalendar.setMaximumDate(max)
         //setting onClickListener
-
         calendarPreOrder.setOnClickListener {
-            val action = CalendarFragmentDirections.callPreOrder()
+            val action = CalendarFragmentDirections.callPreOrder(selectedCookingDate)
             findNavController().navigate(action)
         }
         calendarUpdateOrder.setOnClickListener {
@@ -187,14 +157,89 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             findNavController().navigate(action)
         }
     }
-      override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         menu.clear()
     }
     /*
     OTHER METHODS
      */
+    private fun ifSelectedDateHasCookingDateMath(eventDay:String){
+        datesArray?.let { it ->
+            for(i in it){
+                if(i.first==eventDay){
+                    calendarNoCookingDate.visibility = View.INVISIBLE
+                    val cdAr = cookingDates!!.filter {cd ->  cd.cookingDateAndDishes.cookingDate.cookingDateId == i.second }
+                    val cd = cdAr[0]
+                    val dates =  i.first.split(" ")
+                    val complement = if (cd.cookingDateAndDishes.cookingDate.complement == "Not informed") "" else ", ${cd.cookingDateAndDishes.cookingDate.complement}"
+                    var dateAddress = "${dates[1]} ${dates[2]} at ${cd.cookingDateAndDishes.cookingDate.street}${complement}"
+                    dateAddress.also { calendarDate.text = it }
+                    calendarStatus.text = cd.cookingDateAndDishes.cookingDate.cookingStatus
+                    var menu = ""
+                    var menuIndex = 1
+                    for(m in cd.cookingDateAndDishes.cookingDateDishes){
+                        menu = "${menu}${menuIndex}- ${m.dishName} \n"
+                        menuIndex += 1
+                    }
+                    calendarMenu.setText(menu)
+                    updateUIBtns(i.second)
+                    break
+                }else{
+                    calendarNoCookingDate.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+    private fun updateUIBtns(cookingDateId:Int){
+        selectedCookingDate = cookingDateId
+        cookingDates?.let {
+            val cdArray = it.filter {e -> e.cookingDateAndDishes.cookingDate.cookingDateId == cookingDateId}
+            val cd = cdArray[0]
+            Log.d("UpdateUiBtns","cookingDate ${cd.cookingDateAndDishes.cookingDate}")
+            if(cd.cookingDateAndDishes.cookingDate.cookingStatusId == 4){
+                Log.d("UpdateUiBtns","cookingDate opened to orders")
+                if(cd.order.isNotEmpty()){
+                    Log.d("UpdateUiBtns","cookingDate opened to orders -> orders not empty")
+                    calendarOrderBtnsVisibility(
+                        placeOrder= false,
+                        updateOrder = true,
+                        payOrder = false,
+                        paidOrder = false
+                    )
+                }else{
+                    Log.d("UpdateUiBtns","cookingDate opened to orders -> orders empty")
+                    calendarOrderBtnsVisibility(
+                        placeOrder = true,
+                        updateOrder = false,
+                        payOrder = false,
+                        paidOrder = false
+                    )
+                }
+            }else {
+                Log.d("UpdateUiBtns","cookingDate close to orders")
+                if(cd.order.isNotEmpty()){
+                    var order = cd.order[0].order
 
+                }else{
+                    calendarOrderBtnsVisibility(
+                        placeOrder= false,
+                        updateOrder = false,
+                        payOrder = false,
+                        paidOrder = false
+                    )
+                }
+
+            }
+
+        }
+    }
+    private fun calendarOrderBtnsVisibility(placeOrder:Boolean,updateOrder:Boolean,payOrder:Boolean,paidOrder:Boolean){
+        calendarPreOrder.visibility = if(placeOrder) View.VISIBLE else View.INVISIBLE
+        calendarUpdateOrder.visibility = if(updateOrder) View.VISIBLE else View.INVISIBLE
+        calendarPayOrder.visibility = if(payOrder) View.VISIBLE else View.INVISIBLE
+        calendarPaidOrder.visibility = if(paidOrder) View.VISIBLE else View.INVISIBLE
+    }
     private fun returnUserFromDBNull() {
         Handler(Looper.getMainLooper()).post{
             Toast.makeText(requireActivity(),"It was not possible to recover data from app`s database. Please restart the app.",Toast.LENGTH_LONG).show()
@@ -267,6 +312,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                             listOrders.add(OrderDB(iO.getInt("orderId"),
                                 iO.getString("orderDate"),
                                 iO.getInt("cookingDateId"),
+                                iO.getInt("orderStatusId"),
                                 iO.getString("orderStatusName"),
                                 iO.getInt("userId"),
                                 iO.getString("userName"),

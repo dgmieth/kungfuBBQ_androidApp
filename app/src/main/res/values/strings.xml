@@ -56,7 +56,7 @@
     <string name="calendar_status_lbl">Status:</string>
     <string name="calendar_menu_lbl">Menu:</string>
     <string name="calendar_location_lbl">Location:</string>
-    <string name="btn_preorder">Place order</string>
+    <string name="btn_preorder">Place pre-order</string>
     <string name="preorder_date_lbl">Date:</string>
     <string name="preorder_status_lbl">Status:</string>
     <string name="preorder_menu_lbl">Menu:</string>
@@ -66,12 +66,12 @@
     <string name="preorder_totalprice_lbl">Total price:</string>
     <string name="btn_preorder_saveorder">Pre-order</string>
     <string name="btn_deleteorder">Delete order</string>
-    <string name="btn_updateorder">Checkout order</string>
-    <string name="btn_payorder">Pay order</string>
+    <string name="btn_updateorder">Update pre-order</string>
+    <string name="btn_payorder">Pay pre-order</string>
     <string name="pay_cardnumber_lbl">Credit Card Number</string>
     <string name="pay_cardcode_lbl">Credit Card Code</string>
     <string name="pay_validthrough_lbl">Valid through</string>
-    <string name="btn_paidorder">Paid order checkout</string>
+    <string name="btn_paidorder">Checkout paid pre-order</string>
     <string name="calendar_no_cooking_msg">"Sorry! We are not cooking today... "</string>
 
 </resources>

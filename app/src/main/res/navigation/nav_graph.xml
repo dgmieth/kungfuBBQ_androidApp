@@ -87,7 +87,12 @@
         android:id="@+id/preOrderFragment"
         android:name="me.dgmieth.kungfubbq.PreOrderFragment"
         android:label="Pre-order"
-        tools:layout="@layout/fragment_preorder" />
+        tools:layout="@layout/fragment_preorder" >
+        <argument
+            android:name="cookingDateId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
     <fragment
         android:id="@+id/updateOrderFragment"
         android:name="me.dgmieth.kungfubbq.UpdateOrderFragment"
@@ -118,4 +123,5 @@
         app:destination="@id/homeFragment"
         app:popUpTo="@id/homeFragment"
         app:popUpToInclusive="true" />
+    <action android:id="@+id/callCalendarFragmentGlobal" app:destination="@id/calendarFragment" />
 </navigation>

@@ -12,6 +12,8 @@ data class OrderDB (
     var orderDate: String,
     @ColumnInfo(name = COOKING_DATE_ID_FK)
     var cookingDateIdFk: Int,
+    @ColumnInfo(name = ORDER_STATUS_ID)
+    var orderStatusId: Int,
     @ColumnInfo(name = ORDER_STATUS_NAME)
     var orderStatusName: String,
     @ColumnInfo(name = USER_ID)
@@ -28,6 +30,7 @@ data class OrderDB (
         const val ORDER_ID = "orderId"
         const val ORDER_DATE = "orderDate"
         const val COOKING_DATE_ID_FK = "cookingDateIdFk"
+        const val ORDER_STATUS_ID = "orderStatusId"
         const val ORDER_STATUS_NAME = "orderStatusName"
         const val USER_ID = "userId"
         const val USER_NAME = "userName"
