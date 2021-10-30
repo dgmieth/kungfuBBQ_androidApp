@@ -21,6 +21,7 @@
         app:abbreviationsLabelsColor="@color/i_reda"
         app:anotherMonthsDaysLabelsColor="@color/secondary"
         app:daysLabelsColor="@color/fontColor"
+        app:eventsEnabled="true"
         app:headerColor="@color/i_black"
         app:headerLabelColor="@color/i_yellow"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
@@ -163,7 +164,7 @@
         android:textColor="@color/i_black"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarMenu" />
@@ -225,39 +226,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarMenu" />
 
-
-    <!--<com.shuhart.materialcalendarview.MaterialCalendarView
-        android:id="@+id/calendarView"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/i_black"
-        android:theme="@style/CalenderViewCustom"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:mcv_calendarMode="month"
-        app:mcv_dateTextAppearance="@style/CalenderViewDateCustomText"
-        app:mcv_firstDayOfWeek="sunday"
-        app:mcv_headerTextAppearance="@style/CalenderViewDateCustomText"
-        app:mcv_selectionColor="@color/calendarDayColor"
-        app:mcv_showOtherDates="out_of_range"
-        app:mcv_tileHeight="match_parent"
-        app:mcv_tileSize="match_parent"
-        app:mcv_tileWidth="match_parent"
-        app:mcv_weekDayTextAppearance="@style/CalenderViewMohtAppearance" />
-    -->
-    <!-- <CalendarView
-         android:id="@+id/calendarCalendar"
-         android:layout_width="0dp"
-         android:layout_height="wrap_content"
-         android:layout_gravity="center"
-         android:background="@color/i_black"
-         android:theme="@style/CalenderViewCustom"
-         android:dateTextAppearance="@style/CalenderViewDateCustomText"
-         android:weekDayTextAppearance="@style/CalenderViewWeekCustomText"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintHorizontal_bias="0.482"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintTop_toTopOf="parent" />-->
+        app:layout_constraintTop_toBottomOf="@id/guideline">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:src="@mipmap/ic_sad_face_foreground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/palatino"
+            android:text="@string/calendar_no_cooking_msg"
+            android:textColor="@color/i_black"
+            android:textSize="38sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

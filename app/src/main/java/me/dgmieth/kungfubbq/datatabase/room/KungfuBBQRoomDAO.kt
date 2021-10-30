@@ -44,6 +44,9 @@ interface KungfuBBQRoomDAO {
     @Transaction
     @Query("Select * FROM ${CookingDateDB.TABLE_NAME} WHERE ${CookingDateDB.COOKING_DATE_ID} = :cookingDateId")
     fun getCookingDate(cookingDateId:Int):Single<CookingDateAndCookingDateDishesWithOrder>
+    @Transaction
+    @Query("Select * FROM ${CookingDateDB.TABLE_NAME}")
+    fun getCookingDates():Single<List<CookingDateAndCookingDateDishesWithOrder>>
 
 
     @Delete

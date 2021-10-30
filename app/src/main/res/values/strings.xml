@@ -72,5 +72,6 @@
     <string name="pay_cardcode_lbl">Credit Card Code</string>
     <string name="pay_validthrough_lbl">Valid through</string>
     <string name="btn_paidorder">Paid order checkout</string>
+    <string name="calendar_no_cooking_msg">"Sorry! We are not cooking today... "</string>
 
 </resources>

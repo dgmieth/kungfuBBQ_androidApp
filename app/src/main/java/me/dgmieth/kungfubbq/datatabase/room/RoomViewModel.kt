@@ -1,13 +1,17 @@
 package me.dgmieth.kungfubbq.datatabase.room
 
+import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.reactivex.Completable
+import io.reactivex.Completable.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import me.dgmieth.kungfubbq.datatabase.roomEntities.*
+import java.util.logging.Handler
 
 enum class Actions {
     None,
@@ -22,6 +26,7 @@ enum class Actions {
     UserComplete,
     UserError,
     CookingDatesComplete,
+    CookingDatesSelectError,
     CookingDatesError;
 }
 
@@ -32,7 +37,7 @@ class RoomViewModel:ViewModel() {
     private var db : KungfuBBQRoomDatabase? = null
 
     var user = MutableLiveData<UserAndSocialMedia>()
-    var order = MutableLiveData<CookingDateAndCookingDateDishesWithOrder>()
+    var cookingDates : PublishSubject<List<CookingDateAndCookingDateDishesWithOrder>> = PublishSubject.create()
     var returnMsg : PublishSubject<Actions> = PublishSubject.create()
 
 
@@ -220,8 +225,6 @@ class RoomViewModel:ViewModel() {
             })?.let {
                 bag.add(it)
             }
-
-        db?.kungfuBBQRoomDao()?.insertAllCookingDates(cookingDates)
     }
     fun getCookingDate(cookingDateId:Int){
         Log.d(TAG,"getOrder called $cookingDateId")
@@ -230,9 +233,24 @@ class RoomViewModel:ViewModel() {
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe({
                 Log.d(TAG,"getOrder called ${it}")
-                        order.postValue(it)
+                        cookingDates.onNext(arrayListOf(it))
             },{
                 Log.d(TAG,"getOrder called error ${it}")
+                        returnMsg.onNext(Actions.CookingDatesSelectError)
+            })?.let{
+                bag.add(it)
+            }
+    }
+    fun getCookingDates(){
+        db?.kungfuBBQRoomDao()?.getCookingDates()
+            ?.subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe({
+                Log.d(TAG,"getOrder called ${it}")
+                cookingDates.onNext(it)
+            },{
+                Log.d(TAG,"getOrder called error ${it}")
+                returnMsg.onNext(Actions.CookingDatesSelectError)
             })?.let{
                 bag.add(it)
             }

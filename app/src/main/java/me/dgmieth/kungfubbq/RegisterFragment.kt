@@ -22,6 +22,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_register.*
+import me.dgmieth.kungfubbq.datatabase.room.Actions
 import me.dgmieth.kungfubbq.datatabase.room.KungfuBBQRoomDatabase
 import me.dgmieth.kungfubbq.datatabase.room.RoomViewModel
 import me.dgmieth.kungfubbq.datatabase.roomEntities.SocialMediaInfo
@@ -55,6 +56,32 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         viewModel = ViewModelProviders.of(this).get(RoomViewModel::class.java)
         var db = KungfuBBQRoomDatabase.getInstance(requireActivity())
         viewModel?.getDbInstance(db)
+        viewModel?.returnMsg?.subscribe(
+            {
+                Log.d("ObservableTest", "value is $it")
+                when(it){
+                    Actions.UserComplete ->{
+                        Handler(Looper.getMainLooper()).post{
+                            registerSpinerLayout.visibility = View.INVISIBLE
+                            val action = NavGraphDirections.callHome(true)
+                            findNavController().navigate(action)
+                        }
+                    }
+                    else -> {
+                        Handler(Looper.getMainLooper()).post{
+                            registerSpinerLayout.visibility = View.INVISIBLE
+                            Toast.makeText(requireActivity(),"Register attempt failed. Please try again in some minutes",Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
+            },
+            {
+                Log.d("ObservableTest", "error value is $it")
+                Handler(Looper.getMainLooper()).post{
+                    loginSpinerLayout.visibility = View.INVISIBLE
+                    Toast.makeText(requireActivity(),"Register attempt failed. Please try again in some minutes",Toast.LENGTH_LONG).show()
+                }
+            },{})?.let{ bag.add(it)}
         return super.onCreateView(inflater, container, savedInstanceState)
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -118,10 +145,19 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                         val json = JSONObject(response.body!!.string())
                         if(!json.getBoolean("hasErrors")){
                             println(json)
-                            Handler(Looper.getMainLooper()).post{
-                                val action = NavGraphDirections.callHome(true)
-                                findNavController().navigate(action)
+                            val u = json.getJSONObject("data")
+                            val user = UserDB(u.getInt("id"),u.getString("email"),u.getString("memberSince"),u.getString("name"),u.getString("phoneNumber"),u.getString("token"),1)
+                            var socialM : MutableList<SocialMediaInfo> = arrayListOf()
+                            for (i in 0 until u.getJSONArray("socialMediaInfo").length()){
+                                val s = u.getJSONArray("socialMediaInfo").getJSONObject(0)
+                                var sMInfo = SocialMediaInfo(s.getString("socialMedia"),s.getString("socialMediaName"),u.getInt("id"))
+                                socialM.add(sMInfo)
                             }
+                            viewModel?.insertAllUserInfo(user,socialM)
+//                            Handler(Looper.getMainLooper()).post{
+//                                val action = NavGraphDirections.callHome(true)
+//                                findNavController().navigate(action)
+//                            }
                         }else{
                             println(json)
                             Handler(Looper.getMainLooper()).post{
