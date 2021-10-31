@@ -97,7 +97,12 @@
         android:id="@+id/updateOrderFragment"
         android:name="me.dgmieth.kungfubbq.UpdateOrderFragment"
         android:label="Update order"
-        tools:layout="@layout/fragment_updateorder" />
+        tools:layout="@layout/fragment_updateorder" >
+        <argument
+            android:name="cookingDateId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
     <fragment
         android:id="@+id/payOrderFragment"
         android:name="me.dgmieth.kungfubbq.PayOrderFragment"
@@ -106,6 +111,10 @@
         <action
             android:id="@+id/callPay"
             app:destination="@id/payFragment2" />
+        <argument
+            android:name="cookingDateId"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/payFragment2"
@@ -116,12 +125,21 @@
         android:id="@+id/paidOrderFragment"
         android:name="me.dgmieth.kungfubbq.PaidOrderFragment"
         android:label="Paid order checkout"
-        tools:layout="@layout/fragment_paidorder" />
+        tools:layout="@layout/fragment_paidorder" >
+        <argument
+            android:name="cookingDateId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
     <action android:id="@+id/callUserInfoGlobal" app:destination="@id/userInfoFragment" />
     <action
         android:id="@+id/callHome"
         app:destination="@id/homeFragment"
         app:popUpTo="@id/homeFragment"
         app:popUpToInclusive="true" />
-    <action android:id="@+id/callCalendarFragmentGlobal" app:destination="@id/calendarFragment" />
+    <action
+        android:id="@+id/callCalendarFragmentGlobal"
+        app:destination="@id/calendarFragment"
+        app:popUpTo="@id/calendarFragment"
+        app:popUpToInclusive="true" />
 </navigation>

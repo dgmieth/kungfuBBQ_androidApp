@@ -106,7 +106,7 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
                 preOrderMealPrice.text = priceString
                 //updating total meal price
                 preOrderTotalPrice.text = priceString
-             }
+            }
         },{
             Log.d("CookingDateObservable","error is $it")
 
@@ -179,8 +179,8 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
             Log.d("PreOrderFragment","mapMethod called - inside - $position")
             map.addMarker(
                 MarkerOptions()
-                .position(position)
-                .title("KungfuBBQ")
+                    .position(position)
+                    .title("KungfuBBQ")
             )
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(position,16.0f))
         }
@@ -224,25 +224,25 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
         preOrderLocationMap.onLowMemory()
     }
     /* =========================================================================================
-    *   preorder http request
-    * */
+ *   preorder http request
+ * */
     private fun placePreOrder(){
-        var dishesAry : MutableList<Int> = mutableListOf()
-        var dishesQtty : MutableList<Int> = mutableListOf()
+        var dishesAry : MutableList<Int> = kotlin.collections.mutableListOf()
+        var dishesQtty : MutableList<Int> = kotlin.collections.mutableListOf()
         for(d in cookingDate!!.cookingDateAndDishes.cookingDateDishes){
             dishesAry.add(d.dishId)
             dishesQtty.add(selectedQtty)
         }
         Log.d(TAG,"Body is ${dishesAry}")
         Log.d(TAG,"Body is ${dishesQtty}")
-        val body = FormBody.Builder()
+        val body = okhttp3.FormBody.Builder()
             .add("email",userPreOrder!!.user.email)
             .add("id",userPreOrder!!.user.userId.toString())
             .add("cookingDate_id", cookingDate!!.cookingDateAndDishes.cookingDate.cookingDateId.toString())
             .add("dish_id", dishesAry.toString())
             .add("dish_qtty", dishesQtty.toString())
-            .add("extras_id", mutableListOf<Int>().toString())
-            .add("extras_qtty", mutableListOf<Int>().toString())
+            .add("extras_id", kotlin.collections.mutableListOf<kotlin.Int>().toString())
+            .add("extras_qtty", kotlin.collections.mutableListOf<kotlin.Int>().toString())
             .build()
         Log.d(TAG,"Body is ${body.toString()}")
         HttpCtrl.shared.newCall(HttpCtrl.post(getString(R.string.kungfuServerUrl),"/api/order/newOrder",body,userPreOrder!!.user.token)).enqueue(object :
@@ -250,7 +250,7 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
             override fun onFailure(call: Call, e: IOException) {
                 e.printStackTrace()
                 Handler(Looper.getMainLooper()).post{
-                    Toast.makeText(requireActivity(),"Log in attempt failed with error message: ${e.localizedMessage}",Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireActivity(),"The attempt to save your order to KungfuBBQ server failed with generalized message: ${e.localizedMessage}",Toast.LENGTH_LONG).show()
                 }
             }
             override fun onResponse(call: Call, response: Response) {
@@ -258,11 +258,26 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
                     val json = JSONObject(response.body!!.string())
                     if(!json.getBoolean("hasErrors")){
-                      Log.d(TAG, "values are $json")
-                    }else{
-                        println(json.getString("msg"))
+                        Log.d(TAG, "values are $json")
                         Handler(Looper.getMainLooper()).post{
-                            Toast.makeText(requireActivity(),"Log in attempt failed with server message: ${json.getString("msg").toString()}",Toast.LENGTH_LONG).show()
+                            Toast.makeText(requireActivity(),"${json.getString("msg")}",
+                                Toast.LENGTH_LONG).show()
+                            val action = CalendarFragmentDirections.callCalendarFragmentGlobal()
+                            findNavController().navigate(action)
+                        }
+                    }else{
+                        if(json.getInt("errorCode")==-1){
+                            Handler(Looper.getMainLooper()).post{
+                                Toast.makeText(requireActivity(),"${json.getString("msg")}",
+                                    Toast.LENGTH_LONG).show()
+                                val action = NavGraphDirections.callHome(false)
+                                findNavController().navigate(action)
+                            }
+                        }else{
+                            Handler(Looper.getMainLooper()).post{
+                                Toast.makeText(requireActivity(),"The attempt to save your order to KungfuBBQ server failed with server message: ${json.getString("msg")}",
+                                    Toast.LENGTH_LONG).show()
+                            }
                         }
                     }
                 }

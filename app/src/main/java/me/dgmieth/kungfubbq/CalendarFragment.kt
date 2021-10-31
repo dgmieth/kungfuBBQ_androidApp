@@ -339,7 +339,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                             }
                         }else{
                             Handler(Looper.getMainLooper()).post{
-                                Toast.makeText(requireActivity(),"The attempt to retrieve data from KungfuBBQ server failed with generalized server message: ${json.getString("msg")}",
+                                Toast.makeText(requireActivity(),"The attempt to retrieve data from KungfuBBQ server failed with server message: ${json.getString("msg")}",
                                     Toast.LENGTH_LONG).show()
                             }
                         }
