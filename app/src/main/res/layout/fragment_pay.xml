@@ -114,7 +114,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/payValidLbl" />
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/updateOrderUpdateOrderBtns"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

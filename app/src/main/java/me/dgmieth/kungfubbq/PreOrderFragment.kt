@@ -1,5 +1,7 @@
 package me.dgmieth.kungfubbq
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.nfc.Tag
 import android.os.Bundle
 import android.os.Handler
@@ -7,6 +9,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -23,6 +26,7 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_preorder.*
+import kotlinx.android.synthetic.main.fragment_updateorder.*
 import me.dgmieth.kungfubbq.datatabase.room.Actions
 import me.dgmieth.kungfubbq.datatabase.room.KungfuBBQRoomDatabase
 import me.dgmieth.kungfubbq.datatabase.room.RoomViewModel
@@ -52,6 +56,10 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
 
     private val args : PreOrderFragmentArgs by navArgs()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -127,7 +135,24 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
             }
         })
         //db getUser information request
-        viewModel?.getUser()
+        if(args.cookingDateId != 0) {
+            viewModel?.getUser()
+        }else{
+            var dialogBuilder = AlertDialog.Builder(activity)
+            dialogBuilder.setMessage("Communication with this apps's database failed. Please restart the app.")
+                .setCancelable(false)
+                .setPositiveButton("Ok", DialogInterface.OnClickListener{
+                        dialog, id ->
+                    Handler(Looper.getMainLooper()).post {
+                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
+                        findNavController().navigate(action)
+                    }
+                })
+            val alert = dialogBuilder.create()
+            alert.setTitle("Database communication failure")
+            alert.show()
+        }
+
         return super.onCreateView(inflater, container, savedInstanceState)
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -149,6 +174,7 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
             requireActivity().onBackPressed()
         }
         preOrderPreOrderBtn.setOnClickListener {
+            showSpinner(true)
             placePreOrder()
         }
     }
@@ -248,22 +274,33 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
         HttpCtrl.shared.newCall(HttpCtrl.post(getString(R.string.kungfuServerUrl),"/api/order/newOrder",body,userPreOrder!!.user.token)).enqueue(object :
             Callback {
             override fun onFailure(call: Call, e: IOException) {
+                showSpinner(false)
                 e.printStackTrace()
                 Handler(Looper.getMainLooper()).post{
                     Toast.makeText(requireActivity(),"The attempt to save your order to KungfuBBQ server failed with generalized message: ${e.localizedMessage}",Toast.LENGTH_LONG).show()
                 }
             }
             override fun onResponse(call: Call, response: Response) {
+                showSpinner(false)
                 response.use {
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
                     val json = JSONObject(response.body!!.string())
                     if(!json.getBoolean("hasErrors")){
                         Log.d(TAG, "values are $json")
                         Handler(Looper.getMainLooper()).post{
-                            Toast.makeText(requireActivity(),"${json.getString("msg")}",
-                                Toast.LENGTH_LONG).show()
-                            val action = CalendarFragmentDirections.callCalendarFragmentGlobal()
-                            findNavController().navigate(action)
+                            var dialogBuilder = AlertDialog.Builder(activity)
+                            dialogBuilder.setMessage("${json.getString("msg")}")
+                                .setCancelable(false)
+                                .setPositiveButton("Ok", DialogInterface.OnClickListener{
+                                        _, _ ->
+                                    Handler(Looper.getMainLooper()).post {
+                                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
+                                        findNavController().navigate(action)
+                                    }
+                                })
+                            val alert = dialogBuilder.create()
+                            alert.setTitle("Pre-order created on KungfuBBQ's server")
+                            alert.show()
                         }
                     }else{
                         if(json.getInt("errorCode")==-1){
@@ -283,5 +320,16 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
                 }
             }
         })
+    }
+    /*
+    * UI ELEMENTS
+    */
+    private fun showSpinner(value: Boolean){
+        Handler(Looper.getMainLooper()).post {
+            preOrderSpinerLayout.visibility =  when(value){
+                true -> View.VISIBLE
+                else -> View.INVISIBLE
+            }
+        }
     }
 }

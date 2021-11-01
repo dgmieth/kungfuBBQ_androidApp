@@ -145,7 +145,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             findNavController().navigate(action)
         }
         calendarUpdateOrder.setOnClickListener {
-            val action = CalendarFragmentDirections.callUpdateOrder()
+            val action = CalendarFragmentDirections.callUpdateOrder(selectedCookingDate)
             findNavController().navigate(action)
         }
         calendarPayOrder.setOnClickListener {
@@ -160,6 +160,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         menu.clear()
+
     }
     /*
     OTHER METHODS

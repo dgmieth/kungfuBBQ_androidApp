@@ -123,21 +123,24 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         val userinfo = menu.getItem(0)
-        userinfo.setVisible(args.loggedIn)
+        userinfo.isVisible = args.loggedIn
 
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.userInfoMenuBtn){
-            val action = HomeFragmentDirections.callUserInfoGlobal()
-            findNavController().navigate(action)
-            return true
-        }else if (item.itemId == R.id.aboutAppMenuBtn) {
-            val action = HomeFragmentDirections.callAbout()
-            findNavController().navigate(action)
-            return true
-        }
-        else{
-            return  super.onOptionsItemSelected(item)
+        return when (item.itemId) {
+            R.id.userInfoMenuBtn -> {
+                val action = HomeFragmentDirections.callUserInfoGlobal()
+                findNavController().navigate(action)
+                true
+            }
+            R.id.aboutAppMenuBtn -> {
+                val action = HomeFragmentDirections.callAbout()
+                findNavController().navigate(action)
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
         }
     }
 }

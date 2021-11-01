@@ -1,11 +1,14 @@
 package me.dgmieth.kungfubbq
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -15,12 +18,17 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_preorder.*
 import kotlinx.android.synthetic.main.fragment_updateorder.*
 import me.dgmieth.kungfubbq.datatabase.room.KungfuBBQRoomDatabase
 import me.dgmieth.kungfubbq.datatabase.room.RoomViewModel
 import me.dgmieth.kungfubbq.datatabase.roomEntities.CookingDateAndCookingDateDishesWithOrder
 import me.dgmieth.kungfubbq.datatabase.roomEntities.UserAndSocialMedia
+import me.dgmieth.kungfubbq.httpCtrl.HttpCtrl
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.Response
+import org.json.JSONObject
+import java.io.IOException
 import java.util.*
 
 class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyCallback {
@@ -32,11 +40,15 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
     private var cookingDate : CookingDateAndCookingDateDishesWithOrder? = null
     private var userUpdateOrder : UserAndSocialMedia? = null
     private var selectedQtty = 1
+    private var editItemBtn : MenuItem? = null
 
     private var bag = CompositeDisposable()
 
     private val args : UpdateOrderFragmentArgs by navArgs()
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,9 +58,25 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
         viewModel = ViewModelProviders.of(this).get(RoomViewModel::class.java)
         var db = KungfuBBQRoomDatabase.getInstance(requireActivity())
         viewModel?.getDbInstance(db)
+        //Subscribing to user
+        viewModel?.user?.observe(viewLifecycleOwner, Observer {
+            Log.d(TAG, "user returned $it")
+            viewModel?.getCookingDates()
+            if(!it.user.email.isNullOrEmpty()){
+                Log.d(TAG,"userUpdateOrder called -> value $it")
+                userUpdateOrder = it
+            }else{
+                Handler(Looper.getMainLooper()).post{
+                    Toast.makeText(requireActivity(),"It was not possible to retrieve information from this app's database. Please restart the app.",
+                        Toast.LENGTH_LONG).show()
+                    var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
+                    findNavController().navigate(action)
+                }
+            }
+        })
         //Subscribing to cookingD
         viewModel?.cookingDates?.subscribe({
-            Log.d(TAG,"cookingDates called")
+            Log.d(TAG,"cookingDates called with cookingDateId ${args.cookingDateId}")
             var cdArray = it.filter { c -> c.cookingDateAndDishes.cookingDate.cookingDateId == args.cookingDateId }
             cookingDate = cdArray[0]
             cookingDate?.let { cd ->
@@ -73,7 +101,7 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
                 updateOrderMenu.setText(menuT)
                 //updating maps
                 updateOrderLocationText.text = "${cd.cookingDateAndDishes.cookingDate.street}, ${cd.cookingDateAndDishes.cookingDate.city}"
-                //updateOrderLocationMap.getMapAsync(this)
+                updateOrderLocationMap.getMapAsync(this)
                 var priceString = "U$ ${String.format("%.2f",mealsSum)}"
                 //updating meal price
                 updateOrderMealPrice.text = priceString
@@ -86,24 +114,26 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
         },{})?.let {
             bag.add(it)
         }
-        viewModel?.user?.observe(viewLifecycleOwner, Observer {
-            Log.d(TAG, "user returned $it")
-            if(!it.user.email.isNullOrEmpty()){
-                Log.d(TAG,"userUpdateOrder called -> value $it")
-                userUpdateOrder = it
-                viewModel?.getCookingDates()
-            }else{
-                Handler(Looper.getMainLooper()).post{
-                    Toast.makeText(requireActivity(),"It was not possible to retrieve information from this app's database. Please restart the app.",
-                        Toast.LENGTH_LONG).show()
-                    var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
-                    findNavController().navigate(action)
-                }
-            }
-        })
         Log.d(TAG,"onCreateView -> getting user")
         //db getUser information request
-        viewModel?.getUser()
+        if(args.cookingDateId != 0) {
+            viewModel?.getUser()
+        }else{
+            var dialogBuilder = AlertDialog.Builder(activity)
+            dialogBuilder.setMessage("Communication with this apps's database failed. Please restart the app.")
+                .setCancelable(false)
+                .setPositiveButton("Ok", DialogInterface.OnClickListener{
+                        dialog, id ->
+                    Handler(Looper.getMainLooper()).post {
+                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
+                        findNavController().navigate(action)
+                    }
+                })
+            val alert = dialogBuilder.create()
+            alert.setTitle("Database communication failure")
+            alert.show()
+
+        }
         Log.d(TAG,"onCreateView ends")
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -112,6 +142,7 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
         updateOrderNumberOfMeals.minValue = 1
         updateOrderNumberOfMeals.maxValue = 100
         updateOrderNumberOfMeals.wrapSelectorWheel = true
+        updateOrderNumberOfMeals.isEnabled = false
         updateOrderNumberOfMeals.setOnValueChangedListener{picker,oldVal,newVal ->
             Log.d("preOrderFragment", "picker $picker oldValue $oldVal newValue $newVal")
             selectedQtty = newVal
@@ -121,20 +152,43 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
             updateOrderTotalPrice.text = "U$ ${String.format("%.2f",total)}"
         }
         updateOrderCancelBtn.setOnClickListener {
-
+            showUpdateOrderBtns(false)
         }
-        updateOrderPreOrderBtn.setOnClickListener {
+        updateOrderUpdateOrderBtn.setOnClickListener {
 //            updateOrderSpinerLayout.visibility = View.VISIBLE
 
         }
         updateOrderDeleteOrder.setOnClickListener {
-
+            deleteOrderAlert()
         }
         super.onViewCreated(view, savedInstanceState)
     }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        menu.clear()
+        menu.getItem(0).isVisible = false
+        menu.getItem(1).isVisible = false
+        menu.getItem(2).isVisible = true
+        menu.getItem(3).isVisible = false
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.editMenuBtn -> {
+                editItemBtn = item
+                showUpdateOrderBtns(true)
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
+    }
+    private fun showUpdateOrderBtns(value:Boolean){
+        updateOrderNumberOfMeals.isEnabled = value
+        updateOrderUpdateOrderBtns.isVisible = value
+        updateOrderDeleteOrder.isVisible = !value
+        editItemBtn!!.isVisible = !value
     }
     private fun initGoogleMap(savedInstanceState: Bundle?) {
         Log.d("preOrderFragment", "initGoogleMap")
@@ -203,5 +257,99 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
     override fun onLowMemory() {
         super.onLowMemory()
         updateOrderLocationMap.onLowMemory()
+    }
+    /* =========================================================================================
+    *   updateorder http requests
+    * */
+    private fun deleteOrderAlert() {
+        var dialogBuilder = AlertDialog.Builder(activity)
+        dialogBuilder.setMessage("Are you sure you want to delete your order? This action cannot be undone.")
+            .setCancelable(true)
+            .setPositiveButton("Yes", DialogInterface.OnClickListener{
+                    _, _ ->
+                showSpinner(true)
+                Handler(Looper.getMainLooper()).post {
+                    deleteOrder()
+                }
+            })
+        val alert = dialogBuilder.create()
+        alert.setTitle("Delete your order?")
+        alert.show()
+    }
+    private fun deleteOrder(){
+        var dishesAry : MutableList<Int> = kotlin.collections.mutableListOf()
+        var dishesQtty : MutableList<Int> = kotlin.collections.mutableListOf()
+        for(d in cookingDate!!.cookingDateAndDishes.cookingDateDishes){
+            dishesAry.add(d.dishId)
+            dishesQtty.add(selectedQtty)
+        }
+        Log.d(TAG,"Body is ${dishesAry}")
+        Log.d(TAG,"Body is ${dishesQtty}")
+        val body = okhttp3.FormBody.Builder()
+            .add("email",userUpdateOrder!!.user.email)
+            .add("id",userUpdateOrder!!.user.userId.toString())
+            .add("order_id", cookingDate!!.order[0].order.orderId.toString())
+            .build()
+        Log.d(TAG,"Body is ${body.toString()}")
+        HttpCtrl.shared.newCall(HttpCtrl.post(getString(R.string.kungfuServerUrl),"/api/order/deleteOrder",body,userUpdateOrder!!.user.token)).enqueue(object :
+            Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                showSpinner(false)
+                e.printStackTrace()
+                Handler(Looper.getMainLooper()).post{
+                    Toast.makeText(requireActivity(),"The attempt to delete your order from KungfuBBQ's server failed with generalized message: ${e.localizedMessage}",Toast.LENGTH_LONG).show()
+                }
+            }
+            override fun onResponse(call: Call, response: Response) {
+                showSpinner(false)
+                response.use {
+                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
+                    val json = JSONObject(response.body!!.string())
+                    if(!json.getBoolean("hasErrors")){
+                        Log.d(TAG, "values are $json")
+                        Handler(Looper.getMainLooper()).post{
+                            var dialogBuilder = AlertDialog.Builder(activity)
+                            dialogBuilder.setMessage("${json.getString("msg")}")
+                                .setCancelable(false)
+                                .setPositiveButton("Ok", DialogInterface.OnClickListener{
+                                        _, _ ->
+                                    Handler(Looper.getMainLooper()).post {
+                                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
+                                        findNavController().navigate(action)
+                                    }
+                                })
+                            val alert = dialogBuilder.create()
+                            alert.setTitle("Pre-order successfully deleted from KungfuBBQ's server")
+                            alert.show()
+                        }
+                    }else{
+                        if(json.getInt("errorCode")==-1){
+                            Handler(Looper.getMainLooper()).post{
+                                Toast.makeText(requireActivity(),"${json.getString("msg")}",
+                                    Toast.LENGTH_LONG).show()
+                                val action = NavGraphDirections.callHome(false)
+                                findNavController().navigate(action)
+                            }
+                        }else{
+                            Handler(Looper.getMainLooper()).post{
+                                Toast.makeText(requireActivity(),"The attempt to delete your order from KungfuBBQ's server failed with server message: ${json.getString("msg")}",
+                                    Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    }
+    /*
+    * UI ELEMENTS
+    */
+    private fun showSpinner(value: Boolean){
+        Handler(Looper.getMainLooper()).post {
+            updateOrderSpinerLayout.visibility =  when(value){
+                true -> View.VISIBLE
+                else -> View.INVISIBLE
+            }
+        }
     }
 }
