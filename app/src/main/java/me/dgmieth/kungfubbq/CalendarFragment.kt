@@ -1,13 +1,14 @@
 package me.dgmieth.kungfubbq
 
-import android.app.Notification
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.Observer
@@ -23,8 +24,6 @@ import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class CalendarFragment : Fragment(R.layout.fragment_calendar) {
@@ -85,6 +84,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                 }
                 datesArray = dArray
                 Handler(Looper.getMainLooper()).post{
+                    calendarSpinnerLayout.isVisible = false
                     ifSelectedDateHasCookingDateMath(calendarCalendar.firstSelectedDate.time.toString())
                     Log.d("CalendarCalendar","set events called")
                     calendarCalendar.setEvents(events)
@@ -112,6 +112,8 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        calendarMenu.movementMethod = ScrollingMovementMethod()
+        calendarSpinnerLayout.visibility = View.VISIBLE
         val today = Date()
         val dateFormatter = SimpleDateFormat()
         dateFormatter.applyPattern("y")
@@ -123,7 +125,8 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         val min = Calendar.getInstance()
         val max = Calendar.getInstance()
         val todayCal = Calendar.getInstance()
-        min.set(year,month,1)
+        min.set(year,month,date)
+        min.add(Calendar.DAY_OF_MONTH,-1)
         todayCal.set(year,month,date,0,0,0)
         calendarCalendar.setDate(todayCal)
         //setting min date in calendar
@@ -160,7 +163,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         menu.clear()
-
     }
     /*
     OTHER METHODS
@@ -183,7 +185,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                         menu = "${menu}${menuIndex}- ${m.dishName} \n"
                         menuIndex += 1
                     }
-                    calendarMenu.setText(menu)
+                    calendarMenu.text = menu
                     updateUIBtns(i.second)
                     break
                 }else{

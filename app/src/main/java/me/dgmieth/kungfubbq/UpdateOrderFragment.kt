@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.*
 import android.widget.Toast
@@ -139,6 +140,7 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initGoogleMap(savedInstanceState)
+        updateOrderMenu.movementMethod = ScrollingMovementMethod()
         updateOrderNumberOfMeals.minValue = 1
         updateOrderNumberOfMeals.maxValue = 100
         updateOrderNumberOfMeals.wrapSelectorWheel = true
@@ -146,17 +148,16 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
         updateOrderNumberOfMeals.setOnValueChangedListener{picker,oldVal,newVal ->
             Log.d("preOrderFragment", "picker $picker oldValue $oldVal newValue $newVal")
             selectedQtty = newVal
-            val mealsPrice = (updateOrderMealPrice.text.toString().split(" ")[1].toDouble())
-            Log.d("preOrderFragment", "value ${updateOrderMealPrice.text.toString()} array ${updateOrderMealPrice.text.split(" ")} first value ${updateOrderMealPrice.text.split(" ")[0]} ")
-            val total = mealsPrice * newVal
-            updateOrderTotalPrice.text = "U$ ${String.format("%.2f",total)}"
+            updateOrderTotalPrice.text = returnTotalAmount(newVal)
         }
         updateOrderCancelBtn.setOnClickListener {
             showUpdateOrderBtns(false)
+            updateOrderNumberOfMeals.value = cookingDate!!.order[0].dishes[0].dishQuantity
+            selectedQtty = cookingDate!!.order[0].dishes[0].dishQuantity
+            updateOrderTotalPrice.text = returnTotalAmount(selectedQtty)
         }
         updateOrderUpdateOrderBtn.setOnClickListener {
-//            updateOrderSpinerLayout.visibility = View.VISIBLE
-
+            updateOrder()
         }
         updateOrderDeleteOrder.setOnClickListener {
             deleteOrderAlert()
@@ -183,12 +184,6 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
                 super.onOptionsItemSelected(item)
             }
         }
-    }
-    private fun showUpdateOrderBtns(value:Boolean){
-        updateOrderNumberOfMeals.isEnabled = value
-        updateOrderUpdateOrderBtns.isVisible = value
-        updateOrderDeleteOrder.isVisible = !value
-        editItemBtn!!.isVisible = !value
     }
     private fun initGoogleMap(savedInstanceState: Bundle?) {
         Log.d("preOrderFragment", "initGoogleMap")
@@ -265,6 +260,9 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
         var dialogBuilder = AlertDialog.Builder(activity)
         dialogBuilder.setMessage("Are you sure you want to delete your order? This action cannot be undone.")
             .setCancelable(true)
+            .setNegativeButton("Cancel",DialogInterface.OnClickListener{
+                    _,_->
+            })
             .setPositiveButton("Yes", DialogInterface.OnClickListener{
                     _, _ ->
                 showSpinner(true)
@@ -277,14 +275,7 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
         alert.show()
     }
     private fun deleteOrder(){
-        var dishesAry : MutableList<Int> = kotlin.collections.mutableListOf()
-        var dishesQtty : MutableList<Int> = kotlin.collections.mutableListOf()
-        for(d in cookingDate!!.cookingDateAndDishes.cookingDateDishes){
-            dishesAry.add(d.dishId)
-            dishesQtty.add(selectedQtty)
-        }
-        Log.d(TAG,"Body is ${dishesAry}")
-        Log.d(TAG,"Body is ${dishesQtty}")
+        showSpinner(true)
         val body = okhttp3.FormBody.Builder()
             .add("email",userUpdateOrder!!.user.email)
             .add("id",userUpdateOrder!!.user.userId.toString())
@@ -341,9 +332,85 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
             }
         })
     }
+    private fun updateOrder(){
+        if(cookingDate!!.order[0].dishes[0].dishQuantity == selectedQtty){
+            Handler(Looper.getMainLooper()).post{
+                showUpdateOrderBtns(false)
+                Toast.makeText(requireActivity(),"Nothing was changed",Toast.LENGTH_LONG).show()
+            }
+            return
+        }
+        val body = okhttp3.FormBody.Builder()
+            .add("email",userUpdateOrder!!.user.email)
+            .add("id",userUpdateOrder!!.user.userId.toString())
+            .add("order_id", cookingDate!!.order[0].order.orderId.toString())
+            .add("new_qtty",selectedQtty.toString())
+            .build()
+        Log.d(TAG,"Body is ${body.toString()}")
+        HttpCtrl.shared.newCall(HttpCtrl.post(getString(R.string.kungfuServerUrl),"/api/order/updateOrder",body,userUpdateOrder!!.user.token)).enqueue(object :
+            Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                showSpinner(false)
+                e.printStackTrace()
+                Handler(Looper.getMainLooper()).post{
+                    Toast.makeText(requireActivity(),"The attempt to update your order on KungfuBBQ's server failed with generalized message: ${e.localizedMessage}",Toast.LENGTH_LONG).show()
+                }
+            }
+            override fun onResponse(call: Call, response: Response) {
+                showSpinner(false)
+                response.use {
+                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
+                    val json = JSONObject(response.body!!.string())
+                    if(!json.getBoolean("hasErrors")){
+                        Log.d(TAG, "values are $json")
+                        Handler(Looper.getMainLooper()).post{
+                            var dialogBuilder = AlertDialog.Builder(activity)
+                            dialogBuilder.setMessage("${json.getString("msg")}")
+                                .setCancelable(false)
+                                .setPositiveButton("Ok", DialogInterface.OnClickListener{
+                                        _, _ ->
+                                    Handler(Looper.getMainLooper()).post {
+                                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
+                                        findNavController().navigate(action)
+                                    }
+                                })
+                            val alert = dialogBuilder.create()
+                            alert.setTitle("Pre-order successfully updated on KungfuBBQ's server")
+                            alert.show()
+                        }
+                    }else{
+                        if(json.getInt("errorCode")==-1){
+                            Handler(Looper.getMainLooper()).post{
+                                Toast.makeText(requireActivity(),"${json.getString("msg")}",
+                                    Toast.LENGTH_LONG).show()
+                                val action = NavGraphDirections.callHome(false)
+                                findNavController().navigate(action)
+                            }
+                        }else{
+                            Handler(Looper.getMainLooper()).post{
+                                Toast.makeText(requireActivity(),"The attempt to update your order on KungfuBBQ's server failed with server message: ${json.getString("msg")}",
+                                    Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    }
     /*
     * UI ELEMENTS
     */
+    private fun showUpdateOrderBtns(value:Boolean){
+        updateOrderNumberOfMeals.isEnabled = value
+        updateOrderUpdateOrderBtns.isVisible = value
+        updateOrderDeleteOrder.isVisible = !value
+        editItemBtn!!.isVisible = !value
+    }
+    private fun returnTotalAmount(qttyChosen:Int):String{
+        val mealsPrice = (updateOrderMealPrice.text.toString().split(" ")[1].toDouble())
+        val total = mealsPrice * qttyChosen
+        return "U$ ${String.format("%.2f",total)}"
+    }
     private fun showSpinner(value: Boolean){
         Handler(Looper.getMainLooper()).post {
             updateOrderSpinerLayout.visibility =  when(value){

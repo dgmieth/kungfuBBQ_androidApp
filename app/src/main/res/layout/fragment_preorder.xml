@@ -194,25 +194,42 @@
         app:layout_constraintTop_toBottomOf="@+id/preOrderDate"
         tools:text="Jun 16th 2021" />
 
-    <EditText
+    <TextView
         android:id="@+id/preOrderMenu"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="68dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:background="@color/white"
-        android:ems="10"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
-        android:lines="3"
-        android:maxLines="5"
-        android:minLines="3"
-        android:text="teste"
+        android:fontFamily="@font/palatino"
+        android:scrollbars="vertical"
+        android:text="@string/calendar_menu_lbl"
+        android:textColor="@color/i_black"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/preOrderMenuLbl"
         app:layout_constraintTop_toBottomOf="@+id/preOrderStatus" />
+<!--    <EditText-->
+<!--        android:id="@+id/preOrderMenu"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:layout_marginTop="4dp"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        android:background="@color/white"-->
+<!--        android:ems="10"-->
+<!--        android:gravity="start|top"-->
+<!--        android:inputType="textMultiLine"-->
+<!--        android:lines="3"-->
+<!--        android:maxLines="5"-->
+<!--        android:minLines="3"-->
+<!--        android:text="teste"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="1.0"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/preOrderMenuLbl"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/preOrderStatus" />-->
 
     <LinearLayout
         android:id="@+id/updateOrderUpdateOrderBtns"

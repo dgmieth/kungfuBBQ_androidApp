@@ -6,6 +6,7 @@ import android.nfc.Tag
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.*
 import android.widget.Toast
@@ -105,7 +106,7 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
                     menuIndex += 1
                     mealsSum += m.dishPrice.toDouble()
                 }
-                preOrderMenu.setText(menuT)
+                preOrderMenu.text = menuT
                 //updating maps
                 preOrderLocationText.text = "${cd.cookingDateAndDishes.cookingDate.street}, ${cd.cookingDateAndDishes.cookingDate.city}"
                 preOrderLocationMap.getMapAsync(this)
@@ -158,6 +159,7 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initGoogleMap(savedInstanceState)
+        preOrderMenu.movementMethod = ScrollingMovementMethod()
         Log.d("preOrderFragment", "onViewCreated starts")
         preOrderNumberOfMeals.minValue = 1
         preOrderNumberOfMeals.maxValue = 100

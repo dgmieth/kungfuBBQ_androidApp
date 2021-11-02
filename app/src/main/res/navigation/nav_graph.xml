@@ -69,7 +69,7 @@
         android:id="@+id/calendarFragment"
         android:name="me.dgmieth.kungfubbq.CalendarFragment"
         android:label="Calendar"
-        tools:layout="@layout/fragment_calendar" >
+        tools:layout="@layout/fragment_calendar1" >
         <action
             android:id="@+id/callPreOrder"
             app:destination="@id/preOrderFragment" />
