@@ -21,6 +21,10 @@ interface KungfuBBQRoomDAO {
     @Transaction
     @Query("Select * FROM ${UserDB.TABLE_NAME}")
     fun getUser():Single<UserAndSocialMedia>
+    @Query("UPDATE ${UserDB.TABLE_NAME}" +
+            "           SET ${UserDB.TOKEN} = :newToken" +
+            "       WHERE ${UserDB.USER_ID} = :userId")
+    fun updateUserToken(userId:Int,newToken:String):Completable
 
     //COOKING DATE, DISHES and ORDERS
     @Transaction

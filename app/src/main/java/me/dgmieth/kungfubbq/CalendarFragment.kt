@@ -1,5 +1,7 @@
 package me.dgmieth.kungfubbq
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -152,11 +154,11 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             findNavController().navigate(action)
         }
         calendarPayOrder.setOnClickListener {
-            val action = CalendarFragmentDirections.callPayOrder()
+            val action = CalendarFragmentDirections.callPayOrder(selectedCookingDate)
             findNavController().navigate(action)
         }
         calendarPaidOrder.setOnClickListener {
-            val action = CalendarFragmentDirections.callPaidOrder()
+            val action = CalendarFragmentDirections.callPaidOrder(selectedCookingDate)
             findNavController().navigate(action)
         }
     }
@@ -204,7 +206,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                 Log.d("UpdateUiBtns","cookingDate opened to orders")
                 if(cd.order.isNotEmpty()){
                     Log.d("UpdateUiBtns","cookingDate opened to orders -> orders not empty")
-                    calendarOrderBtnsVisibility(
+                    showOrderBtns(
                         placeOrder= false,
                         updateOrder = true,
                         payOrder = false,
@@ -212,7 +214,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                     )
                 }else{
                     Log.d("UpdateUiBtns","cookingDate opened to orders -> orders empty")
-                    calendarOrderBtnsVisibility(
+                    showOrderBtns(
                         placeOrder = true,
                         updateOrder = false,
                         payOrder = false,
@@ -220,12 +222,61 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                     )
                 }
             }else {
-                Log.d("UpdateUiBtns","cookingDate close to orders")
+                Log.d(TAG,"cookingDate close to orders")
                 if(cd.order.isNotEmpty()){
                     var order = cd.order[0].order
-
+                    if (order.orderStatusId == 2 ){ /*Waiting cooking calendar date closure and sorting*/
+                        /*show update btn*/
+                        showOrderBtns(
+                            placeOrder = false,
+                            updateOrder = true,
+                            payOrder = false,
+                            paidOrder = false
+                        )
+                    }
+                    if (order.orderStatusId == 3 ){ /*Waiting user confirmation/payment*/
+                        /*show pay btn*/
+                        showOrderBtns(
+                            placeOrder = false,
+                            updateOrder = false,
+                            payOrder = true,
+                            paidOrder = false
+                        )
+                    }
+                    if (order.orderStatusId == 4 ){ /*Waiting selected users to drop out*/
+                        /*create user alert*/
+                        Log.d(TAG,"waiting dropouts")
+                        showAlert("Your order did not make it to this list, but you are on the waiting list for drop out orders. You'll receive a notification if your order gets onto this list",
+                                "Order status")
+                    }
+                    if (arrayListOf<Int>(5,8,9,10,11).contains(order.orderStatusId) ){ /*5-Confirmed/paid by user 8-Waiting order pickup alert 9- Waiting pickup 10- Delivered 11-Closed  */
+                        /*show checkout pair order btn*/
+                        showOrderBtns(
+                            placeOrder = false,
+                            updateOrder = false,
+                            payOrder = false,
+                            paidOrder = true
+                        )
+                    }
+                    if (order.orderStatusId == 6 ){ /*Declined by user*/
+                        /*create user alert*/
+                        Log.d(TAG,"order declined")
+                        showAlert("You cancelled this order if you wish to order food from us, please choose another available cooking date",
+                            "Order status")
+                    }
+                    if (order.orderStatusId == 7 ){ /*Not made to this cookingCalendar date list*/
+                        /*create user alert*/
+                        showAlert("We are sorry! Unfortunately your order did not make to this final list of this cooking date. Please, order from us again on another available cooking date",
+                            "Order status")
+                    }
+                    if (order.orderStatusId == 12 ){ /*The cooking calendar register was excluded by the database administrator, application user or routine*/
+                        /*create user alert*/
+                        Log.d(TAG,"did not make to this cd")
+                        showAlert("You missed the time you had to confirm the order. Please choose another available cooking date.",
+                            "Order status")
+                    }
                 }else{
-                    calendarOrderBtnsVisibility(
+                    showOrderBtns(
                         placeOrder= false,
                         updateOrder = false,
                         payOrder = false,
@@ -237,7 +288,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
 
         }
     }
-    private fun calendarOrderBtnsVisibility(placeOrder:Boolean,updateOrder:Boolean,payOrder:Boolean,paidOrder:Boolean){
+    private fun showOrderBtns(placeOrder:Boolean, updateOrder:Boolean, payOrder:Boolean, paidOrder:Boolean){
         calendarPreOrder.visibility = if(placeOrder) View.VISIBLE else View.INVISIBLE
         calendarUpdateOrder.visibility = if(updateOrder) View.VISIBLE else View.INVISIBLE
         calendarPayOrder.visibility = if(payOrder) View.VISIBLE else View.INVISIBLE
@@ -350,5 +401,21 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                 }
             }
         })
+    }
+    private fun showAlert(message:String,title:String){
+        Handler(Looper.getMainLooper()).post{
+            var dialogBuilder = AlertDialog.Builder(activity)
+            dialogBuilder.setMessage(message)
+                .setCancelable(true)
+                .setNegativeButton("Cancel",DialogInterface.OnClickListener{
+                        _, _ ->
+                })
+                .setPositiveButton("Ok", DialogInterface.OnClickListener{
+                        _, _ ->
+                })
+            val alert = dialogBuilder.create()
+            alert.setTitle(title)
+            alert.show()
+        }
     }
 }

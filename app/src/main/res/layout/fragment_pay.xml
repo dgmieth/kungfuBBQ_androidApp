@@ -63,7 +63,7 @@
         android:fontFamily="@font/palatino"
         android:hint="1234 4567 8900 0000 "
         android:inputType="number"
-        android:maxLength="16"
+        android:maxLength="19"
         android:minHeight="48dp"
         android:textAlignment="center"
         android:textColor="@color/i_black"
@@ -95,18 +95,18 @@
         app:layout_constraintTop_toBottomOf="@+id/payCardCodeLbl" />
 
     <NumberPicker
-        android:id="@+id/aboutFragment"
+        android:id="@+id/payCardYear"
         android:layout_width="0dp"
         android:layout_height="150dp"
         android:layout_marginStart="96dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="12dp"
-        app:layout_constraintEnd_toStartOf="@+id/payMonth"
+        app:layout_constraintEnd_toStartOf="@+id/payCardMonth"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/payValidLbl" />
 
     <NumberPicker
-        android:id="@+id/payMonth"
+        android:id="@+id/payCardMonth"
         android:layout_width="75dp"
         android:layout_height="150dp"
         android:layout_marginTop="16dp"
@@ -168,4 +168,22 @@
             android:layout_height="wrap_content"
             android:layout_weight=".33" />
     </LinearLayout>
+    <FrameLayout
+        android:id="@+id/paySpinnerLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#7EF5DF27"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:id="@+id/loginProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical" />
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

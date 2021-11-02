@@ -146,6 +146,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                         }else{
                             println(json.getString("msg"))
                            Handler(Looper.getMainLooper()).post{
+                               loginSpinerLayout.visibility = View.INVISIBLE
                                 Toast.makeText(requireActivity(),"Log in attempt failed with server message: ${json.getString("msg").toString()}",Toast.LENGTH_LONG).show()
                            }
                         }

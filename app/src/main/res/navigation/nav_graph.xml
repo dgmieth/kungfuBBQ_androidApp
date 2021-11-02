@@ -110,17 +110,38 @@
         tools:layout="@layout/fragment_payorder" >
         <action
             android:id="@+id/callPay"
-            app:destination="@id/payFragment2" />
+            app:destination="@id/payFragment" />
         <argument
             android:name="cookingDateId"
             app:argType="integer"
             android:defaultValue="0" />
     </fragment>
     <fragment
-        android:id="@+id/payFragment2"
+        android:id="@+id/payFragment"
         android:name="me.dgmieth.kungfubbq.PayFragment"
         android:label="Payment"
-        tools:layout="@layout/fragment_pay" />
+        tools:layout="@layout/fragment_pay" >
+        <argument
+            android:name="userEmail"
+            app:argType="string"
+            android:defaultValue="noValue" />
+        <argument
+            android:name="userId"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="coookingDateId"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="orderId"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="userToken"
+            app:argType="string"
+            android:defaultValue="noValue" />
+    </fragment>
     <fragment
         android:id="@+id/paidOrderFragment"
         android:name="me.dgmieth.kungfubbq.PaidOrderFragment"
@@ -142,4 +163,8 @@
         app:destination="@id/calendarFragment"
         app:popUpTo="@id/calendarFragment"
         app:popUpToInclusive="true" />
+    <action
+        android:id="@+id/callPayOrderFragmentGlobal"
+        app:destination="@id/payOrderFragment"
+        app:popUpTo="@id/payOrderFragment" />
 </navigation>

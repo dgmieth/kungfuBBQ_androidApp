@@ -14,15 +14,6 @@ import me.dgmieth.kungfubbq.datatabase.roomEntities.*
 import java.util.logging.Handler
 
 enum class Actions {
-    None,
-    SocialMediaDelError,
-    UserDelError,
-    SocialMediaInsError,
-    UserInsError,
-    SocialMediaDeletion,
-    UserDeletion,
-    SocialMediaInsert,
-    UserInsert,
     UserComplete,
     UserError,
     CookingDatesComplete,
@@ -49,20 +40,6 @@ class RoomViewModel:ViewModel() {
         this.db = dbInstance
     }
     //USER AND SOCIAL MEDIA INFO ENTITIES
-//    fun deleteAllUserInfo(){
-//        Log.d(TAG,"DeleteCalled")
-//        db?.kungfuBBQRoomDao()?.deleteAllUserInfo()?.observeOn(AndroidSchedulers.mainThread())?.subscribeOn(Schedulers.io())?.subscribe(
-//            {
-//                Log.d(TAG,"DeleteCalled userInfo 1")
-//                returnMsg.onNext(Actions.UserDeletion)
-//            },{
-//                Log.d(TAG,"DeleteCalled  userInfo  ${it}")
-//                returnMsg.onNext(Actions.UserDelError)
-//            }
-//        )?.let {
-//            bag.add(it)
-//        }
-//    }
     fun insertAllUserInfo(user:UserDB,socialMediaList:MutableList<SocialMediaInfo>){
         db?.kungfuBBQRoomDao()?.deleteAllUserInfo()?.observeOn(AndroidSchedulers.mainThread())?.subscribeOn(Schedulers.io())?.
         subscribe({
@@ -104,46 +81,6 @@ class RoomViewModel:ViewModel() {
             bag.add(it)
         }
     }
-//    fun insertUserInfo(user:UserDB){
-//        Log.d(TAG,"InsertUserInfo called $user")
-//        db?.kungfuBBQRoomDao()?.insertUser(user)?.
-//            subscribeOn(Schedulers.io())?.
-//            observeOn(AndroidSchedulers.mainThread())?.
-//            subscribe({
-//                Log.d(TAG,"insertUserCalled1")
-//                returnMsg.onNext(Actions.UserInsert)
-//            },{
-//                Log.d(TAG,"insertUserCalled1  ${it}")
-//                returnMsg.onNext(Actions.UserInsError)
-//            })?.let{
-//                bag.add(it)
-//            }
-//    }
-//    fun deleteAllSocialMediaInfo(){
-//        db?.kungfuBBQRoomDao()?.deleteAllSocialMediaInfo()?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())?.subscribe(
-//            {
-//                Log.d(TAG,"DeleteCalled  socialMediaInfo 1")
-//                returnMsg.onNext(Actions.SocialMediaDeletion)
-//            },{
-//                Log.d(TAG,"DeleteCalled  socialMediaInfo  ${it}")
-//                returnMsg.onNext(Actions.SocialMediaDelError)
-//            }
-//        )?.let {
-//            bag.add(it)
-//        }
-//    }
-//    fun insertSocialMediaInfo(data:MutableList<SocialMediaInfo>){
-//        db?.kungfuBBQRoomDao()?.insertSocialMediaInfo(data)?.
-//                    subscribeOn(Schedulers.io())?.
-//                    observeOn(AndroidSchedulers.mainThread())?.
-//                    subscribe({
-//                        returnMsg.onNext(Actions.SocialMediaInsert)
-//                    },{
-//                        returnMsg.onNext(Actions.SocialMediaInsError)
-//                    })?.let{
-//                        bag.add(it)
-//        }
-//    }
     fun getUser(){
         db?.kungfuBBQRoomDao()?.getUser()
             ?.subscribeOn(Schedulers.io())
@@ -156,6 +93,16 @@ class RoomViewModel:ViewModel() {
                 },{})?.let{
                     bag.add(it)
         }
+    }
+    fun updateUserToken(userId:Int,newToken:String){
+        db?.kungfuBBQRoomDao()?.updateUserToken(userId,newToken)?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe({
+                returnMsg.onNext(Actions.UserComplete)
+            },{
+                returnMsg.onNext(Actions.UserError)
+            })?.let {
+                bag.add(it)
+            }
     }
     /* ==================================================================================
     COOKING DATE, DISHES and ORDERS

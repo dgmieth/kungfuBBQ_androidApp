@@ -99,7 +99,7 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
                     menuIndex += 1
                     mealsSum += m.dishPrice.toDouble()
                 }
-                updateOrderMenu.setText(menuT)
+                updateOrderMenu.text = menuT
                 //updating maps
                 updateOrderLocationText.text = "${cd.cookingDateAndDishes.cookingDate.street}, ${cd.cookingDateAndDishes.cookingDate.city}"
                 updateOrderLocationMap.getMapAsync(this)
