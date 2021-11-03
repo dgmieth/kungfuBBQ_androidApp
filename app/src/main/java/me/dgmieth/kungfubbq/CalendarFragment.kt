@@ -224,6 +224,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             }else {
                 Log.d(TAG,"cookingDate close to orders")
                 if(cd.order.isNotEmpty()){
+                    Log.d(TAG,"order is ${cd.order}")
                     var order = cd.order[0].order
                     if (order.orderStatusId == 2 ){ /*Waiting cooking calendar date closure and sorting*/
                         /*show update btn*/
@@ -276,6 +277,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                             "Order status")
                     }
                 }else{
+                    Log.d(TAG,"order is emtpy")
                     showOrderBtns(
                         placeOrder= false,
                         updateOrder = false,

@@ -276,10 +276,11 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
         val body = okhttp3.FormBody.Builder()
             .add("email",userPayOrder!!.user.email)
             .add("id",userPayOrder!!.user.userId.toString())
+            .add("cookingDate_id",args.cookingDateId.toString())
             .add("order_id", cookingDate!!.order[0].order.orderId.toString())
             .build()
         Log.d(TAG,"Body is ${body.toString()}")
-        HttpCtrl.shared.newCall(HttpCtrl.post(getString(R.string.kungfuServerUrl),"/api/order/deleteOrder",body,userPayOrder!!.user.token)).enqueue(object :
+        HttpCtrl.shared.newCall(HttpCtrl.post(getString(R.string.kungfuServerUrl),"/api/order/cancelMadeToListOrder",body,userPayOrder!!.user.token)).enqueue(object :
             Callback {
             override fun onFailure(call: Call, e: IOException) {
                 showSpinner(false)
