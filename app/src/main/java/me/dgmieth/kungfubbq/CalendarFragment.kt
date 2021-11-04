@@ -267,13 +267,13 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                     }
                     if (order.orderStatusId == 7 ){ /*Not made to this cookingCalendar date list*/
                         /*create user alert*/
-                        showAlert("We are sorry! Unfortunately your order did not make to this final list of this cooking date. Please, order from us again on another available cooking date",
+                        showAlert("We are sorry! Unfortunately your order did not make to the final list on this cooking date. Please, order from us again on another available cooking date",
                             "Order status")
                     }
                     if (order.orderStatusId == 12 ){ /*The cooking calendar register was excluded by the database administrator, application user or routine*/
                         /*create user alert*/
                         Log.d(TAG,"did not make to this cd")
-                        showAlert("You missed the time you had to confirm the order. Please choose another available cooking date.",
+                        showAlert("You missed the time you had to confirm the order. Please order again from another available cooking date.",
                             "Order status")
                     }
                 }else{

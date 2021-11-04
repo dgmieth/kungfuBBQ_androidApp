@@ -81,6 +81,7 @@
         android:textColor="@color/i_black"
         android:textSize="22sp"
         android:textStyle="bold"
+        android:imeOptions="actionDone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cateringPhoneLbl" />
 

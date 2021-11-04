@@ -57,5 +57,5 @@ data class UserAndSocialMedia(
         parentColumn = "userId",
         entityColumn = "userIdFk"
     )
-    val socialMedia : List<SocialMediaInfo>
+    val socialMedias : List<SocialMediaInfo>
 )

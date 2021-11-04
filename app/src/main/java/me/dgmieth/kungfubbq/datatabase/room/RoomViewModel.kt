@@ -41,6 +41,7 @@ class RoomViewModel:ViewModel() {
     }
     //USER AND SOCIAL MEDIA INFO ENTITIES
     fun insertAllUserInfo(user:UserDB,socialMediaList:MutableList<SocialMediaInfo>){
+        Log.d(TAG, "socialMedias are $socialMediaList")
         db?.kungfuBBQRoomDao()?.deleteAllUserInfo()?.observeOn(AndroidSchedulers.mainThread())?.subscribeOn(Schedulers.io())?.
         subscribe({
             Log.d(TAG,"DeleteCalled userInfo 1")

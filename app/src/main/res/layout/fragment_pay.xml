@@ -89,6 +89,7 @@
         android:textAlignment="center"
         android:textColor="@color/i_black"
         android:textSize="22sp"
+        android:imeOptions="actionDone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

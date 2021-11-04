@@ -141,38 +141,41 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
         }
     }
     private fun payOrder(){
-        //showSpinner(true)
-        if(cardNumber.isNullOrEmpty()){
-            ObjectAnimator
-                .ofFloat(payCardNumber,"translationX",0f,30f,-30f,30f,-30f,0f)
-                .apply {
-                    duration = 1000
-                }
-                .start()
-        }
-        if(cardCode.isNullOrEmpty()){
-            ObjectAnimator
-                .ofFloat(payCardCode,"translationX",0f,30f,-30f,30f,-30f,0f)
-                .apply {
-                    duration = 1000
-                }
-                .start()
-        }
-        if(payCardMonth.value == 0 ){
-            ObjectAnimator
-                .ofFloat(payCardMonth,"translationX",0f,30f,-30f,30f,-30f,0f)
-                .apply {
-                    duration = 1000
-                }
-                .start()
-        }
-        if(payCardYear.value == 0 ){
-            ObjectAnimator
-                .ofFloat(payCardYear,"translationX",0f,30f,-30f,30f,-30f,0f)
-                .apply {
-                    duration = 1000
-                }
-                .start()
+        if(cardNumber.isNullOrEmpty()||cardCode.isNullOrEmpty()||payCardMonth.value == 0 || payCardYear.value == 0){
+
+            if(cardNumber.isNullOrEmpty()){
+                ObjectAnimator
+                    .ofFloat(payCardNumber,"translationX",0f,30f,-30f,30f,-30f,0f)
+                    .apply {
+                        duration = 1000
+                    }
+                    .start()
+            }
+            if(cardCode.isNullOrEmpty()){
+                ObjectAnimator
+                    .ofFloat(payCardCode,"translationX",0f,30f,-30f,30f,-30f,0f)
+                    .apply {
+                        duration = 1000
+                    }
+                    .start()
+            }
+            if(payCardMonth.value == 0 ){
+                ObjectAnimator
+                    .ofFloat(payCardMonth,"translationX",0f,30f,-30f,30f,-30f,0f)
+                    .apply {
+                        duration = 1000
+                    }
+                    .start()
+            }
+            if(payCardYear.value == 0 ){
+                ObjectAnimator
+                    .ofFloat(payCardYear,"translationX",0f,30f,-30f,30f,-30f,0f)
+                    .apply {
+                        duration = 1000
+                    }
+                    .start()
+            }
+            return
         }
         showSpinner(true)
         var eDate = "${yearsFirst[payCardYear.value]}-${if(payCardMonth.value<=9) 0 else String()}${payCardMonth.value}"
