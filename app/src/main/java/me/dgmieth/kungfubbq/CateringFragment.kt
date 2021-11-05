@@ -94,6 +94,7 @@ class CateringFragment : Fragment(R.layout.fragment_catering) {
                 override fun onFailure(call: Call, e: IOException) {
                     e.printStackTrace()
                     Handler(Looper.getMainLooper()).post{
+                        cateringSpinerLayout.visibility = View.INVISIBLE
                         Toast.makeText(requireActivity(),"Sending your message failed with error message: ${e.localizedMessage}",
                             Toast.LENGTH_LONG).show()
                     }
