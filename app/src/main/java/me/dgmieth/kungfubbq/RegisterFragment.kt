@@ -126,6 +126,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 .add("email",registerEmailEditText.text.toString())
                 .add("password",registerPasswordEditText.text.toString())
                 .add("confirmPassword",registerConfirmPasswordEditText.text.toString())
+                .add("mobileOS","android")
                 .build()
             HttpCtrl.shared.newCall(HttpCtrl.post(getString(R.string.kungfuServerUrl),"/login/register",body)).enqueue(object :
                 Callback {

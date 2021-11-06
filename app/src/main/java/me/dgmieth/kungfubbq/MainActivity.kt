@@ -13,6 +13,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupActionBarWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
+import com.onesignal.OneSignal
+
+const val ONESIGNAL_APP_ID = "ea1898be-1deb-48f9-a158-0f0bf071f492"
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,14 +25,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Log.d("MainActivity", "onCreate: starts")
-        Log.d("MainActivity", "$savedInstanceState")
+        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE)
+        OneSignal.initWithContext(this)
+        OneSignal.setAppId(ONESIGNAL_APP_ID)
+
+
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        Log.d("MainActivity", "onCreate: navHostFragment")
         navController = navHostFragment.findNavController()
         setSupportActionBar(toolbar)
         setupActionBarWithNavController(navController)
-        Log.d("MainActivity", "onCreate: end")
+
 
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

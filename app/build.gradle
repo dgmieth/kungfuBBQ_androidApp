@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-android-extensions'
     id "androidx.navigation.safeargs.kotlin"
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    id 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 }
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-kapt'
@@ -79,5 +80,13 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    //notifcation OneSignal
+    implementation 'com.onesignal:OneSignal:[4.0.0, 4.99.99]'
+    implementation 'com.onesignal:OneSignal:[4.0.0, 4.99.99]'
+    def work_version = "2.6.0"
+    // Force WorkManager 2.6.0 for transitive dependency
+    implementation("androidx.work:work-runtime-ktx:$work_version") {
+        force = true
+    }
 
 }

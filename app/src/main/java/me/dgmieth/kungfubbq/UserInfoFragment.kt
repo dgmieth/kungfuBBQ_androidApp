@@ -126,7 +126,7 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
             requireActivity().onBackPressed()
         }
         userInfoUpdatePasswordBtn.setOnClickListener {
-            val action = UserInfoFragmentDirections.callUpdatePassword()
+            val action = UserInfoFragmentDirections.callUpdatePassword(userInfo!!.user.token.toString(),userInfo!!.user.email,userInfo!!.user.userId.toString())
             findNavController().navigate(action)
         }
         userInfoCancelBtn.setOnClickListener {

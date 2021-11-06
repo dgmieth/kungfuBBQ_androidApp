@@ -48,7 +48,19 @@
         android:id="@+id/updatePasswordFragment"
         android:name="me.dgmieth.kungfubbq.UpdatePasswordFragment"
         android:label="Change password"
-        tools:layout="@layout/fragment_updatepassword" />
+        tools:layout="@layout/fragment_updatepassword" >
+        <argument
+            android:name="token"
+            app:argType="string" />
+        <argument android:name="email"
+            app:argType="string" />
+        <action
+            android:id="@+id/callBackUserInfoFragment"
+            app:destination="@id/userInfoFragment" />
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/cateringFragment"
         android:name="me.dgmieth.kungfubbq.CateringFragment"

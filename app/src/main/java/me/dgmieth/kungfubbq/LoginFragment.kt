@@ -26,6 +26,7 @@ import me.dgmieth.kungfubbq.httpRequets.LoginBodyData
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
+import com.onesignal.OneSignal
 
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
@@ -34,6 +35,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private var viewModel: RoomViewModel? = null
     private var bag = CompositeDisposable()
+    private var userId = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,6 +53,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 when(it){
                     Actions.UserComplete ->{
                         Handler(Looper.getMainLooper()).post{
+                            OneSignal.setExternalUserId(userId.toString())
                             loginSpinerLayout.visibility = View.INVISIBLE
                             val action = NavGraphDirections.callHome(true)
                             findNavController().navigate(action)
@@ -119,6 +122,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             val body = FormBody.Builder()
                 .add("email",loginUserEmail.text.toString())
                 .add("password",loginPassword.text.toString())
+                .add("mobileOS","android")
                 .build()
             println(body)
             HttpCtrl.shared.newCall(HttpCtrl.post(getString(R.string.kungfuServerUrl),"/login/login",body)).enqueue(object :
@@ -142,6 +146,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                 var sMInfo = SocialMediaInfo(s.getString("socialMedia"),s.getString("socialMediaName"),u.getInt("id"))
                                 socialM.add(sMInfo)
                             }
+                            userId = user.userId
                             Log.d(TAG, "socialMedia $socialM")
                             viewModel?.insertAllUserInfo(user,socialM)
                         }else{
