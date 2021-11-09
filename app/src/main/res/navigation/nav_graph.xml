@@ -56,7 +56,8 @@
             app:argType="string" />
         <action
             android:id="@+id/callBackUserInfoFragment"
-            app:destination="@id/userInfoFragment" />
+            app:destination="@id/userInfoFragment"
+            app:popUpTo="@id/userInfoFragment" />
         <argument
             android:name="id"
             app:argType="string" />
