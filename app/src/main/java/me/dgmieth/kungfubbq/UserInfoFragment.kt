@@ -188,7 +188,9 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
         }
     }
     private fun validateInfo():Boolean{
-        if(noFormatPhoneNbm==null){
+        if(userInfoPhone.text.toString().isEmpty()){
+            return true
+        }else if(noFormatPhoneNbm==null){
             Handler(Looper.getMainLooper()).post{
                 Toast.makeText(requireActivity(),"Incorrect phone number",Toast.LENGTH_LONG).show()
             }

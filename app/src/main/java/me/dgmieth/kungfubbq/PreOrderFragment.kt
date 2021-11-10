@@ -94,7 +94,7 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
                 val cal = Calendar.getInstance()
                 cal.set(splitDate[0].toInt(), splitDate[1].toInt()-1, splitDate[2].toInt())
                 val dateStrParts = cal.time.toString().split(" ")
-                preOrderDate.text = "${dateStrParts[1]} ${dateStrParts[1]}"
+                preOrderDate.text = "${dateStrParts[1]} ${dateStrParts[2]}"
                 //updating status
                 preOrderStatus.text = cd.cookingDateAndDishes.cookingDate.cookingStatus
                 //updating menu

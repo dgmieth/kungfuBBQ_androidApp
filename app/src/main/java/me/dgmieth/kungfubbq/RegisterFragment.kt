@@ -150,7 +150,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                             val user = UserDB(u.getInt("id"),u.getString("email"),u.getString("memberSince"),u.getString("name"),u.getString("phoneNumber"),u.getString("token"),1)
                             var socialM : MutableList<SocialMediaInfo> = arrayListOf()
                             for (i in 0 until u.getJSONArray("socialMediaInfo").length()){
-                                val s = u.getJSONArray("socialMediaInfo").getJSONObject(0)
+                                val s = u.getJSONArray("socialMediaInfo").getJSONObject(i)
                                 var sMInfo = SocialMediaInfo(s.getString("socialMedia"),s.getString("socialMediaName"),u.getInt("id"))
                                 socialM.add(sMInfo)
                             }
