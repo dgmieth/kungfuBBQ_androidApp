@@ -329,8 +329,8 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                     val json = JSONObject(response.body!!.string())
                     if(!json.getBoolean("hasErrors")){
                         println(json)
-                        var cDates = json.getJSONArray("data").getJSONArray(0)
-                        var orders = json.getJSONArray("data").getJSONArray(1)
+                        var cDates = json.getJSONArray("msg").getJSONArray(0)
+                        var orders = json.getJSONArray("msg").getJSONArray(1)
                         var listCDates : MutableList<CookingDateDB> = arrayListOf()
                         var listOrders : MutableList<OrderDB> = arrayListOf()
                         var listCDatesDishes : MutableList<CookingDateDishesDB> = arrayListOf()

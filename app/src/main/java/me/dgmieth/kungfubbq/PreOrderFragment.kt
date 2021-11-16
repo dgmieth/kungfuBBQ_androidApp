@@ -287,8 +287,8 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
                 response.use {
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
                     val json = JSONObject(response.body!!.string())
+                    Log.d(TAG, "values are $json")
                     if(!json.getBoolean("hasErrors")){
-                        Log.d(TAG, "values are $json")
                         Handler(Looper.getMainLooper()).post{
                             var dialogBuilder = AlertDialog.Builder(activity)
                             dialogBuilder.setMessage("${json.getString("msg")}")
@@ -316,6 +316,8 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
                             Handler(Looper.getMainLooper()).post{
                                 Toast.makeText(requireActivity(),"The attempt to save your order to KungfuBBQ server failed with server message: ${json.getString("msg")}",
                                     Toast.LENGTH_LONG).show()
+                                var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
+                                findNavController().navigate(action)
                             }
                         }
                     }
