@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="80dp"
         android:fontFamily="@font/palatino"
         android:text="@string/pay_cardnumber_lbl"
         android:textColor="@color/i_black"
@@ -99,21 +99,21 @@
         android:id="@+id/payCardYear"
         android:layout_width="0dp"
         android:layout_height="150dp"
-        android:layout_marginStart="96dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="12dp"
-        app:layout_constraintEnd_toStartOf="@+id/payCardMonth"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginEnd="96dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/payCardMonth"
         app:layout_constraintTop_toBottomOf="@+id/payValidLbl" />
 
     <NumberPicker
         android:id="@+id/payCardMonth"
         android:layout_width="75dp"
         android:layout_height="150dp"
+        android:layout_marginStart="96dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="96dp"
         android:descendantFocusability="blocksDescendants"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/payValidLbl" />
     <LinearLayout
         android:id="@+id/updateOrderUpdateOrderBtns"
@@ -136,7 +136,7 @@
         <Button
             android:id="@+id/payCancelBtn"
             android:layout_width="wrap_content"
-            android:layout_height="58dp"
+            android:layout_height="68dp"
             android:layout_weight="1"
             android:backgroundTint="@color/secondary"
             android:fontFamily="@font/palatino"
@@ -144,7 +144,7 @@
             android:text="@string/btn_cancel"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="24sp"
+            android:textSize="28sp"
             android:textStyle="bold" />
 
         <Space
@@ -155,7 +155,7 @@
         <Button
             android:id="@+id/payPayBtn"
             android:layout_width="wrap_content"
-            android:layout_height="58dp"
+            android:layout_height="68dp"
             android:layout_weight="1"
             android:backgroundTint="@color/i_reda"
             android:fontFamily="@font/palatino"
@@ -163,7 +163,7 @@
             android:text="@string/btn_payorder"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="24sp"
+            android:textSize="28sp"
             android:textStyle="bold" />
 
         <Space

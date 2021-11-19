@@ -65,13 +65,14 @@
     <string name="preorder_mealprice_lbl">Meal price:</string>
     <string name="preorder_totalprice_lbl">Total price:</string>
     <string name="btn_preorder_saveorder">Pre-order</string>
-    <string name="btn_deleteorder">Delete order</string>
-    <string name="btn_updateorder">Update pre-order</string>
-    <string name="btn_payorder">Pay pre-order</string>
+    <string name="btn_deleteorder">Delete</string>
+    <string name="btn_updateorder">Update</string>
+    <string name="btn_payorder">Pay</string>
     <string name="pay_cardnumber_lbl">Credit Card Number</string>
     <string name="pay_cardcode_lbl">Credit Card Code</string>
     <string name="pay_validthrough_lbl">Valid through</string>
     <string name="btn_paidorder">Checkout paid pre-order</string>
     <string name="calendar_no_cooking_msg">"Sorry! We are not cooking today... "</string>
+    <string name="btn_register_register">Register</string>
 
 </resources>

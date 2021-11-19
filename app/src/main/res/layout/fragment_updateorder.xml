@@ -233,19 +233,20 @@
 
     <Button
         android:id="@+id/updateOrderDeleteOrder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_width="0dp"
+        android:layout_height="68dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/i_reda"
+        android:backgroundTint="@color/i_gray"
         android:fontFamily="@font/palatino"
         android:scrollbarSize="22sp"
         android:text="@string/btn_deleteorder"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="22sp"
+        android:textSize="28sp"
         android:textStyle="bold"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -271,7 +272,7 @@
         <Button
             android:id="@+id/updateOrderCancelBtn"
             android:layout_width="wrap_content"
-            android:layout_height="58dp"
+            android:layout_height="68dp"
             android:layout_weight="1"
             android:backgroundTint="@color/secondary"
             android:fontFamily="@font/palatino"
@@ -279,7 +280,7 @@
             android:text="@string/btn_cancel"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="24sp"
+            android:textSize="28sp"
             android:textStyle="bold" />
 
         <Space
@@ -290,7 +291,7 @@
         <Button
             android:id="@+id/updateOrderUpdateOrderBtn"
             android:layout_width="wrap_content"
-            android:layout_height="58dp"
+            android:layout_height="68dp"
             android:layout_weight="1"
             android:backgroundTint="@color/i_reda"
             android:fontFamily="@font/palatino"
@@ -298,7 +299,7 @@
             android:text="@string/btn_updateorder"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="24sp"
+            android:textSize="28sp"
             android:textStyle="bold" />
 
         <Space
@@ -318,6 +319,7 @@
         app:layout_constraintStart_toEndOf="@+id/updateOrderLocationLbl"
         app:layout_constraintTop_toBottomOf="@+id/updateOrderLocationText"
         tools:ignore="SpeakableTextPresentCheck" />
+
     <FrameLayout
         android:id="@+id/updateOrderSpinerLayout"
         android:layout_width="0dp"

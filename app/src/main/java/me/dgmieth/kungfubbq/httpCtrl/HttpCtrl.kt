@@ -11,7 +11,6 @@ class HttpCtrl {
             httpUrl?.let{
                 val url = it
                 header?.let{
-                Log.d("HttpCtrl","return with authorization header ${it}")
                 return Request.Builder()
                     .header("Authorization","Bearer ${it}")
                     .header("Content-type","application/json")
@@ -20,13 +19,11 @@ class HttpCtrl {
                 }
             }
             return Request.Builder()
-                .header("Content-type","application/json")
                 .url("$url$endpoint")
                 .build()
         }
         fun post(url:String,endpoint: String,body:FormBody, header:String?=null) : Request{
             header?.let{
-                Log.d("HttpCtrl","return with authorization header $it")
                 return Request.Builder()
                     .header("Content-type","application/json")
                     .header("Authorization","Bearer $it")
@@ -34,7 +31,6 @@ class HttpCtrl {
                     .post(body)
                     .build()
             }
-            Log.d("HttpCtrl","return without authorization header")
             return Request.Builder()
                 .header("Content-type","application/json")
                 .url("$url$endpoint")

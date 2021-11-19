@@ -22,7 +22,6 @@ import me.dgmieth.kungfubbq.datatabase.roomEntities.SocialMediaInfo
 import me.dgmieth.kungfubbq.datatabase.roomEntities.UserAndSocialMedia
 import me.dgmieth.kungfubbq.datatabase.roomEntities.UserDB
 import me.dgmieth.kungfubbq.httpCtrl.HttpCtrl
-import me.dgmieth.kungfubbq.httpRequets.LoginBodyData
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
@@ -44,12 +43,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     ): View? {
         //view model set up
         viewModel = ViewModelProviders.of(this).get(RoomViewModel::class.java)
-        var db = KungfuBBQRoomDatabase.getInstance(requireActivity())
-        viewModel?.getDbInstance(db)
+        viewModel?.getDbInstance(KungfuBBQRoomDatabase.getInstance(requireActivity()))
         //rxjava observer
         viewModel?.returnMsg?.subscribe(
             {
-                Log.d("ObservableTest", "value is $it")
                 when(it){
                     Actions.UserComplete ->{
                         Handler(Looper.getMainLooper()).post{
@@ -68,7 +65,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 }
             },
             {
-                Log.d("ObservableTest", "error value is $it")
                 Handler(Looper.getMainLooper()).post{
                     loginSpinerLayout.visibility = View.INVISIBLE
                     Toast.makeText(requireActivity(),"Log in attempt failed. Please try again in some minutes",Toast.LENGTH_LONG).show()
@@ -91,7 +87,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         setHasOptionsMenu(true)
         //setting button click observers
         loginResetPassword.setOnClickListener{
-            println("clicked")
             callResetPasswordAlert()
         }
         loginRegisterBtn.setOnClickListener {
@@ -118,7 +113,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     //HTTP REQUEST METHODS
     private fun logUserIn() {
         if(!loginUserEmail.text.toString().isNullOrEmpty()&&!loginPassword.text.toString().isNullOrEmpty()){
-            loginSpinerLayout.visibility = View.VISIBLE
+            showSpinner(true)
             val body = FormBody.Builder()
                 .add("email",loginUserEmail.text.toString())
                 .add("password",loginPassword.text.toString())
@@ -128,12 +123,14 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             HttpCtrl.shared.newCall(HttpCtrl.post(getString(R.string.kungfuServerUrl),"/login/login",body)).enqueue(object :
                 Callback {
                 override fun onFailure(call: Call, e: IOException) {
+                    showSpinner(false)
                     e.printStackTrace()
                     Handler(Looper.getMainLooper()).post{
                         Toast.makeText(requireActivity(),"Log in attempt failed with error message: ${e.localizedMessage}",Toast.LENGTH_LONG).show()
                     }
                 }
                 override fun onResponse(call: Call, response: Response) {
+                    showSpinner(false)
                     response.use {
                         if (!response.isSuccessful) throw IOException("Unexpected code $response")
                         val json = JSONObject(response.body!!.string())
@@ -147,10 +144,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                 socialM.add(sMInfo)
                             }
                             userId = user.userId
-                            Log.d(TAG, "socialMedia $socialM")
                             viewModel?.insertAllUserInfo(user,socialM)
                         }else{
-                            println(json.getString("msg"))
                            Handler(Looper.getMainLooper()).post{
                                loginSpinerLayout.visibility = View.INVISIBLE
                                 Toast.makeText(requireActivity(),"Log in attempt failed with server message: ${json.getString("msg").toString()}",Toast.LENGTH_LONG).show()
@@ -160,7 +155,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 }
             })
         }else{
-            Log.d(TAG, "loginButton not validated")
             Toast.makeText(requireActivity(),"You must inform your e-mail and your password",Toast.LENGTH_LONG).show()
         }
     }
@@ -171,6 +165,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         HttpCtrl.shared.newCall(HttpCtrl.post(getString(R.string.kungfuServerUrl),"/api/user/forgotPassword",body)).enqueue(object :
             Callback {
             override fun onFailure(call: Call, e: IOException) {
+                showSpinner(false)
                 e.printStackTrace()
                 Handler(Looper.getMainLooper()).post{
                     Toast.makeText(requireActivity(),"The attempt to recover password failed.",Toast.LENGTH_LONG).show()
@@ -178,7 +173,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             }
             override fun onResponse(call: Call, response: Response) {
                 response.use {
-                    loginSpinerLayout.visibility = View.INVISIBLE
+                    showSpinner(false)
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
                     val json = JSONObject(response.body!!.string())
                     if(!json.getBoolean("hasErrors")){
@@ -194,17 +189,15 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             }
         })
     }
-
     //========================================================
     //DATABASE RETURN CALLBACKS
     private fun returnUserFromDBNull() {
         Log.d(TAG, "no data returned")
     }
-
     private fun returnUserFromDBSuccess(it: UserAndSocialMedia) {
-        Log.d(TAG, "dataReturn was ${it.user.email} and ${it.user.userId}")
         loginUserEmail.setText(it.user.email)
     }
+    //========================================================
     //OTHER UI METHODS
     private fun callResetPasswordAlert(){
         var textField = EditText(activity)
@@ -218,11 +211,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             .setCancelable(false)
             .setPositiveButton("Send", DialogInterface.OnClickListener{
                 dialog, id ->
-                print(dialog)
-                print(id)
-                Log.d(TAG, "ForgotPasswordAlert with $dialog $id ${textField.text.toString()}")
                 if(!textField.text.toString().isNullOrEmpty()){
-                    loginSpinerLayout.visibility = View.VISIBLE
+                    showSpinner(true)
                     recoverPasswordEmail(textField.text.toString())
                 }else{
                     Toast.makeText(requireActivity(),"You must inform the e-mail",Toast.LENGTH_LONG).show()
@@ -232,5 +222,13 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         val alert = dialogBuilder.create()
         alert.setTitle("Password recovery")
         alert.show()
+    }
+    private fun showSpinner(value: Boolean){
+        Handler(Looper.getMainLooper()).post {
+            loginSpinerLayout.visibility =  when(value){
+                true -> View.VISIBLE
+                else -> View.INVISIBLE
+            }
+        }
     }
 }

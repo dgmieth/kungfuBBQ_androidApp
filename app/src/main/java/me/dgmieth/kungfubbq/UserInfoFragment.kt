@@ -1,10 +1,6 @@
 package me.dgmieth.kungfubbq
 
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,21 +10,17 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
-import android.widget.EditText
 import android.widget.Toast
-import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_userinfo.*
 import me.dgmieth.kungfubbq.datatabase.room.Actions
 import me.dgmieth.kungfubbq.datatabase.room.KungfuBBQRoomDatabase
 import me.dgmieth.kungfubbq.datatabase.room.RoomViewModel
-import me.dgmieth.kungfubbq.datatabase.roomEntities.CookingDateAndCookingDateDishesWithOrder
 import me.dgmieth.kungfubbq.datatabase.roomEntities.SocialMediaInfo
 import me.dgmieth.kungfubbq.datatabase.roomEntities.UserAndSocialMedia
 import me.dgmieth.kungfubbq.datatabase.roomEntities.UserDB
@@ -44,7 +36,6 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
 
     private val TAG = "UserInfoFragment"
 
-    private val MAPS_API_KEY = "google_maps_api_key"
     private var viewModel: RoomViewModel? = null
     private var userInfo : UserAndSocialMedia? = null
     private var editItemBtn : MenuItem? = null
@@ -70,7 +61,6 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
         //subscribing to returnMsg
         viewModel?.returnMsg?.subscribe(
             {
-                Log.d("ObservableTest", "value is $it")
                 when(it){
                     Actions.UserComplete ->{
                         viewModel?.getUser()
@@ -78,13 +68,12 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
                     else -> {
                         Handler(Looper.getMainLooper()).post{
                             loginSpinerLayout.visibility = View.INVISIBLE
-                            Toast.makeText(requireActivity(),"The attemp to retrieve user information from the database failed",Toast.LENGTH_LONG).show()
+                            Toast.makeText(requireActivity(),"The attempt to retrieve user information from the database failed",Toast.LENGTH_LONG).show()
                         }
                     }
                 }
             },
             {
-                Log.d("ObservableTest", "error value is $it")
                 Handler(Looper.getMainLooper()).post{
                     loginSpinerLayout.visibility = View.INVISIBLE
                     Toast.makeText(requireActivity(),"Log in attempt failed. Please try again in some minutes",Toast.LENGTH_LONG).show()
@@ -92,20 +81,15 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
             },{})?.let{ bag.add(it)}
         //Subscribing to user
         viewModel?.user?.observe(viewLifecycleOwner, Observer {
-            Log.d(TAG, "user returned $it")
             viewModel?.getCookingDates()
             if(!it.user.email.isNullOrEmpty()){
-                Log.d(TAG,"userUpdateOrder called -> value $it")
                 userInfo = it
                 userInfo?.let {
-                    Log.d(TAG,"user refresh infor called")
                     var user = it
                     setUIElements(user)
                     showSpinner(false)
                     showSaveBtn(false)
                 }
-                Log.d(TAG, "user is $it")
-
             }else{
                 showSpinner(false)
                 Handler(Looper.getMainLooper()).post{
@@ -122,6 +106,7 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
+        //click listeners
         userInfoCancelBtn.setOnClickListener {
             requireActivity().onBackPressed()
         }
@@ -139,7 +124,6 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
             }
         }
     }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         menu.getItem(0).isVisible = false
@@ -148,7 +132,6 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
         menu.getItem(3).isVisible = false
         editItemBtn = menu.getItem(2)
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.logOutMenuBtn -> {
@@ -165,28 +148,8 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
             }
         }
     }
-    private fun showSaveBtn(value:Boolean){
-        Handler(Looper.getMainLooper()).post {
-            editItemBtn!!.isVisible = !value
-            userInfoBtnGroup.isVisible = value
-            userInfoUpdatePasswordBtn.isVisible = !value
-            userInfoName.isEnabled = value
-            userInfoPhone.isEnabled = value
-            userInfoFacebookName.isEnabled = value
-            userInfoInstagramName.isEnabled = value
-            if(value){
-                userInfoName.setBackgroundColor(Color.WHITE)
-                userInfoPhone.setBackgroundColor(Color.WHITE)
-                userInfoFacebookName.setBackgroundColor(Color.WHITE)
-                userInfoInstagramName.setBackgroundColor(Color.WHITE)
-            }else{
-                userInfoName.setBackgroundColor(Color.TRANSPARENT)
-                userInfoPhone.setBackgroundColor(Color.TRANSPARENT)
-                userInfoFacebookName.setBackgroundColor(Color.TRANSPARENT)
-                userInfoInstagramName.setBackgroundColor(Color.TRANSPARENT)
-            }
-        }
-    }
+    //===========================================================
+    // validation
     private fun validateInfo():Boolean{
         if(userInfoPhone.text.toString().isEmpty()){
             return true
@@ -204,9 +167,10 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
             }
             return false
         }
-        Log.d(TAG, "returning true")
         return true
     }
+    //===========================================================
+    // http requests
     private fun updateInfo(){
         val body = FormBody.Builder()
             .add("email",if(userInfoUserName.text.toString().isNullOrEmpty()) "none" else userInfoUserName.text.toString())
@@ -230,11 +194,7 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
                 response.use {
                     showSpinner(false)
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
-                    for ((name, value) in response.headers) {
-                        println("$name: $value")
-                    }
                     val json = JSONObject(response.body!!.string())
-                    Log.d(TAG, "update return response is $json")
                     if(!json.getBoolean("hasErrors")){
                         val u = json.getJSONObject("data")
                         val user = UserDB(u.getInt("id"),u.getString("email"),u.getString("memberSince"),u.getString("name"),u.getString("phoneNumber"),u.getString("token"),1)
@@ -247,18 +207,27 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
                         Log.d(TAG, "socialMedia $socialM")
                         viewModel?.insertAllUserInfo(user,socialM)
                     }else{
-                        println(json)
-                        Handler(Looper.getMainLooper()).post{
-                            Toast.makeText(requireActivity(),"The attempt to update your user information failed with server message: ${json.getString("msg")}",
-                                Toast.LENGTH_LONG).show()
+                        if(json.getInt("errorCode")==-1){
+                            Handler(Looper.getMainLooper()).post{
+                                Toast.makeText(requireActivity(),"${json.getString("msg")}",
+                                    Toast.LENGTH_LONG).show()
+                                val action = NavGraphDirections.callHome(false)
+                                findNavController().navigate(action)
+                            }
+                        }else{
+                            Handler(Looper.getMainLooper()).post{
+                                Toast.makeText(requireActivity(),"The attempt to update your user information failed with server message: ${json.getString("msg")}",
+                                    Toast.LENGTH_LONG).show()
+                            }
                         }
                     }
                 }
             }
         })
     }
+    //===========================================
+    //data manipulation
     private fun formatPhoneNumber() {
-        Log.d(TAG, "formatPhoneNumberCalled")
         if(userInfoPhone.text.toString().length==10){
             userInfoPhone.removeTextChangedListener(phoneTextWatcher)
             noFormatPhoneNbm = userInfoPhone.text.toString()
@@ -266,7 +235,6 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
             userInfoPhone.setText(number)
             userInfoPhone.setSelection(userInfoPhone.text.toString().length)
             userInfoPhone.addTextChangedListener(phoneTextWatcher)
-            Log.d(TAG, "length==10 $number and ${noFormatPhoneNbm!!}")
         }else{
             var text = userInfoPhone.text.toString().replace("""[^0-9]""".toRegex(),"")
             noFormatPhoneNbm = null
@@ -274,11 +242,33 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
             userInfoPhone.setText(text)
             userInfoPhone.setSelection(userInfoPhone.text.toString().length)
             userInfoPhone.addTextChangedListener(phoneTextWatcher)
-            Log.d(TAG, "length==10 $text ")
+        }
+    }
+    //===========================================================
+    // ui elements
+    private fun showSaveBtn(value:Boolean){
+        Handler(Looper.getMainLooper()).post {
+            editItemBtn!!.isVisible = !value
+            userInfoBtnGroup.isVisible = value
+            userInfoUpdatePasswordBtn.isVisible = !value
+            userInfoName.isEnabled = value
+            userInfoPhone.isEnabled = value
+            userInfoFacebookName.isEnabled = value
+            userInfoInstagramName.isEnabled = value
+            if(value){
+                userInfoName.setBackgroundColor(Color.WHITE)
+                userInfoPhone.setBackgroundColor(Color.WHITE)
+                userInfoFacebookName.setBackgroundColor(Color.WHITE)
+                userInfoInstagramName.setBackgroundColor(Color.WHITE)
+            }else{
+                userInfoName.setBackgroundColor(Color.TRANSPARENT)
+                userInfoPhone.setBackgroundColor(Color.TRANSPARENT)
+                userInfoFacebookName.setBackgroundColor(Color.TRANSPARENT)
+                userInfoInstagramName.setBackgroundColor(Color.TRANSPARENT)
+            }
         }
     }
     private fun setUIElements(user: UserAndSocialMedia){
-        Log.d(TAG, "setUIElements callled")
         Handler(Looper.getMainLooper()).post {
             userInfoPhone.removeTextChangedListener(phoneTextWatcher)
             userInfoUserName.text = user.user.email

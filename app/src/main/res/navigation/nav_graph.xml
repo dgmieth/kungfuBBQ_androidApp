@@ -34,7 +34,12 @@
         android:id="@+id/registerFragment"
         android:name="me.dgmieth.kungfubbq.RegisterFragment"
         android:label="Register"
-        tools:layout="@layout/fragment_register" />
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/returnToLoginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/userInfoFragment"
         android:name="me.dgmieth.kungfubbq.UserInfoFragment"

@@ -23,12 +23,14 @@ import java.io.IOException
 
 
 class UpdatePasswordFragment : Fragment(R.layout.fragment_updatepassword) {
+
     private val TAG = "UpdatePasswordFragment"
     private val args : UpdatePasswordFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
+        //click listeners
         updatePasswordCancelBtn.setOnClickListener {
             requireActivity().onBackPressed()
         }
@@ -39,11 +41,12 @@ class UpdatePasswordFragment : Fragment(R.layout.fragment_updatepassword) {
             }
         }
     }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         menu.clear()
     }
+    //==================================
+    // validation of editTexts
     private fun validateInfo():Boolean{
         val currentP = !updatePasswordCurrentPassword.text.toString().isNullOrEmpty() && updatePasswordCurrentPassword.text.toString().length==8
         val newP = !updatePasswordNewPassword.text.toString().isNullOrBlank() && updatePasswordNewPassword.text.toString().length==8
@@ -57,10 +60,6 @@ class UpdatePasswordFragment : Fragment(R.layout.fragment_updatepassword) {
         return false
     }
     private fun updatePassword(){
-        Log.d(TAG, updatePasswordCurrentPassword.text.toString())
-        Log.d(TAG,updatePasswordNewPassword.text.toString())
-        Log.d(TAG,updatePasswordNewPasswordConfirmation.text.toString())
-        Log.d(TAG,args.toString())
         val body = FormBody.Builder()
             .add("email",args.email)
             .add("id",args.id)
@@ -83,7 +82,6 @@ class UpdatePasswordFragment : Fragment(R.layout.fragment_updatepassword) {
                     showSpinner(false)
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
                     val json = JSONObject(response.body!!.string())
-                    Log.d(TAG, "update return response is $json")
                     if(!json.getBoolean("hasErrors")){
                         Handler(Looper.getMainLooper()).post{
                             Toast.makeText(requireActivity(),"${json.getString("msg")}",
@@ -92,23 +90,26 @@ class UpdatePasswordFragment : Fragment(R.layout.fragment_updatepassword) {
                             findNavController().navigate(action)
                         }
                     }else{
-                        Handler(Looper.getMainLooper()).post{
-                            Toast.makeText(requireActivity(),"The attempt to update your passrord failed with server message: ${json.getString("msg")}",
-                                Toast.LENGTH_LONG).show()
+                        if(json.getInt("errorCode")==-1){
+                            Handler(Looper.getMainLooper()).post{
+                                Toast.makeText(requireActivity(),"${json.getString("msg")}",
+                                    Toast.LENGTH_LONG).show()
+                                val action = NavGraphDirections.callHome(false)
+                                findNavController().navigate(action)
+                            }
+                        }else{
+                            Handler(Looper.getMainLooper()).post{
+                                Toast.makeText(requireActivity(),"The attempt to update your password failed with server message: ${json.getString("msg")}",
+                                    Toast.LENGTH_LONG).show()
+                            }
                         }
                     }
                 }
             }
         })
     }
-    private fun setUIElements(user: UserAndSocialMedia){
-        Log.d(TAG, "setUIElements callled")
-        Handler(Looper.getMainLooper()).post {
-            updatePasswordCurrentPassword.setText("")
-            updatePasswordNewPassword.setText("")
-            updatePasswordNewPasswordConfirmation.setText("")
-        }
-    }
+    //==================================
+    // ui elements
     private fun showSpinner(value: Boolean){
         Handler(Looper.getMainLooper()).post {
             updatePasswordSpinnerLayout.visibility =  when(value){
