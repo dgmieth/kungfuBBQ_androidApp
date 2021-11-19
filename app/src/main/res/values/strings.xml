@@ -34,7 +34,7 @@
     <string name="updatepassword_confirmnewpassword_label">Confirm new password:</string>
     <string name="btn_save">Save</string>
     <string name="catering_textview_explanatorytext">You may hire KungfuBBQ for catering. Please, fill out this form with your contact information and tell us briefly about your needs (such as amount of people, date, menu, ...).</string>
-    <string name="userinfo_phonenumber_hint">(000) 000-0000</string>
+    <string name="userinfo_phonenumber_hint">(001) 123-4567</string>
     <string name="catering_description_hint">Describe your need:</string>
     <string name="userinfo_name_hint">John Doe</string>
     <string name="btn_send">Send</string>
