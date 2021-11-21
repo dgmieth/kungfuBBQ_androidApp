@@ -45,6 +45,10 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
 
     private val args : PayOrderFragmentArgs by navArgs()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,12 +56,10 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
     ): View? {
         Log.d(TAG,"onCreateView called")
         viewModel = ViewModelProviders.of(this).get(RoomViewModel::class.java)
-        var db = KungfuBBQRoomDatabase.getInstance(requireActivity())
-        viewModel?.getDbInstance(db)
+        viewModel?.getDbInstance(KungfuBBQRoomDatabase.getInstance(requireActivity()))
         //subscribing to returnMsg events
         viewModel?.returnMsg?.subscribe(
             {
-                Log.d("ObservableTest", "value is $it")
                 showSpinner(false)
                 when(it){
                     Actions.UserError ->{
@@ -66,13 +68,10 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
                             Toast.makeText(requireActivity(),"It was not possible to authenticate this user in KungfuBBQ's server. Please try again in some minutes",Toast.LENGTH_LONG).show()
                         }
                     }
-                    else -> {
-                        Log.d(TAG,"User's token was updated")
-                    }
+                    else -> { }
                 }
             },
             {
-                Log.d("ObservableTest", "error value is $it")
                 Handler(Looper.getMainLooper()).post{
                     loginSpinerLayout.visibility = View.INVISIBLE
                     Toast.makeText(requireActivity(),"Log in attempt failed. Please try again in some minutes",Toast.LENGTH_LONG).show()
@@ -83,7 +82,6 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
             Log.d(TAG, "user returned $it")
             viewModel?.getCookingDates()
             if(!it.user.email.isNullOrEmpty()){
-                Log.d(TAG,"userUpdateOrder called -> value $it")
                 userPayOrder = it
             }else{
                 Handler(Looper.getMainLooper()).post{
@@ -96,12 +94,10 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
         })
         //Subscribing to cookingD
         viewModel?.cookingDates?.subscribe({
-            Log.d(TAG,"cookingDates called with cookingDateId ${args.cookingDateId}")
             var cdArray = it.filter { c -> c.cookingDateAndDishes.cookingDate.cookingDateId == args.cookingDateId }
             cookingDate = cdArray[0]
             renewToken()
             cookingDate?.let { cd ->
-                Log.d(TAG,"cookingDates called -> value $cd")
                 //updating date
                 val splitDate = (cd.cookingDateAndDishes.cookingDate.cookingDate.split(" ")[0]).split("-")
                 val cal = Calendar.getInstance()
@@ -135,7 +131,6 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
         },{})?.let {
             bag.add(it)
         }
-        Log.d(TAG,"onCreateView -> getting user")
         //db getUser information request
         if(args.cookingDateId != 0) {
             viewModel?.getUser()
@@ -153,15 +148,14 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
             val alert = dialogBuilder.create()
             alert.setTitle("Database communication failure")
             alert.show()
-
         }
-        Log.d(TAG,"onCreateView ends")
         return super.onCreateView(inflater, container, savedInstanceState)
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initGoogleMap(savedInstanceState)
         showSpinner(true)
         payOrderMenu.movementMethod = ScrollingMovementMethod()
+        //click listeners
         payOrderCancelBtn.setOnClickListener {
             deleteOrderAlert()
         }
@@ -177,54 +171,18 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
         }
         super.onViewCreated(view, savedInstanceState)
     }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         menu.clear()
     }
-    private fun initGoogleMap(savedInstanceState: Bundle?) {
-        Log.d("preOrderFragment", "initGoogleMap")
-        var mapViewBundle: Bundle? = null
-        if (savedInstanceState != null) {
-            Log.d("preOrderFragment", "savedInstance is not null")
-            mapViewBundle = savedInstanceState.getBundle(MAPS_API_KEY)
-            Log.d("preOrderFragment", "$mapViewBundle")
-        }else{
-            Log.d("preOrderFragment", "savedInstance is null")
-            Log.d("preOrderFragment", "$mapViewBundle")
-        }
-        payOrderLocationMap.onCreate(mapViewBundle)
-        payOrderLocationMap.getMapAsync(this)
-    }
-
-    override fun onMapReady(map: GoogleMap) {
-        Log.d("PreOrderFragment","mapMethod called")
-        cookingDate?.let {
-            Log.d("PreOrderFragment","mapMethod called - inside")
-            var position = LatLng(it.cookingDateAndDishes.cookingDate.lat, it.cookingDateAndDishes.cookingDate.lng)
-            val dayton = LatLng(39.758949, -84.191605)
-            Log.d("PreOrderFragment","mapMethod called - inside - $position")
-            map.addMarker(
-                com.google.android.gms.maps.model.MarkerOptions()
-                    .position(position)
-                    .title("KungfuBBQ")
-            )
-            map.moveCamera(com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom(position,16.0f))
-        }
-    }
-
     override fun onStart() {
         super.onStart()
-        Log.d("preOrderFragment", "onStart starts")
         payOrderLocationMap.onStart()
-        Log.d("preOrderFragment", "onStart ends")
     }
-
     override fun onResume() {
         super.onResume()
         payOrderLocationMap.onResume()
     }
-
     override fun onPause() {
         super.onPause()
         payOrderLocationMap.onPause()
@@ -233,22 +191,39 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
         super.onStop()
         payOrderLocationMap.onStop()
     }
-
     override fun onDestroy() {
         super.onDestroy()
         bag.clear()
         bag.dispose()
-        //updateOrderLocationMap.onDestroy()
     }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         payOrderLocationMap.onSaveInstanceState(outState)
     }
-
     override fun onLowMemory() {
         super.onLowMemory()
         payOrderLocationMap.onLowMemory()
+    }
+    //============================================================
+    // maps
+    private fun initGoogleMap(savedInstanceState: Bundle?) {
+        var mapViewBundle: Bundle? = null
+        if (savedInstanceState != null) {
+            mapViewBundle = savedInstanceState.getBundle(MAPS_API_KEY)
+        }
+        payOrderLocationMap.onCreate(mapViewBundle)
+        payOrderLocationMap.getMapAsync(this)
+    }
+    override fun onMapReady(map: GoogleMap) {
+        cookingDate?.let {
+            var position = LatLng(it.cookingDateAndDishes.cookingDate.lat, it.cookingDateAndDishes.cookingDate.lng)
+            map.addMarker(
+                com.google.android.gms.maps.model.MarkerOptions()
+                    .position(position)
+                    .title("KungfuBBQ")
+            )
+            map.moveCamera(com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom(position,16.0f))
+        }
     }
     /* =========================================================================================
     *   http requests
@@ -272,7 +247,6 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
         alert.show()
     }
     private fun deleteOrder(){
-        //showSpinner(true)
         val body = okhttp3.FormBody.Builder()
             .add("email",userPayOrder!!.user.email)
             .add("id",userPayOrder!!.user.userId.toString())
@@ -296,7 +270,6 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
                     val json = JSONObject(response.body!!.string())
                     if(!json.getBoolean("hasErrors")){
-                        Log.d(TAG, "values are $json")
                         Handler(Looper.getMainLooper()).post{
                             var dialogBuilder = AlertDialog.Builder(activity)
                             dialogBuilder.setMessage("${json.getString("msg")}")
@@ -313,17 +286,18 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
                             alert.show()
                         }
                     }else{
-                        if(json.getInt("errorCode")==-1){
-                            Handler(Looper.getMainLooper()).post{
-                                Toast.makeText(requireActivity(),"${json.getString("msg")}",
-                                    Toast.LENGTH_LONG).show()
-                                val action = NavGraphDirections.callHome(false)
-                                findNavController().navigate(action)
+                        when {
+                            json.getInt("errorCode")==-1 -> {
+                                notLoggedIntAlert()
                             }
-                        }else{
-                            Handler(Looper.getMainLooper()).post{
-                                Toast.makeText(requireActivity(),"The attempt to delete your order from KungfuBBQ's server failed with server message: ${json.getString("msg")}",
-                                    Toast.LENGTH_LONG).show()
+                            json.getInt("errorCode") <= -2 -> {
+                                showWarningMessage(json.getString("msg"))
+                            }
+                            else -> {
+                                Handler(Looper.getMainLooper()).post{
+                                    Toast.makeText(requireActivity(),"The attempt to delete your order from KungfuBBQ's server failed with server message: ${json.getString("msg")}",
+                                        Toast.LENGTH_LONG).show()
+                                }
                             }
                         }
                     }
@@ -345,7 +319,6 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
                 override fun onFailure(call: Call, e: IOException) {
                     showSpinner(false)
                     e.printStackTrace()
-                    Log.d(TAG, "return is $e")
                     Handler(Looper.getMainLooper()).post{
                         Toast.makeText(requireActivity(),"The attempt to connect to KungfuBBQ's server failed with generalized error message: ${e.localizedMessage}",
                             Toast.LENGTH_LONG).show()
@@ -354,24 +327,15 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
                 override fun onResponse(call: Call, response: Response) {
                     response.use {
                         if (!response.isSuccessful) throw IOException("Unexpected code $response")
-                        for ((name, value) in response.headers) {
-                            println("$name: $value")
-                        }
                         val json = JSONObject(response.body!!.string())
                         if(!json.getBoolean("hasErrors")){
-                           Log.d(TAG,"response with values $json")
                             viewModel?.updateUserToken(u.user.userId, json.getString("msg"))
                         }else{
                             if(json.getInt("errorCode")==-1){
-                                Handler(Looper.getMainLooper()).post{
-                                    Toast.makeText(requireActivity(),"${json.getString("msg")}",
-                                        Toast.LENGTH_LONG).show()
-                                    val action = NavGraphDirections.callHome(false)
-                                    findNavController().navigate(action)
-                                }
+                                notLoggedIntAlert()
                             }else{
                                 Handler(Looper.getMainLooper()).post{
-                                    Toast.makeText(requireActivity(),"The attempt to connect to KungfuBBQ's server failed with server message: ${json.getString("msg")}",
+                                    Toast.makeText(requireActivity(),"The attempt to connect to KungfuBBQ server failed with server message: ${json.getString("msg")}",
                                         Toast.LENGTH_LONG).show()
                                 }
                             }
@@ -392,5 +356,20 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
             }
         }
     }
-
+    private fun showWarningMessage(text:String){
+        //showWarningMessage(json.getString("msg"))
+        Handler(Looper.getMainLooper()).post{
+            Toast.makeText(requireActivity(),"$text", Toast.LENGTH_LONG).show()
+            val action = NavGraphDirections.callCalendarFragmentGlobal()
+            findNavController().navigate(action)
+        }
+    }
+    private fun notLoggedIntAlert(){
+        Handler(Looper.getMainLooper()).post{
+            Toast.makeText(requireActivity(),"You are not authenticated in Kungfu BBQ server anylonge. Please log in again.",
+                Toast.LENGTH_LONG).show()
+            val action = NavGraphDirections.callHome(false)
+            findNavController().navigate(action)
+        }
+    }
 }

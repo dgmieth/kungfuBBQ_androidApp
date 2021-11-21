@@ -74,5 +74,6 @@
     <string name="btn_paidorder">Checkout paid pre-order</string>
     <string name="calendar_no_cooking_msg">"Sorry! We are not cooking today... "</string>
     <string name="btn_register_register">Register</string>
+    <string name="paidorder_ordernumber">Order nr:</string>
 
 </resources>

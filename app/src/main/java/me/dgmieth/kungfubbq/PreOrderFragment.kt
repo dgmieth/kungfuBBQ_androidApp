@@ -270,28 +270,13 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
                     }else{
                         when {
                             json.getInt("errorCode")==-1 -> {
-                                Handler(Looper.getMainLooper()).post{
-                                    Toast.makeText(requireActivity(),"${json.getString("msg")}",
-                                        Toast.LENGTH_LONG).show()
-                                    val action = NavGraphDirections.callHome(false)
-                                    findNavController().navigate(action)
-                                }
+                                notLoggedIntAlert()
                             }
                             json.getInt("errorCode")==-2 -> {
-                                Handler(Looper.getMainLooper()).post{
-                                    Toast.makeText(requireActivity(),"${json.getString("msg")}",
-                                        Toast.LENGTH_LONG).show()
-                                    val action = NavGraphDirections.callCalendarFragmentGlobal()
-                                    findNavController().navigate(action)
-                                }
+                                showWarningMessage(json.getString("msg"))
                             }
                             json.getInt("errorCode")==-3 -> {
-                                Handler(Looper.getMainLooper()).post{
-                                    Toast.makeText(requireActivity(),"${json.getString("msg")}",
-                                        Toast.LENGTH_LONG).show()
-                                    val action = NavGraphDirections.callCalendarFragmentGlobal()
-                                    findNavController().navigate(action)
-                                }
+                                showWarningMessage(json.getString("msg"))
                             }
                             else -> {
                                 Handler(Looper.getMainLooper()).post{
@@ -316,6 +301,23 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
                 true -> View.VISIBLE
                 else -> View.INVISIBLE
             }
+        }
+    }
+    private fun showWarningMessage(text:String){
+        //showWarningMessage(json.getString("msg"))
+        Handler(Looper.getMainLooper()).post{
+            Toast.makeText(requireActivity(),"$text",
+                Toast.LENGTH_LONG).show()
+            val action = NavGraphDirections.callCalendarFragmentGlobal()
+            findNavController().navigate(action)
+        }
+    }
+    private fun notLoggedIntAlert(){
+        Handler(Looper.getMainLooper()).post{
+            Toast.makeText(requireActivity(),"You are not authenticated in Kungfu BBQ server anylonge. Please log in again.",
+                Toast.LENGTH_LONG).show()
+            val action = NavGraphDirections.callHome(false)
+            findNavController().navigate(action)
         }
     }
 }

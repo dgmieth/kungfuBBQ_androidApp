@@ -28,11 +28,6 @@ class MainActivity : AppCompatActivity() {
         OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE)
         OneSignal.initWithContext(this)
         OneSignal.setAppId(ONESIGNAL_APP_ID)
-//        OneSignal.setNotificationWillShowInForegroundHandler { notificationReceivedEvent ->
-//            Log.d("NOTIFICATION", "value is $notificationReceivedEvent")
-//            notificationReceivedEvent.complete(null)
-//        }
-
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.findNavController()

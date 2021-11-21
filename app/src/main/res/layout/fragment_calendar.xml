@@ -163,7 +163,7 @@
     <Button
         android:id="@+id/calendarPreOrder"
         android:layout_width="0dp"
-        android:layout_height="68dp"
+        android:layout_height="60dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
@@ -182,7 +182,7 @@
     <Button
         android:id="@+id/calendarUpdateOrder"
         android:layout_width="0dp"
-        android:layout_height="68dp"
+        android:layout_height="60dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
@@ -201,7 +201,7 @@
     <Button
         android:id="@+id/calendarPayOrder"
         android:layout_width="0dp"
-        android:layout_height="68dp"
+        android:layout_height="60dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
@@ -220,7 +220,7 @@
     <Button
         android:id="@+id/calendarPaidOrder"
         android:layout_width="0dp"
-        android:layout_height="68dp"
+        android:layout_height="60dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"

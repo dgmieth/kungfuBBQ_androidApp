@@ -209,7 +209,7 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
                     }else{
                         if(json.getInt("errorCode")==-1){
                             Handler(Looper.getMainLooper()).post{
-                                Toast.makeText(requireActivity(),"${json.getString("msg")}",
+                                Toast.makeText(requireActivity(),"You are not authenticated in Kungfu BBQ server anylonger. Please log in again.",
                                     Toast.LENGTH_LONG).show()
                                 val action = NavGraphDirections.callHome(false)
                                 findNavController().navigate(action)

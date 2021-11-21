@@ -232,7 +232,7 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
     * */
     private fun deleteOrderAlert() {
         var dialogBuilder = AlertDialog.Builder(activity)
-        dialogBuilder.setMessage("Are you sure you want to delete your order? This action cannot be undone.")
+        dialogBuilder.setMessage("Are you sure you want to cancel this order? This action will take you out of this cooking date's distribuition list and cannot be undone. As soon as you cancel, the system will request another user on the waiting list to take your place on the distribution list.")
             .setCancelable(true)
             .setNegativeButton("Cancel",DialogInterface.OnClickListener{
                     _,_->
@@ -262,7 +262,7 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
                 showSpinner(false)
                 e.printStackTrace()
                 Handler(Looper.getMainLooper()).post{
-                    Toast.makeText(requireActivity(),"The attempt to delete your order from KungfuBBQ's server failed with generalized message: ${e.localizedMessage}",Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireActivity(),"The attempt to delete your order from KungfuBBQ server failed with generalized message: ${e.localizedMessage}",Toast.LENGTH_LONG).show()
                 }
             }
             override fun onResponse(call: Call, response: Response) {
@@ -271,7 +271,6 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
                     val json = JSONObject(response.body!!.string())
                     if(!json.getBoolean("hasErrors")){
-                        Log.d(TAG, "values are $json")
                         Handler(Looper.getMainLooper()).post{
                             var dialogBuilder = AlertDialog.Builder(activity)
                             dialogBuilder.setMessage("${json.getString("msg")}")
@@ -290,28 +289,10 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
                     }else{
                         when {
                             json.getInt("errorCode")==-1 -> {
-                                Handler(Looper.getMainLooper()).post{
-                                    Toast.makeText(requireActivity(),"${json.getString("msg")}",
-                                        Toast.LENGTH_LONG).show()
-                                    val action = NavGraphDirections.callHome(false)
-                                    findNavController().navigate(action)
-                                }
+                                notLoggedIntAlert()
                             }
-                            json.getInt("errorCode")==-2 -> {
-                                Handler(Looper.getMainLooper()).post{
-                                    Toast.makeText(requireActivity(),"${json.getString("msg")}",
-                                        Toast.LENGTH_LONG).show()
-                                    val action = NavGraphDirections.callCalendarFragmentGlobal()
-                                    findNavController().navigate(action)
-                                }
-                            }
-                            json.getInt("errorCode")==-3 -> {
-                                Handler(Looper.getMainLooper()).post{
-                                    Toast.makeText(requireActivity(),"${json.getString("msg")}",
-                                        Toast.LENGTH_LONG).show()
-                                    val action = NavGraphDirections.callCalendarFragmentGlobal()
-                                    findNavController().navigate(action)
-                                }
+                            json.getInt("errorCode") <= -2 -> {
+                                showWarningMessage(json.getString("msg"))
                             }
                             else -> {
                                 Handler(Looper.getMainLooper()).post{
@@ -324,6 +305,15 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
                 }
             }
         })
+    }
+    private fun showWarningMessage(text:String){
+        //showWarningMessage(json.getString("msg"))
+        Handler(Looper.getMainLooper()).post{
+            Toast.makeText(requireActivity(),"$text",
+                Toast.LENGTH_LONG).show()
+            val action = NavGraphDirections.callCalendarFragmentGlobal()
+            findNavController().navigate(action)
+        }
     }
     private fun updateOrder(){
         if(cookingDate!!.order[0].dishes[0].dishQuantity == selectedQtty){
@@ -373,28 +363,10 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
                     }else{
                         when {
                             json.getInt("errorCode")==-1 -> {
-                                Handler(Looper.getMainLooper()).post{
-                                    Toast.makeText(requireActivity(),"${json.getString("msg")}",
-                                        Toast.LENGTH_LONG).show()
-                                    val action = NavGraphDirections.callHome(false)
-                                    findNavController().navigate(action)
-                                }
+                                notLoggedIntAlert()
                             }
-                            json.getInt("errorCode")==-2 -> {
-                                Handler(Looper.getMainLooper()).post{
-                                    Toast.makeText(requireActivity(),"${json.getString("msg")}",
-                                        Toast.LENGTH_LONG).show()
-                                    val action = NavGraphDirections.callCalendarFragmentGlobal()
-                                    findNavController().navigate(action)
-                                }
-                            }
-                            json.getInt("errorCode")==-3 -> {
-                                Handler(Looper.getMainLooper()).post{
-                                    Toast.makeText(requireActivity(),"${json.getString("msg")}",
-                                        Toast.LENGTH_LONG).show()
-                                    val action = NavGraphDirections.callCalendarFragmentGlobal()
-                                    findNavController().navigate(action)
-                                }
+                            json.getInt("errorCode") <=-2 -> {
+                                showWarningMessage(json.getString("msg"))
                             }
                             else -> {
                                 Handler(Looper.getMainLooper()).post{
@@ -428,6 +400,14 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
                 true -> View.VISIBLE
                 else -> View.INVISIBLE
             }
+        }
+    }
+    private fun notLoggedIntAlert(){
+        Handler(Looper.getMainLooper()).post{
+            Toast.makeText(requireActivity(),"You are not authenticated in Kungfu BBQ server anylonge. Please log in again.",
+                Toast.LENGTH_LONG).show()
+            val action = NavGraphDirections.callHome(false)
+            findNavController().navigate(action)
         }
     }
 }

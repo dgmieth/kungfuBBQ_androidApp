@@ -42,7 +42,6 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
         override fun afterTextChanged(s: Editable?) { }
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            Log.d(TAG, "pauCardCode value is ${payCardCode.text.toString()}")
             if(payCardCode.text.toString().length>=3){
                 cardCode = payCardCode.text.toString()
                 return
@@ -55,7 +54,6 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -97,18 +95,15 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
         payCardMonth.minValue = 0
         payCardMonth.maxValue = months.size -1
         payCardMonth.displayedValues = months
-        payCardYear.setOnValueChangedListener{picker,oldVal,newVal ->
-            Log.d(TAG, "$oldVal -> $newVal")
+        payCardYear.setOnValueChangedListener{_,_,_ ->
         }
-        payCardMonth.setOnValueChangedListener{picker,oldVal,newVal ->
-            Log.d(TAG, "$oldVal -> $newVal")
+        payCardMonth.setOnValueChangedListener{_,_,_ ->
         }
         payCancelBtn.setOnClickListener {
             val action = PayOrderFragmentDirections.callPayOrderFragmentGlobal(args.coookingDateId)
             findNavController().navigate(action)
         }
         payPayBtn.setOnClickListener {
-            Log.d(TAG,"pay button clicked")
             payOrder()
         }
         payCardNumber.addTextChangedListener(cardNumberWatcher)
@@ -119,7 +114,6 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
         menu.clear()
     }
     private fun formatPhoneNumber() {
-        Log.d(TAG, "formatPhoneNumber ${payCardNumber.text.toString()}")
         if(payCardNumber.text.toString().length==16){
             payCardNumber.removeTextChangedListener(cardNumberWatcher)
             var number = payCardNumber.text.toString()
@@ -142,44 +136,22 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
     }
     private fun payOrder(){
         if(cardNumber.isNullOrEmpty()||cardCode.isNullOrEmpty()||payCardMonth.value == 0 || payCardYear.value == 0){
-
             if(cardNumber.isNullOrEmpty()){
-                ObjectAnimator
-                    .ofFloat(payCardNumber,"translationX",0f,30f,-30f,30f,-30f,0f)
-                    .apply {
-                        duration = 1000
-                    }
-                    .start()
+                animateViews(payCardNumber)
             }
             if(cardCode.isNullOrEmpty()){
-                ObjectAnimator
-                    .ofFloat(payCardCode,"translationX",0f,30f,-30f,30f,-30f,0f)
-                    .apply {
-                        duration = 1000
-                    }
-                    .start()
+                animateViews(payCardCode)
             }
             if(payCardMonth.value == 0 ){
-                ObjectAnimator
-                    .ofFloat(payCardMonth,"translationX",0f,30f,-30f,30f,-30f,0f)
-                    .apply {
-                        duration = 1000
-                    }
-                    .start()
+                animateViews(payCardMonth)
             }
             if(payCardYear.value == 0 ){
-                ObjectAnimator
-                    .ofFloat(payCardYear,"translationX",0f,30f,-30f,30f,-30f,0f)
-                    .apply {
-                        duration = 1000
-                    }
-                    .start()
+                animateViews(payCardYear)
             }
             return
         }
         showSpinner(true)
         var eDate = "${yearsFirst[payCardYear.value]}-${if(payCardMonth.value<=9) 0 else String()}${payCardMonth.value}"
-        Log.d(TAG,"edate is $eDate")
         val body = okhttp3.FormBody.Builder()
             .add("email",args.userEmail)
             .add("id",args.userId.toString())
@@ -189,7 +161,6 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
             .add("cardCode",cardCode.toString().trim())
             .add("expirationDate",eDate)
             .build()
-        Log.d(TAG,"Body is ${body.toString()}")
         HttpCtrl.shared.newCall(HttpCtrl.post(getString(R.string.kungfuServerUrl),"/api/order/payOrder",body,args.userToken)).enqueue(object :
             Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -223,17 +194,18 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
                             alert.show()
                         }
                     }else{
-                        if(json.getInt("errorCode")==-1){
-                            Handler(Looper.getMainLooper()).post{
-                                Toast.makeText(requireActivity(),"${json.getString("msg")}",
-                                    Toast.LENGTH_LONG).show()
-                                val action = NavGraphDirections.callHome(false)
-                                findNavController().navigate(action)
+                        when {
+                            json.getInt("errorCode")==-1 -> {
+                                notLoggedIntAlert()
                             }
-                        }else{
-                            Handler(Looper.getMainLooper()).post{
-                                Toast.makeText(requireActivity(),"The attempt to pay your pre-order failed with server message: ${json.getString("msg")}",
-                                    Toast.LENGTH_LONG).show()
+                            json.getInt("errorCode")<=-2 -> {
+                                showWarningMessage(json.getString("msg"))
+                            }
+                            else -> {
+                                Handler(Looper.getMainLooper()).post{
+                                    Toast.makeText(requireActivity(),"The attempt to pay your pre-order failed with server message: ${json.getString("msg")}",
+                                        Toast.LENGTH_LONG).show()
+                                }
                             }
                         }
                     }
@@ -241,6 +213,8 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
             }
         })
     }
+    //========================================
+    // ui elements
     private fun showSpinner(value: Boolean){
         Handler(Looper.getMainLooper()).post {
             paySpinnerLayout.visibility =  when(value){
@@ -248,5 +222,29 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
                 else -> View.INVISIBLE
             }
         }
+    }
+    private fun showWarningMessage(text:String){
+        //showWarningMessage(json.getString("msg"))
+        Handler(Looper.getMainLooper()).post{
+            Toast.makeText(requireActivity(),"$text", Toast.LENGTH_LONG).show()
+            val action = NavGraphDirections.callCalendarFragmentGlobal()
+            findNavController().navigate(action)
+        }
+    }
+    private fun notLoggedIntAlert(){
+        Handler(Looper.getMainLooper()).post{
+            Toast.makeText(requireActivity(),"You are not authenticated in Kungfu BBQ server anylonge. Please log in again.",
+                Toast.LENGTH_LONG).show()
+            val action = NavGraphDirections.callHome(false)
+            findNavController().navigate(action)
+        }
+    }
+    private fun animateViews(viewObject:Any){
+        ObjectAnimator
+            .ofFloat(viewObject,"translationX",0f,30f,-30f,30f,-30f,0f)
+            .apply {
+                duration = 1000
+            }
+            .start()
     }
 }

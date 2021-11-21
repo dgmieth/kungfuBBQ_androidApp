@@ -44,18 +44,15 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProviders.of(this).get(RoomViewModel::class.java)
-        var db = KungfuBBQRoomDatabase.getInstance(requireActivity())
-        viewModel?.getDbInstance(db)
+        viewModel?.getDbInstance(KungfuBBQRoomDatabase.getInstance(requireActivity()))
         //subscribing to returnMsg
         viewModel?.returnMsg?.subscribe({
-            Log.d(TAG,"returnMsg has value of $it")
             when(it){
                 Actions.CookingDatesComplete -> {
                     viewModel?.getCookingDates()
@@ -71,9 +68,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         }
         //Subscribing to cookingD
         viewModel?.cookingDates?.subscribe({
-            Log.d("CookingDateObservable","value is $it")
             cookingDates = it
-            Log.d("CookingDates","array values is $cookingDates")
             cookingDates?.let{ cd ->
                 var dArray : MutableList<Pair<String,Int>> = mutableListOf()
                 for(i in cd) {
@@ -88,7 +83,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                 Handler(Looper.getMainLooper()).post{
                     calendarSpinnerLayout.isVisible = false
                     ifSelectedDateHasCookingDateMath(calendarCalendar.firstSelectedDate.time.toString())
-                    Log.d("CalendarCalendar","set events called")
                     calendarCalendar.setEvents(events)
                     calendarCalendar.setOnDayClickListener { eventDay ->
                         ifSelectedDateHasCookingDateMath(eventDay.calendar.time.toString())
@@ -98,13 +92,12 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             }
         },{
             Log.d("CookingDateObservable","error is $it")
-
         },{})?.let {
             bag.add(it)
         }
         viewModel?.user?.observe(viewLifecycleOwner, Observer {
             if(!it.user.email.isNullOrEmpty()){
-                returnUserFromDBSuccess(it)
+                getActiveCookingDatesWithinSixtyDays(it)
             }else{
                 returnUserFromDBNull()
             }
@@ -201,11 +194,8 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         cookingDates?.let {
             val cdArray = it.filter {e -> e.cookingDateAndDishes.cookingDate.cookingDateId == cookingDateId}
             val cd = cdArray[0]
-            Log.d("UpdateUiBtns","cookingDate ${cd.cookingDateAndDishes.cookingDate}")
             if(cd.cookingDateAndDishes.cookingDate.cookingStatusId == 4){
-                Log.d("UpdateUiBtns","cookingDate opened to orders")
                 if(cd.order.isNotEmpty()){
-                    Log.d("UpdateUiBtns","cookingDate opened to orders -> orders not empty")
                     showOrderBtns(
                         placeOrder= false,
                         updateOrder = true,
@@ -213,7 +203,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                         paidOrder = false
                     )
                 }else{
-                    Log.d("UpdateUiBtns","cookingDate opened to orders -> orders empty")
                     showOrderBtns(
                         placeOrder = true,
                         updateOrder = false,
@@ -222,9 +211,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                     )
                 }
             }else {
-                Log.d(TAG,"cookingDate close to orders")
                 if(cd.order.isNotEmpty()){
-                    Log.d(TAG,"order is ${cd.order}")
                     var order = cd.order[0].order
                     if (order.orderStatusId == 2 ){ /*Waiting cooking calendar date closure and sorting*/
                         /*show update btn*/
@@ -246,7 +233,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                     }
                     if (order.orderStatusId == 4 ){ /*Waiting selected users to drop out*/
                         /*create user alert*/
-                        Log.d(TAG,"waiting dropouts")
                         showAlert("Your order did not make it to this list, but you are on the waiting list for drop out orders. You'll receive a notification if your order gets onto this list",
                                 "Order status")
                     }
@@ -261,7 +247,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                     }
                     if (order.orderStatusId == 6 ){ /*Declined by user*/
                         /*create user alert*/
-                        Log.d(TAG,"order declined")
                         showAlert("You cancelled this order if you wish to order food from us, please choose another available cooking date",
                             "Order status")
                     }
@@ -272,7 +257,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                     }
                     if (order.orderStatusId == 12 ){ /*The cooking calendar register was excluded by the database administrator, application user or routine*/
                         /*create user alert*/
-                        Log.d(TAG,"did not make to this cd")
                         showAlert("You missed the time you had to confirm the order. Please order again from another available cooking date.",
                             "Order status")
                     }
@@ -287,7 +271,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                 }
 
             }
-
         }
     }
     private fun showOrderBtns(placeOrder:Boolean, updateOrder:Boolean, payOrder:Boolean, paidOrder:Boolean){
@@ -301,8 +284,9 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             Toast.makeText(requireActivity(),"It was not possible to recover data from app`s database. Please restart the app.",Toast.LENGTH_LONG).show()
         }
     }
-
-    private fun returnUserFromDBSuccess(it: UserAndSocialMedia) {
+    //===============================================================
+    //
+    private fun getActiveCookingDatesWithinSixtyDays(it: UserAndSocialMedia) {
         var httpUrl = HttpUrl.Builder()
             .scheme("https")
             .host("${getString(R.string.kungfuServerUrlNoSchema)}")
@@ -323,12 +307,8 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             override fun onResponse(call: Call, response: Response) {
                 response.use {
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
-                    for ((name, value) in response.headers) {
-                        println("$name: $value")
-                    }
                     val json = JSONObject(response.body!!.string())
                     if(!json.getBoolean("hasErrors")){
-                        println(json)
                         var cDates = json.getJSONArray("msg").getJSONArray(0)
                         var orders = json.getJSONArray("msg").getJSONArray(1)
                         var listCDates : MutableList<CookingDateDB> = arrayListOf()
@@ -388,7 +368,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                     }else{
                         if(json.getInt("errorCode")==-1){
                             Handler(Looper.getMainLooper()).post{
-                                Toast.makeText(requireActivity(),"${json.getString("msg")}",
+                                Toast.makeText(requireActivity(),"You are not authenticated in Kungfu BBQ server anylonger. Please log in again.",
                                     Toast.LENGTH_LONG).show()
                                 val action = NavGraphDirections.callHome(false)
                                 findNavController().navigate(action)

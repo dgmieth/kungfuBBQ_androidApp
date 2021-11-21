@@ -13,12 +13,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_paidorder.*
 import me.dgmieth.kungfubbq.datatabase.room.KungfuBBQRoomDatabase
@@ -42,24 +39,18 @@ class PaidOrderFragment : Fragment(R.layout.fragment_paidorder),OnMapReadyCallba
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        Log.d("preOrderFragment", "onCreate starts")
-        Log.d("preOrderFragment", "onCreate ends")
     }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         viewModel = ViewModelProviders.of(this).get(RoomViewModel::class.java)
-        var db = KungfuBBQRoomDatabase.getInstance(requireActivity())
-        viewModel?.getDbInstance(db)
+        viewModel?.getDbInstance(KungfuBBQRoomDatabase.getInstance(requireActivity()))
         //Subscribing to user
         viewModel?.user?.observe(viewLifecycleOwner, Observer {
-            Log.d(TAG, "user returned $it")
             viewModel?.getCookingDates()
             if(!it.user.email.isNullOrEmpty()){
-                Log.d(TAG,"userUpdateOrder called -> value $it")
                 userPaidOrder = it
             }else{
                 Handler(Looper.getMainLooper()).post{
@@ -72,7 +63,6 @@ class PaidOrderFragment : Fragment(R.layout.fragment_paidorder),OnMapReadyCallba
         })
         //Subscribing to cookingD
         viewModel?.cookingDates?.subscribe({
-            Log.d(TAG,"cookingDates called with cookingDateId ${args.cookingDateId}")
             var cdArray = it.filter { c -> c.cookingDateAndDishes.cookingDate.cookingDateId == args.cookingDateId }
             cookingDate = cdArray[0]
             cookingDate?.let { cd ->
@@ -83,6 +73,7 @@ class PaidOrderFragment : Fragment(R.layout.fragment_paidorder),OnMapReadyCallba
                 cal.set(splitDate[0].toInt(), splitDate[1].toInt()-1, splitDate[2].toInt())
                 val dateStrParts = cal.time.toString().split(" ")
                 paidOrderDate.text = "${dateStrParts[1]} ${dateStrParts[2]}"
+                orderNr.text = cd.order[0].order.orderId.toString()
                 //updating status
                 paidOrderStatus.text = cd.cookingDateAndDishes.cookingDate.cookingStatus
                 //updating menu
@@ -110,7 +101,6 @@ class PaidOrderFragment : Fragment(R.layout.fragment_paidorder),OnMapReadyCallba
         },{})?.let {
             bag.add(it)
         }
-        Log.d(TAG,"onCreateView -> getting user")
         //db getUser information request
         if(args.cookingDateId != 0) {
             viewModel?.getUser()
@@ -119,7 +109,7 @@ class PaidOrderFragment : Fragment(R.layout.fragment_paidorder),OnMapReadyCallba
             dialogBuilder.setMessage("Communication with this apps's database failed. Please restart the app.")
                 .setCancelable(false)
                 .setPositiveButton("Ok", DialogInterface.OnClickListener{
-                        dialog, id ->
+                        _, _ ->
                     Handler(Looper.getMainLooper()).post {
                         var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
                         findNavController().navigate(action)
@@ -128,45 +118,32 @@ class PaidOrderFragment : Fragment(R.layout.fragment_paidorder),OnMapReadyCallba
             val alert = dialogBuilder.create()
             alert.setTitle("Database communication failure")
             alert.show()
-
         }
         Log.d(TAG,"onCreateView ends")
         return super.onCreateView(inflater, container, savedInstanceState)
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("preOrderFragment", "onViewCreated starts")
         initGoogleMap(savedInstanceState)
-        Log.d("preOrderFragment", "onViewCreated ends")
-
     }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         menu.clear()
     }
+    //===================================================
+    // maps
     private fun initGoogleMap(savedInstanceState: Bundle?) {
-        Log.d("preOrderFragment", "initGoogleMap")
         var mapViewBundle: Bundle? = null
         if (savedInstanceState != null) {
-            Log.d("preOrderFragment", "savedInstance is not null")
             mapViewBundle = savedInstanceState.getBundle(MAPS_API_KEY)
-            Log.d("preOrderFragment", "$mapViewBundle")
-        }else{
-            Log.d("preOrderFragment", "savedInstance is null")
-            Log.d("preOrderFragment", "$mapViewBundle")
         }
         paidOrderLocationMap.onCreate(mapViewBundle)
         paidOrderLocationMap.getMapAsync(this)
     }
 
     override fun onMapReady(map: GoogleMap) {
-        Log.d("PreOrderFragment","mapMethod called")
         cookingDate?.let {
-            Log.d("PreOrderFragment","mapMethod called - inside")
             var position = LatLng(it.cookingDateAndDishes.cookingDate.lat, it.cookingDateAndDishes.cookingDate.lng)
-            val dayton = LatLng(39.758949, -84.191605)
-            Log.d("PreOrderFragment","mapMethod called - inside - $position")
             map.addMarker(
                 com.google.android.gms.maps.model.MarkerOptions()
                     .position(position)
@@ -175,19 +152,10 @@ class PaidOrderFragment : Fragment(R.layout.fragment_paidorder),OnMapReadyCallba
             map.moveCamera(com.google.android.gms.maps.CameraUpdateFactory.newLatLngZoom(position,16.0f))
         }
     }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d("preOrderFragment", "onStart starts")
-//        paidOrderLocationMap.onStart()
-        Log.d("preOrderFragment", "onStart ends")
-    }
-
     override fun onResume() {
         super.onResume()
         paidOrderLocationMap.onResume()
     }
-
     override fun onPause() {
         super.onPause()
         paidOrderLocationMap.onPause()
@@ -196,22 +164,17 @@ class PaidOrderFragment : Fragment(R.layout.fragment_paidorder),OnMapReadyCallba
         super.onStop()
         paidOrderLocationMap.onStop()
     }
-
     override fun onDestroy() {
         super.onDestroy()
         bag.clear()
         bag.dispose()
-        //updateOrderLocationMap.onDestroy()
     }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         paidOrderLocationMap.onSaveInstanceState(outState)
     }
-
     override fun onLowMemory() {
         super.onLowMemory()
         paidOrderLocationMap.onLowMemory()
     }
-
 }
