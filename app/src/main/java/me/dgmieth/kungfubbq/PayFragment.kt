@@ -1,6 +1,7 @@
 package me.dgmieth.kungfubbq
 
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
@@ -14,7 +15,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import kotlinx.android.synthetic.main.fragment_pay.*
+import me.dgmieth.kungfubbq.databinding.FragmentPayBinding
 import me.dgmieth.kungfubbq.httpCtrl.HttpCtrl
 import okhttp3.Call
 import okhttp3.Callback
@@ -42,13 +43,16 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
         override fun afterTextChanged(s: Editable?) { }
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            if(payCardCode.text.toString().length>=3){
-                cardCode = payCardCode.text.toString()
+            if(binding.payCardCode.text.toString().length>=3){
+                cardCode = binding.payCardCode.text.toString()
                 return
             }
             cardCode = null
         }
     }
+
+    private var _binding: FragmentPayBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,7 +78,8 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
             alert.setTitle("Database communication failure")
             alert.show()
         }
-        return super.onCreateView(inflater, container, savedInstanceState)
+        _binding = FragmentPayBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -89,69 +94,69 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
         }
         val years = yearsFirst.toTypedArray()
         val months = arrayOf("Month","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Set","Oct","Nov","Dec")
-        payCardYear.minValue = 0
-        payCardYear.maxValue = 20
-        payCardYear.displayedValues = years
-        payCardMonth.minValue = 0
-        payCardMonth.maxValue = months.size -1
-        payCardMonth.displayedValues = months
-        payCardYear.setOnValueChangedListener{_,_,_ ->
+        binding.payCardYear.minValue = 0
+        binding.payCardYear.maxValue = 20
+        binding.payCardYear.displayedValues = years
+        binding.payCardMonth.minValue = 0
+        binding.payCardMonth.maxValue = months.size -1
+        binding.payCardMonth.displayedValues = months
+        binding.payCardYear.setOnValueChangedListener{_,_,_ ->
         }
-        payCardMonth.setOnValueChangedListener{_,_,_ ->
+        binding.payCardMonth.setOnValueChangedListener{_,_,_ ->
         }
-        payCancelBtn.setOnClickListener {
+        binding.payCancelBtn.setOnClickListener {
             val action = PayOrderFragmentDirections.callPayOrderFragmentGlobal(args.coookingDateId)
             findNavController().navigate(action)
         }
-        payPayBtn.setOnClickListener {
+        binding.payPayBtn.setOnClickListener {
             payOrder()
         }
-        payCardNumber.addTextChangedListener(cardNumberWatcher)
-        payCardCode.addTextChangedListener(codeNumberWatcher)
+        binding.payCardNumber.addTextChangedListener(cardNumberWatcher)
+        binding.payCardCode.addTextChangedListener(codeNumberWatcher)
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         menu.clear()
     }
     private fun formatPhoneNumber() {
-        if(payCardNumber.text.toString().length==16){
-            payCardNumber.removeTextChangedListener(cardNumberWatcher)
-            var number = payCardNumber.text.toString()
+        if(binding.payCardNumber.text.toString().length==16){
+            binding.payCardNumber.removeTextChangedListener(cardNumberWatcher)
+            var number = binding.payCardNumber.text.toString()
             var newNumber = ""
             for(i in 0..15 step 4){
                 newNumber = "$newNumber${number.substring(i, i+4)} "
             }
             cardNumber = number
-            payCardNumber.setText(newNumber)
-            payCardNumber.setSelection(payCardNumber.text.toString().length)
-            payCardNumber.addTextChangedListener(cardNumberWatcher)
+            binding.payCardNumber.setText(newNumber)
+            binding.payCardNumber.setSelection(binding.payCardNumber.text.toString().length)
+            binding.payCardNumber.addTextChangedListener(cardNumberWatcher)
         }else{
             cardNumber = null
-            var text = payCardNumber.text.toString().replace(""" """.toRegex(),"")
-            payCardNumber.removeTextChangedListener(cardNumberWatcher)
-            payCardNumber.setText(text)
-            payCardNumber.setSelection(payCardNumber.text.toString().length)
-            payCardNumber.addTextChangedListener(cardNumberWatcher)
+            var text = binding.payCardNumber.text.toString().replace(""" """.toRegex(),"")
+            binding.payCardNumber.removeTextChangedListener(cardNumberWatcher)
+            binding.payCardNumber.setText(text)
+            binding.payCardNumber.setSelection(binding.payCardNumber.text.toString().length)
+            binding.payCardNumber.addTextChangedListener(cardNumberWatcher)
         }
     }
     private fun payOrder(){
-        if(cardNumber.isNullOrEmpty()||cardCode.isNullOrEmpty()||payCardMonth.value == 0 || payCardYear.value == 0){
+        if(cardNumber.isNullOrEmpty()||cardCode.isNullOrEmpty()||binding.payCardMonth.value == 0 || binding.payCardYear.value == 0){
             if(cardNumber.isNullOrEmpty()){
-                animateViews(payCardNumber)
+                animateViews(binding.payCardNumber)
             }
             if(cardCode.isNullOrEmpty()){
-                animateViews(payCardCode)
+                animateViews(binding.payCardCode)
             }
-            if(payCardMonth.value == 0 ){
-                animateViews(payCardMonth)
+            if(binding.payCardMonth.value == 0 ){
+                animateViews(binding.payCardMonth)
             }
-            if(payCardYear.value == 0 ){
-                animateViews(payCardYear)
+            if(binding.payCardYear.value == 0 ){
+                animateViews(binding.payCardYear)
             }
             return
         }
         showSpinner(true)
-        var eDate = "${yearsFirst[payCardYear.value]}-${if(payCardMonth.value<=9) 0 else String()}${payCardMonth.value}"
+        var eDate = "${yearsFirst[binding.payCardYear.value]}-${if(binding.payCardMonth.value<=9) 0 else String()}${binding.payCardMonth.value}"
         val body = okhttp3.FormBody.Builder()
             .add("email",args.userEmail)
             .add("id",args.userId.toString())
@@ -217,7 +222,7 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
     // ui elements
     private fun showSpinner(value: Boolean){
         Handler(Looper.getMainLooper()).post {
-            paySpinnerLayout.visibility =  when(value){
+            binding.paySpinnerLayout.visibility =  when(value){
                 true -> View.VISIBLE
                 else -> View.INVISIBLE
             }
@@ -239,6 +244,7 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
             findNavController().navigate(action)
         }
     }
+    @SuppressLint("ObjectAnimatorBinding")
     private fun animateViews(viewObject:Any){
         ObjectAnimator
             .ofFloat(viewObject,"translationX",0f,30f,-30f,30f,-30f,0f)

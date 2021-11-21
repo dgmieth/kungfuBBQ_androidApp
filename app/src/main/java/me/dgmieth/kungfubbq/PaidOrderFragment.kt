@@ -17,7 +17,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_paidorder.*
+import me.dgmieth.kungfubbq.databinding.FragmentPaidorderBinding
 import me.dgmieth.kungfubbq.datatabase.room.KungfuBBQRoomDatabase
 import me.dgmieth.kungfubbq.datatabase.room.RoomViewModel
 import me.dgmieth.kungfubbq.datatabase.roomEntities.CookingDateAndCookingDateDishesWithOrder
@@ -35,6 +35,9 @@ class PaidOrderFragment : Fragment(R.layout.fragment_paidorder),OnMapReadyCallba
     private var bag = CompositeDisposable()
 
     private val args : PayOrderFragmentArgs by navArgs()
+
+    private var _binding: FragmentPaidorderBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,10 +75,10 @@ class PaidOrderFragment : Fragment(R.layout.fragment_paidorder),OnMapReadyCallba
                 val cal = Calendar.getInstance()
                 cal.set(splitDate[0].toInt(), splitDate[1].toInt()-1, splitDate[2].toInt())
                 val dateStrParts = cal.time.toString().split(" ")
-                paidOrderDate.text = "${dateStrParts[1]} ${dateStrParts[2]}"
-                orderNr.text = cd.order[0].order.orderId.toString()
+                binding.paidOrderDate.text = "${dateStrParts[1]} ${dateStrParts[2]}"
+                binding.orderNr.text = cd.order[0].order.orderId.toString()
                 //updating status
-                paidOrderStatus.text = cd.cookingDateAndDishes.cookingDate.cookingStatus
+                binding.paidOrderStatus.text = cd.cookingDateAndDishes.cookingDate.cookingStatus
                 //updating menu
                 var menuT = ""
                 var menuIndex = 1
@@ -85,16 +88,16 @@ class PaidOrderFragment : Fragment(R.layout.fragment_paidorder),OnMapReadyCallba
                     menuIndex += 1
                     mealsSum += m.dishPrice.toDouble()
                 }
-                paidOrderMenu.text = menuT
+                binding.paidOrderMenu.text = menuT
                 //updating maps
-                paidOrderLocationText.text = "${cd.cookingDateAndDishes.cookingDate.street}, ${cd.cookingDateAndDishes.cookingDate.city}"
-                paidOrderLocationMap.getMapAsync(this)
+                binding.paidOrderLocationText.text = "${cd.cookingDateAndDishes.cookingDate.street}, ${cd.cookingDateAndDishes.cookingDate.city}"
+                binding.paidOrderLocationMap.getMapAsync(this)
                 var priceString = "U$ ${String.format("%.2f",mealsSum)}"
                 //updating meal price
-                paidOrderMealPrice.text = priceString
+                binding.paidOrderMealPrice.text = priceString
                 //updating total meal price
-                paidOrderNumberOfMeals.text = cd.order[0].dishes[0].dishQuantity.toString()
-                paidOrderTotalPrice.text = "U$ ${String.format("%.2f",mealsSum*cd.order[0].dishes[0].dishQuantity)}"
+                binding.paidOrderNumberOfMeals.text = cd.order[0].dishes[0].dishQuantity.toString()
+                binding.paidOrderTotalPrice.text = "U$ ${String.format("%.2f",mealsSum*cd.order[0].dishes[0].dishQuantity)}"
             }
         },{
             Log.d("CookingDateObservable","error is $it")
@@ -119,8 +122,8 @@ class PaidOrderFragment : Fragment(R.layout.fragment_paidorder),OnMapReadyCallba
             alert.setTitle("Database communication failure")
             alert.show()
         }
-        Log.d(TAG,"onCreateView ends")
-        return super.onCreateView(inflater, container, savedInstanceState)
+        _binding = FragmentPaidorderBinding.inflate(inflater, container, false)
+        return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -137,8 +140,8 @@ class PaidOrderFragment : Fragment(R.layout.fragment_paidorder),OnMapReadyCallba
         if (savedInstanceState != null) {
             mapViewBundle = savedInstanceState.getBundle(MAPS_API_KEY)
         }
-        paidOrderLocationMap.onCreate(mapViewBundle)
-        paidOrderLocationMap.getMapAsync(this)
+        binding.paidOrderLocationMap.onCreate(mapViewBundle)
+        binding.paidOrderLocationMap.getMapAsync(this)
     }
 
     override fun onMapReady(map: GoogleMap) {
@@ -154,15 +157,15 @@ class PaidOrderFragment : Fragment(R.layout.fragment_paidorder),OnMapReadyCallba
     }
     override fun onResume() {
         super.onResume()
-        paidOrderLocationMap.onResume()
+        binding.paidOrderLocationMap.onResume()
     }
     override fun onPause() {
         super.onPause()
-        paidOrderLocationMap.onPause()
+        binding.paidOrderLocationMap.onPause()
     }
     override fun onStop() {
         super.onStop()
-        paidOrderLocationMap.onStop()
+        binding.paidOrderLocationMap.onStop()
     }
     override fun onDestroy() {
         super.onDestroy()
@@ -171,10 +174,10 @@ class PaidOrderFragment : Fragment(R.layout.fragment_paidorder),OnMapReadyCallba
     }
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        paidOrderLocationMap.onSaveInstanceState(outState)
+        binding.paidOrderLocationMap.onSaveInstanceState(outState)
     }
     override fun onLowMemory() {
         super.onLowMemory()
-        paidOrderLocationMap.onLowMemory()
+        binding.paidOrderLocationMap.onLowMemory()
     }
 }

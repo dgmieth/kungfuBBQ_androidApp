@@ -16,7 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.Observer
 import com.applandeo.materialcalendarview.EventDay
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_calendar.*
+import me.dgmieth.kungfubbq.databinding.FragmentCalendarBinding
 import me.dgmieth.kungfubbq.datatabase.room.Actions
 import me.dgmieth.kungfubbq.datatabase.room.KungfuBBQRoomDatabase
 import me.dgmieth.kungfubbq.datatabase.room.RoomViewModel
@@ -36,6 +36,9 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
     private var cookingDates : List<CookingDateAndCookingDateDishesWithOrder>? = null
     private var datesArray : MutableList<Pair<String,Int>>? = null
     private var selectedCookingDate = 0
+
+    private var _binding: FragmentCalendarBinding? = null
+    private val binding get() = _binding!!
 
     private var viewModel: RoomViewModel? = null
     private var bag = CompositeDisposable()
@@ -81,10 +84,10 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                 }
                 datesArray = dArray
                 Handler(Looper.getMainLooper()).post{
-                    calendarSpinnerLayout.isVisible = false
-                    ifSelectedDateHasCookingDateMath(calendarCalendar.firstSelectedDate.time.toString())
-                    calendarCalendar.setEvents(events)
-                    calendarCalendar.setOnDayClickListener { eventDay ->
+                    binding.calendarSpinnerLayout.isVisible = false
+                    ifSelectedDateHasCookingDateMath(binding.calendarCalendar.firstSelectedDate.time.toString())
+                    binding.calendarCalendar.setEvents(events)
+                    binding.calendarCalendar.setOnDayClickListener { eventDay ->
                         ifSelectedDateHasCookingDateMath(eventDay.calendar.time.toString())
                         println(eventDay.calendar.time.toString())
                     }
@@ -103,12 +106,13 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             }
         })
         viewModel?.getUser()
-        return super.onCreateView(inflater, container, savedInstanceState)
+        _binding = FragmentCalendarBinding.inflate(inflater, container, false)
+        return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        calendarMenu.movementMethod = ScrollingMovementMethod()
-        calendarSpinnerLayout.visibility = View.VISIBLE
+        binding.calendarMenu.movementMethod = ScrollingMovementMethod()
+        binding.calendarSpinnerLayout.visibility = View.VISIBLE
         val today = Date()
         val dateFormatter = SimpleDateFormat()
         dateFormatter.applyPattern("y")
@@ -123,9 +127,9 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         min.set(year,month,date)
         min.add(Calendar.DAY_OF_MONTH,-1)
         todayCal.set(year,month,date,0,0,0)
-        calendarCalendar.setDate(todayCal)
+        binding.calendarCalendar.setDate(todayCal)
         //setting min date in calendar
-        calendarCalendar.setMinimumDate(min)
+        binding.calendarCalendar.setMinimumDate(min)
         month += 1
         if(month > 11){
             max.set(Calendar.YEAR, year + 1)
@@ -136,21 +140,21 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         }
         //setting max date
         max.set(Calendar.DATE, max.getActualMaximum(Calendar.DATE))
-        calendarCalendar.setMaximumDate(max)
+        binding.calendarCalendar.setMaximumDate(max)
         //setting onClickListener
-        calendarPreOrder.setOnClickListener {
+        binding.calendarPreOrder.setOnClickListener {
             val action = CalendarFragmentDirections.callPreOrder(selectedCookingDate)
             findNavController().navigate(action)
         }
-        calendarUpdateOrder.setOnClickListener {
+        binding.calendarUpdateOrder.setOnClickListener {
             val action = CalendarFragmentDirections.callUpdateOrder(selectedCookingDate)
             findNavController().navigate(action)
         }
-        calendarPayOrder.setOnClickListener {
+        binding.calendarPayOrder.setOnClickListener {
             val action = CalendarFragmentDirections.callPayOrder(selectedCookingDate)
             findNavController().navigate(action)
         }
-        calendarPaidOrder.setOnClickListener {
+        binding.calendarPaidOrder.setOnClickListener {
             val action = CalendarFragmentDirections.callPaidOrder(selectedCookingDate)
             findNavController().navigate(action)
         }
@@ -166,25 +170,25 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         datesArray?.let { it ->
             for(i in it){
                 if(i.first==eventDay){
-                    calendarNoCookingDate.visibility = View.INVISIBLE
+                    binding.calendarNoCookingDate.visibility = View.INVISIBLE
                     val cdAr = cookingDates!!.filter {cd ->  cd.cookingDateAndDishes.cookingDate.cookingDateId == i.second }
                     val cd = cdAr[0]
                     val dates =  i.first.split(" ")
                     val complement = if (cd.cookingDateAndDishes.cookingDate.complement == "Not informed") "" else ", ${cd.cookingDateAndDishes.cookingDate.complement}"
                     var dateAddress = "${dates[1]} ${dates[2]} at ${cd.cookingDateAndDishes.cookingDate.street}${complement}"
-                    dateAddress.also { calendarDate.text = it }
-                    calendarStatus.text = cd.cookingDateAndDishes.cookingDate.cookingStatus
+                    dateAddress.also { binding.calendarDate.text = it }
+                    binding.calendarStatus.text = cd.cookingDateAndDishes.cookingDate.cookingStatus
                     var menu = ""
                     var menuIndex = 1
                     for(m in cd.cookingDateAndDishes.cookingDateDishes){
                         menu = "${menu}${menuIndex}- ${m.dishName} \n"
                         menuIndex += 1
                     }
-                    calendarMenu.text = menu
+                    binding.calendarMenu.text = menu
                     updateUIBtns(i.second)
                     break
                 }else{
-                    calendarNoCookingDate.visibility = View.VISIBLE
+                    binding.calendarNoCookingDate.visibility = View.VISIBLE
                 }
             }
         }
@@ -274,10 +278,10 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         }
     }
     private fun showOrderBtns(placeOrder:Boolean, updateOrder:Boolean, payOrder:Boolean, paidOrder:Boolean){
-        calendarPreOrder.visibility = if(placeOrder) View.VISIBLE else View.INVISIBLE
-        calendarUpdateOrder.visibility = if(updateOrder) View.VISIBLE else View.INVISIBLE
-        calendarPayOrder.visibility = if(payOrder) View.VISIBLE else View.INVISIBLE
-        calendarPaidOrder.visibility = if(paidOrder) View.VISIBLE else View.INVISIBLE
+        binding.calendarPreOrder.visibility = if(placeOrder) View.VISIBLE else View.INVISIBLE
+        binding.calendarUpdateOrder.visibility = if(updateOrder) View.VISIBLE else View.INVISIBLE
+        binding.calendarPayOrder.visibility = if(payOrder) View.VISIBLE else View.INVISIBLE
+        binding.calendarPaidOrder.visibility = if(paidOrder) View.VISIBLE else View.INVISIBLE
     }
     private fun returnUserFromDBNull() {
         Handler(Looper.getMainLooper()).post{

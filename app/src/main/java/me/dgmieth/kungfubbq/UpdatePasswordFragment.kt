@@ -4,15 +4,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.View
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import kotlinx.android.synthetic.main.fragment_updatepassword.*
-import me.dgmieth.kungfubbq.datatabase.roomEntities.UserAndSocialMedia
+import me.dgmieth.kungfubbq.databinding.FragmentUpdatepasswordBinding
 import me.dgmieth.kungfubbq.httpCtrl.HttpCtrl
 import okhttp3.Call
 import okhttp3.Callback
@@ -27,14 +24,25 @@ class UpdatePasswordFragment : Fragment(R.layout.fragment_updatepassword) {
     private val TAG = "UpdatePasswordFragment"
     private val args : UpdatePasswordFragmentArgs by navArgs()
 
+    private var _binding: FragmentUpdatepasswordBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentUpdatepasswordBinding.inflate(inflater, container, false)
+        return binding.root
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         //click listeners
-        updatePasswordCancelBtn.setOnClickListener {
+        binding.updatePasswordCancelBtn.setOnClickListener {
             requireActivity().onBackPressed()
         }
-        updatePasswordSaveBtn.setOnClickListener {
+        binding.updatePasswordSaveBtn.setOnClickListener {
             if(validateInfo()){
                 showSpinner(true)
                 updatePassword()
@@ -48,9 +56,9 @@ class UpdatePasswordFragment : Fragment(R.layout.fragment_updatepassword) {
     //==================================
     // validation of editTexts
     private fun validateInfo():Boolean{
-        val currentP = !updatePasswordCurrentPassword.text.toString().isNullOrEmpty() && updatePasswordCurrentPassword.text.toString().length==8
-        val newP = !updatePasswordNewPassword.text.toString().isNullOrBlank() && updatePasswordNewPassword.text.toString().length==8
-        val confirmP = !updatePasswordNewPasswordConfirmation.text.toString().isNullOrEmpty() && updatePasswordNewPasswordConfirmation.text.toString().length==8
+        val currentP = !binding.updatePasswordCurrentPassword.text.toString().isNullOrEmpty() && binding.updatePasswordCurrentPassword.text.toString().length==8
+        val newP = !binding.updatePasswordNewPassword.text.toString().isNullOrBlank() && binding.updatePasswordNewPassword.text.toString().length==8
+        val confirmP = !binding.updatePasswordNewPasswordConfirmation.text.toString().isNullOrEmpty() && binding.updatePasswordNewPasswordConfirmation.text.toString().length==8
         if(currentP&&newP&&confirmP){
             return true
         }
@@ -63,9 +71,9 @@ class UpdatePasswordFragment : Fragment(R.layout.fragment_updatepassword) {
         val body = FormBody.Builder()
             .add("email",args.email)
             .add("id",args.id)
-            .add("currentPassword",updatePasswordCurrentPassword.text.toString())
-            .add("newPassword",updatePasswordNewPassword.text.toString())
-            .add("confirmPassword", updatePasswordNewPasswordConfirmation.text.toString())
+            .add("currentPassword",binding.updatePasswordCurrentPassword.text.toString())
+            .add("newPassword",binding.updatePasswordNewPassword.text.toString())
+            .add("confirmPassword", binding.updatePasswordNewPasswordConfirmation.text.toString())
             .build()
         HttpCtrl.shared.newCall(HttpCtrl.post(getString(R.string.kungfuServerUrl),"/api/user/changePassword",body,args.token)).enqueue(object :
             Callback {
@@ -112,7 +120,7 @@ class UpdatePasswordFragment : Fragment(R.layout.fragment_updatepassword) {
     // ui elements
     private fun showSpinner(value: Boolean){
         Handler(Looper.getMainLooper()).post {
-            updatePasswordSpinnerLayout.visibility =  when(value){
+            binding.updatePasswordSpinnerLayout.visibility =  when(value){
                 true -> View.VISIBLE
                 else -> View.INVISIBLE
             }

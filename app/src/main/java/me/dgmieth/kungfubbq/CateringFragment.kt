@@ -6,14 +6,12 @@ import android.os.Looper
 import android.telephony.PhoneNumberUtils
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.Menu
-import android.view.MenuInflater
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.View
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import kotlinx.android.synthetic.main.fragment_catering.*
+import me.dgmieth.kungfubbq.databinding.FragmentCateringBinding
 import me.dgmieth.kungfubbq.httpCtrl.HttpCtrl
 import okhttp3.Call
 import okhttp3.Callback
@@ -33,6 +31,18 @@ class CateringFragment : Fragment(R.layout.fragment_catering) {
             formatPhoneNumber()
         }
     }
+
+    private var _binding: FragmentCateringBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentCateringBinding.inflate(inflater, container, false)
+        return binding.root
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -41,34 +51,34 @@ class CateringFragment : Fragment(R.layout.fragment_catering) {
         super.onCreateOptionsMenu(menu, inflater)
         menu.clear()
         //click listeners
-        cateringCancelBtn.setOnClickListener {
+        binding.cateringCancelBtn.setOnClickListener {
             requireActivity().onBackPressed()
         }
-        cateringSendBtn.setOnClickListener {
+        binding.cateringSendBtn.setOnClickListener {
             sendMessage()
         }
-        cateringPhone.addTextChangedListener(phoneTextWatcher)
+        binding.cateringPhone.addTextChangedListener(phoneTextWatcher)
     }
     //===============================================================
     // ui interface
     private fun formatPhoneNumber() {
-        if(cateringPhone.text.toString().length==10){
-            cateringPhone.removeTextChangedListener(phoneTextWatcher)
-            var number = PhoneNumberUtils.formatNumber(cateringPhone.text.toString(),"US")
-            cateringPhone.setText(number)
-            cateringPhone.setSelection(cateringPhone.text.toString().length)
-            cateringPhone.addTextChangedListener(phoneTextWatcher)
+        if(binding.cateringPhone.text.toString().length==10){
+            binding.cateringPhone.removeTextChangedListener(phoneTextWatcher)
+            var number = PhoneNumberUtils.formatNumber(binding.cateringPhone.text.toString(),"US")
+            binding.cateringPhone.setText(number)
+            binding.cateringPhone.setSelection(binding.cateringPhone.text.toString().length)
+            binding.cateringPhone.addTextChangedListener(phoneTextWatcher)
         }else{
-            var text = cateringPhone.text.toString().replace("""[^0-9]""".toRegex(),"")
-            cateringPhone.removeTextChangedListener(phoneTextWatcher)
-            cateringPhone.setText(text)
-            cateringPhone.setSelection(cateringPhone.text.toString().length)
-            cateringPhone.addTextChangedListener(phoneTextWatcher)
+            var text = binding.cateringPhone.text.toString().replace("""[^0-9]""".toRegex(),"")
+            binding.cateringPhone.removeTextChangedListener(phoneTextWatcher)
+            binding.cateringPhone.setText(text)
+            binding.cateringPhone.setSelection(binding.cateringPhone.text.toString().length)
+            binding.cateringPhone.addTextChangedListener(phoneTextWatcher)
         }
     }
     private fun showSpinner(value: Boolean){
         Handler(Looper.getMainLooper()).post {
-            cateringSpinerLayout.visibility =  when(value){
+            binding.cateringSpinerLayout.visibility =  when(value){
                 true -> View.VISIBLE
                 else -> View.INVISIBLE
             }
@@ -77,14 +87,14 @@ class CateringFragment : Fragment(R.layout.fragment_catering) {
     //===============================================================
     // http request
     private fun sendMessage(){
-        if(!cateringEmail.text.toString().isNullOrEmpty() && !cateringName.text.toString().isNullOrEmpty()&&
-                !cateringPhone.text.toString().isNullOrEmpty()&&!cateringDescription.text.toString().isNullOrEmpty()){
+        if(!binding.cateringEmail.text.toString().isNullOrEmpty() && !binding.cateringName.text.toString().isNullOrEmpty()&&
+                !binding.cateringPhone.text.toString().isNullOrEmpty()&&!binding.cateringDescription.text.toString().isNullOrEmpty()){
             showSpinner(true)
             val body = FormBody.Builder()
-                .add("email",cateringEmail.text.toString())
-                .add("name",cateringName.text.toString())
-                .add("phoneNumber",cateringPhone.text.toString().replace("""[^0-9]""".toRegex(),""))
-                .add("orderDescription",cateringDescription.text.toString())
+                .add("email",binding.cateringEmail.text.toString())
+                .add("name",binding.cateringName.text.toString())
+                .add("phoneNumber",binding.cateringPhone.text.toString().replace("""[^0-9]""".toRegex(),""))
+                .add("orderDescription",binding.cateringDescription.text.toString())
                 .build()
             HttpCtrl.shared.newCall(HttpCtrl.post(getString(R.string.kungfuServerUrl),"/api/catoring/saveContact",body)).enqueue(object :
                 Callback {

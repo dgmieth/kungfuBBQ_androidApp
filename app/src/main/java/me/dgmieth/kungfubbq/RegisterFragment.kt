@@ -12,15 +12,13 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.android.synthetic.main.fragment_register.*
+import me.dgmieth.kungfubbq.databinding.FragmentRegisterBinding
 import me.dgmieth.kungfubbq.datatabase.room.Actions
 import me.dgmieth.kungfubbq.datatabase.room.KungfuBBQRoomDatabase
 import me.dgmieth.kungfubbq.datatabase.room.RoomViewModel
 import me.dgmieth.kungfubbq.datatabase.roomEntities.SocialMediaInfo
 import me.dgmieth.kungfubbq.datatabase.roomEntities.UserDB
 import me.dgmieth.kungfubbq.httpCtrl.HttpCtrl
-
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.FormBody
@@ -36,6 +34,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private var viewModel: RoomViewModel? = null
     private val bag = CompositeDisposable()
 
+    private var _binding: FragmentRegisterBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,14 +50,14 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 when(it){
                     Actions.UserComplete ->{
                         Handler(Looper.getMainLooper()).post{
-                            registerSpinerLayout.visibility = View.INVISIBLE
+                            showSpinner(false)
                             val action = NavGraphDirections.callHome(true)
                             findNavController().navigate(action)
                         }
                     }
                     else -> {
                         Handler(Looper.getMainLooper()).post{
-                            registerSpinerLayout.visibility = View.INVISIBLE
+                            showSpinner(false)
                             Toast.makeText(requireActivity(),"Register attempt failed. Please try again in some minutes",Toast.LENGTH_LONG).show()
                         }
                     }
@@ -65,11 +65,12 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             },
             {
                 Handler(Looper.getMainLooper()).post{
-                    loginSpinerLayout.visibility = View.INVISIBLE
+                    showSpinner(false)
                     Toast.makeText(requireActivity(),"Register attempt failed. Please try again in some minutes",Toast.LENGTH_LONG).show()
                 }
             },{})?.let{ bag.add(it)}
-        return super.onCreateView(inflater, container, savedInstanceState)
+        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -83,10 +84,10 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         alert.setTitle("Invitation code needed")
         alert.show()
         //setting click listeners
-        registerCancelBtn.setOnClickListener {
+        binding.registerCancelBtn.setOnClickListener {
             requireActivity().onBackPressed()
         }
-        registerRegisterBtn.setOnClickListener {
+        binding.registerRegisterBtn.setOnClickListener {
             registerUser()
         }
     }
@@ -103,15 +104,15 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     //EVENT LISTENER FOR BUTTONS
     private fun registerUser() {
         showSpinner(true)
-        if(!registerInvitationCodeEditText.text.toString().isNullOrEmpty() &&
-                !registerConfirmPasswordEditText.text.toString().isNullOrEmpty() &&
-                !registerPasswordEditText.text.toString().isNullOrEmpty() &&
-                !registerEmailEditText.text.toString().isNullOrEmpty()){
+        if(!binding.registerInvitationCodeEditText.text.toString().isNullOrEmpty() &&
+                !binding.registerConfirmPasswordEditText.text.toString().isNullOrEmpty() &&
+                !binding.registerPasswordEditText.text.toString().isNullOrEmpty() &&
+                !binding.registerEmailEditText.text.toString().isNullOrEmpty()){
             val body = FormBody.Builder()
-                .add("code",registerInvitationCodeEditText.text.toString())
-                .add("email",registerEmailEditText.text.toString())
-                .add("password",registerPasswordEditText.text.toString())
-                .add("confirmPassword",registerConfirmPasswordEditText.text.toString())
+                .add("code",binding.registerInvitationCodeEditText.text.toString())
+                .add("email",binding.registerEmailEditText.text.toString())
+                .add("password",binding.registerPasswordEditText.text.toString())
+                .add("confirmPassword",binding.registerConfirmPasswordEditText.text.toString())
                 .add("mobileOS","android")
                 .build()
             HttpCtrl.shared.newCall(HttpCtrl.post(getString(R.string.kungfuServerUrl),"/login/register",body)).enqueue(object :
@@ -162,7 +163,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     //UI elements functions
     private fun showSpinner(value: Boolean){
         Handler(Looper.getMainLooper()).post {
-            registerSpinerLayout.visibility =  when(value){
+            binding.registerSpinerLayout.visibility =  when(value){
                 true -> View.VISIBLE
                 else -> View.INVISIBLE
             }

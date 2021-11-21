@@ -20,7 +20,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_preorder.*
+import me.dgmieth.kungfubbq.databinding.FragmentPreorderBinding
 import me.dgmieth.kungfubbq.datatabase.room.KungfuBBQRoomDatabase
 import me.dgmieth.kungfubbq.datatabase.room.RoomViewModel
 import me.dgmieth.kungfubbq.datatabase.roomEntities.CookingDateAndCookingDateDishesWithOrder
@@ -45,6 +45,9 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
     private var bag = CompositeDisposable()
 
     private val args : PreOrderFragmentArgs by navArgs()
+
+    private var _binding: FragmentPreorderBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,9 +83,9 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
                 val cal = Calendar.getInstance()
                 cal.set(splitDate[0].toInt(), splitDate[1].toInt()-1, splitDate[2].toInt())
                 val dateStrParts = cal.time.toString().split(" ")
-                preOrderDate.text = "${dateStrParts[1]} ${dateStrParts[2]}"
+                binding.preOrderDate.text = "${dateStrParts[1]} ${dateStrParts[2]}"
                 //updating status
-                preOrderStatus.text = cd.cookingDateAndDishes.cookingDate.cookingStatus
+                binding.preOrderStatus.text = cd.cookingDateAndDishes.cookingDate.cookingStatus
                 //updating menu
                 var menuT = ""
                 var menuIndex = 1
@@ -92,15 +95,15 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
                     menuIndex += 1
                     mealsSum += m.dishPrice.toDouble()
                 }
-                preOrderMenu.text = menuT
+                binding.preOrderMenu.text = menuT
                 //updating maps
-                preOrderLocationText.text = "${cd.cookingDateAndDishes.cookingDate.street}, ${cd.cookingDateAndDishes.cookingDate.city}"
-                preOrderLocationMap.getMapAsync(this)
+                binding.preOrderLocationText.text = "${cd.cookingDateAndDishes.cookingDate.street}, ${cd.cookingDateAndDishes.cookingDate.city}"
+                binding.preOrderLocationMap.getMapAsync(this)
                 var priceString = "U$ ${String.format("%.2f",mealsSum)}"
                 //updating meal price
-                preOrderMealPrice.text = priceString
+                binding.preOrderMealPrice.text = priceString
                 //updating total meal price
-                preOrderTotalPrice.text = priceString
+                binding.preOrderTotalPrice.text = priceString
             }
         },{
             Log.d("CookingDateObservable","error is $it")
@@ -129,7 +132,7 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
             dialogBuilder.setMessage("Communication with this apps's database failed. Please restart the app.")
                 .setCancelable(false)
                 .setPositiveButton("Ok", DialogInterface.OnClickListener{
-                        dialog, id ->
+                        _, _ ->
                     Handler(Looper.getMainLooper()).post {
                         var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
                         findNavController().navigate(action)
@@ -139,26 +142,27 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
             alert.setTitle("Database communication failure")
             alert.show()
         }
-        return super.onCreateView(inflater, container, savedInstanceState)
+        _binding = FragmentPreorderBinding.inflate(inflater, container, false)
+        return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initGoogleMap(savedInstanceState)
-        preOrderMenu.movementMethod = ScrollingMovementMethod()
-        preOrderNumberOfMeals.minValue = 1
-        preOrderNumberOfMeals.maxValue = 100
-        preOrderNumberOfMeals.wrapSelectorWheel = true
-        preOrderNumberOfMeals.setOnValueChangedListener{_,_,newVal ->
+        binding.preOrderMenu.movementMethod = ScrollingMovementMethod()
+        binding.preOrderNumberOfMeals.minValue = 1
+        binding.preOrderNumberOfMeals.maxValue = 100
+        binding.preOrderNumberOfMeals.wrapSelectorWheel = true
+        binding.preOrderNumberOfMeals.setOnValueChangedListener{_,_,newVal ->
             selectedQtty = newVal
-            val mealsPrice = (preOrderMealPrice.text.toString().split(" ")[1].toDouble())
+            val mealsPrice = (binding.preOrderMealPrice.text.toString().split(" ")[1].toDouble())
             val total = mealsPrice * newVal
-            preOrderTotalPrice.text = "U$ ${String.format("%.2f",total)}"
+            binding.preOrderTotalPrice.text = "U$ ${String.format("%.2f",total)}"
         }
         //click listeners
-        preOrderCancelBtn.setOnClickListener {
+        binding.preOrderCancelBtn.setOnClickListener {
             requireActivity().onBackPressed()
         }
-        preOrderPreOrderBtn.setOnClickListener {
+        binding.preOrderPreOrderBtn.setOnClickListener {
             showSpinner(true)
             placePreOrder()
         }
@@ -169,19 +173,19 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
     }
     override fun onStart() {
         super.onStart()
-        preOrderLocationMap.onStart()
+        binding.preOrderLocationMap.onStart()
     }
     override fun onResume() {
         super.onResume()
-        preOrderLocationMap.onResume()
+        binding.preOrderLocationMap.onResume()
     }
     override fun onPause() {
         super.onPause()
-        preOrderLocationMap.onPause()
+        binding.preOrderLocationMap.onPause()
     }
     override fun onStop() {
         super.onStop()
-        preOrderLocationMap.onStop()
+        binding.preOrderLocationMap.onStop()
     }
     override fun onDestroy() {
         super.onDestroy()
@@ -190,11 +194,11 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
     }
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        preOrderLocationMap.onSaveInstanceState(outState)
+        binding.preOrderLocationMap.onSaveInstanceState(outState)
     }
     override fun onLowMemory() {
         super.onLowMemory()
-        preOrderLocationMap.onLowMemory()
+        binding.preOrderLocationMap.onLowMemory()
     }
     //===========================================================
     //maps
@@ -203,12 +207,11 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
         if (savedInstanceState != null) {
             mapViewBundle = savedInstanceState.getBundle(MAPS_API_KEY)
         }
-        preOrderLocationMap.onCreate(mapViewBundle)
+        binding.preOrderLocationMap.onCreate(mapViewBundle)
     }
     override fun onMapReady(map: GoogleMap) {
         cookingDate?.let {
             var position = LatLng(it.cookingDateAndDishes.cookingDate.lat, it.cookingDateAndDishes.cookingDate.lng)
-            val dayton = LatLng(39.758949, -84.191605)
             map.addMarker(
                 MarkerOptions()
                     .position(position)
@@ -297,7 +300,7 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
     */
     private fun showSpinner(value: Boolean){
         Handler(Looper.getMainLooper()).post {
-            preOrderSpinerLayout.visibility =  when(value){
+            binding.preOrderSpinerLayout.visibility =  when(value){
                 true -> View.VISIBLE
                 else -> View.INVISIBLE
             }

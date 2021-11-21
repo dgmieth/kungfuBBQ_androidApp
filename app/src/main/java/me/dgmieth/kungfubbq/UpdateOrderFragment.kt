@@ -19,7 +19,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_updateorder.*
+import me.dgmieth.kungfubbq.databinding.FragmentUpdateorderBinding
 import me.dgmieth.kungfubbq.datatabase.room.KungfuBBQRoomDatabase
 import me.dgmieth.kungfubbq.datatabase.room.RoomViewModel
 import me.dgmieth.kungfubbq.datatabase.roomEntities.CookingDateAndCookingDateDishesWithOrder
@@ -46,6 +46,10 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
     private var bag = CompositeDisposable()
 
     private val args : UpdateOrderFragmentArgs by navArgs()
+
+    private var _binding: FragmentUpdateorderBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -83,9 +87,9 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
                 val cal = Calendar.getInstance()
                 cal.set(splitDate[0].toInt(), splitDate[1].toInt()-1, splitDate[2].toInt())
                 val dateStrParts = cal.time.toString().split(" ")
-                updateOrderDate.text = "${dateStrParts[1]} ${dateStrParts[2]}"
+                binding.updateOrderDate.text = "${dateStrParts[1]} ${dateStrParts[2]}"
                 //updating status
-                updateOrderStatus.text = cd.cookingDateAndDishes.cookingDate.cookingStatus
+                binding.updateOrderStatus.text = cd.cookingDateAndDishes.cookingDate.cookingStatus
                 //updating menu
                 var menuT = ""
                 var menuIndex = 1
@@ -95,16 +99,16 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
                     menuIndex += 1
                     mealsSum += m.dishPrice.toDouble()
                 }
-                updateOrderMenu.text = menuT
+                binding.updateOrderMenu.text = menuT
                 //updating maps
-                updateOrderLocationText.text = "${cd.cookingDateAndDishes.cookingDate.street}, ${cd.cookingDateAndDishes.cookingDate.city}"
-                updateOrderLocationMap.getMapAsync(this)
+                binding.updateOrderLocationText.text = "${cd.cookingDateAndDishes.cookingDate.street}, ${cd.cookingDateAndDishes.cookingDate.city}"
+                binding.updateOrderLocationMap.getMapAsync(this)
                 var priceString = "U$ ${String.format("%.2f",mealsSum)}"
                 //updating meal price
-                updateOrderMealPrice.text = priceString
+                binding.updateOrderMealPrice.text = priceString
                 //updating total meal price
-                updateOrderNumberOfMeals.value = cd.order[0].dishes[0].dishQuantity
-                updateOrderTotalPrice.text = "U$ ${String.format("%.2f",mealsSum*cd.order[0].dishes[0].dishQuantity)}"
+                binding.updateOrderNumberOfMeals.value = cd.order[0].dishes[0].dishQuantity
+                binding.updateOrderTotalPrice.text = "U$ ${String.format("%.2f",mealsSum*cd.order[0].dishes[0].dishQuantity)}"
             }
         },{
             Log.d("CookingDateObservable","error is $it")
@@ -129,30 +133,31 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
             alert.setTitle("Database communication failure")
             alert.show()
         }
-        return super.onCreateView(inflater, container, savedInstanceState)
+        _binding = FragmentUpdateorderBinding.inflate(inflater, container, false)
+        return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initGoogleMap(savedInstanceState)
-        updateOrderMenu.movementMethod = ScrollingMovementMethod()
-        updateOrderNumberOfMeals.minValue = 1
-        updateOrderNumberOfMeals.maxValue = 100
-        updateOrderNumberOfMeals.wrapSelectorWheel = true
-        updateOrderNumberOfMeals.isEnabled = false
+        binding.updateOrderMenu.movementMethod = ScrollingMovementMethod()
+        binding.updateOrderNumberOfMeals.minValue = 1
+        binding.updateOrderNumberOfMeals.maxValue = 100
+        binding.updateOrderNumberOfMeals.wrapSelectorWheel = true
+        binding.updateOrderNumberOfMeals.isEnabled = false
         //click listeners
-        updateOrderNumberOfMeals.setOnValueChangedListener{_,_,newVal ->
+        binding.updateOrderNumberOfMeals.setOnValueChangedListener{_,_,newVal ->
             selectedQtty = newVal
-            updateOrderTotalPrice.text = returnTotalAmount(newVal)
+            binding.updateOrderTotalPrice.text = returnTotalAmount(newVal)
         }
-        updateOrderCancelBtn.setOnClickListener {
+        binding.updateOrderCancelBtn.setOnClickListener {
             showUpdateOrderBtns(false)
-            updateOrderNumberOfMeals.value = cookingDate!!.order[0].dishes[0].dishQuantity
+            binding.updateOrderNumberOfMeals.value = cookingDate!!.order[0].dishes[0].dishQuantity
             selectedQtty = cookingDate!!.order[0].dishes[0].dishQuantity
-            updateOrderTotalPrice.text = returnTotalAmount(selectedQtty)
+            binding.updateOrderTotalPrice.text = returnTotalAmount(selectedQtty)
         }
-        updateOrderUpdateOrderBtn.setOnClickListener {
+        binding.updateOrderUpdateOrderBtn.setOnClickListener {
             updateOrder()
         }
-        updateOrderDeleteOrder.setOnClickListener {
+        binding.updateOrderDeleteOrder.setOnClickListener {
             deleteOrderAlert()
         }
         super.onViewCreated(view, savedInstanceState)
@@ -178,19 +183,19 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
     }
     override fun onStart() {
         super.onStart()
-        updateOrderLocationMap.onStart()
+        binding.updateOrderLocationMap.onStart()
     }
     override fun onResume() {
         super.onResume()
-        updateOrderLocationMap.onResume()
+        binding.updateOrderLocationMap.onResume()
     }
     override fun onPause() {
         super.onPause()
-        updateOrderLocationMap.onPause()
+        binding.updateOrderLocationMap.onPause()
     }
     override fun onStop() {
         super.onStop()
-        updateOrderLocationMap.onStop()
+        binding.updateOrderLocationMap.onStop()
     }
     override fun onDestroy() {
         super.onDestroy()
@@ -199,11 +204,11 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
     }
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        updateOrderLocationMap.onSaveInstanceState(outState)
+        binding.updateOrderLocationMap.onSaveInstanceState(outState)
     }
     override fun onLowMemory() {
         super.onLowMemory()
-        updateOrderLocationMap.onLowMemory()
+        binding.updateOrderLocationMap.onLowMemory()
     }
     //===================================================
     // maps
@@ -212,13 +217,12 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
         if (savedInstanceState != null) {
             mapViewBundle = savedInstanceState.getBundle(MAPS_API_KEY)
         }
-        updateOrderLocationMap.onCreate(mapViewBundle)
-        updateOrderLocationMap.getMapAsync(this)
+        binding.updateOrderLocationMap.onCreate(mapViewBundle)
+        binding.updateOrderLocationMap.getMapAsync(this)
     }
     override fun onMapReady(map: GoogleMap) {
         cookingDate?.let {
             var position = LatLng(it.cookingDateAndDishes.cookingDate.lat, it.cookingDateAndDishes.cookingDate.lng)
-            val dayton = LatLng(39.758949, -84.191605)
             map.addMarker(
                 com.google.android.gms.maps.model.MarkerOptions()
                     .position(position)
@@ -384,19 +388,19 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
     * UI ELEMENTS
     */
     private fun showUpdateOrderBtns(value:Boolean){
-        updateOrderNumberOfMeals.isEnabled = value
-        updateOrderUpdateOrderBtns.isVisible = value
-        updateOrderDeleteOrder.isVisible = !value
+        binding.updateOrderNumberOfMeals.isEnabled = value
+        binding.updateOrderUpdateOrderBtns.isVisible = value
+        binding.updateOrderDeleteOrder.isVisible = !value
         editItemBtn!!.isVisible = !value
     }
     private fun returnTotalAmount(qttyChosen:Int):String{
-        val mealsPrice = (updateOrderMealPrice.text.toString().split(" ")[1].toDouble())
+        val mealsPrice = (binding.updateOrderMealPrice.text.toString().split(" ")[1].toDouble())
         val total = mealsPrice * qttyChosen
         return "U$ ${String.format("%.2f",total)}"
     }
     private fun showSpinner(value: Boolean){
         Handler(Looper.getMainLooper()).post {
-            updateOrderSpinerLayout.visibility =  when(value){
+            binding.updateOrderSpinerLayout.visibility =  when(value){
                 true -> View.VISIBLE
                 else -> View.INVISIBLE
             }

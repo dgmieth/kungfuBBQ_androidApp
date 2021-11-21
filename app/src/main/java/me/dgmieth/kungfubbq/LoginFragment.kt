@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.Observer
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_login.*
 import me.dgmieth.kungfubbq.datatabase.room.Actions
 import me.dgmieth.kungfubbq.datatabase.room.KungfuBBQRoomDatabase
 import me.dgmieth.kungfubbq.datatabase.room.RoomViewModel
@@ -26,6 +25,7 @@ import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
 import com.onesignal.OneSignal
+import me.dgmieth.kungfubbq.databinding.FragmentLoginBinding
 
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
@@ -35,6 +35,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private var viewModel: RoomViewModel? = null
     private var bag = CompositeDisposable()
     private var userId = 0
+
+    private var _binding: FragmentLoginBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,56 +50,65 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         //rxjava observer
         viewModel?.returnMsg?.subscribe(
             {
-                when(it){
-                    Actions.UserComplete ->{
-                        Handler(Looper.getMainLooper()).post{
+                when (it) {
+                    Actions.UserComplete -> {
+                        Handler(Looper.getMainLooper()).post {
                             OneSignal.setExternalUserId(userId.toString())
-                            loginSpinerLayout.visibility = View.INVISIBLE
+                            binding.loginSpinerLayout.visibility = View.INVISIBLE
                             val action = NavGraphDirections.callHome(true)
                             findNavController().navigate(action)
                         }
                     }
                     else -> {
-                        Handler(Looper.getMainLooper()).post{
-                            loginSpinerLayout.visibility = View.INVISIBLE
-                            Toast.makeText(requireActivity(),"Log in attempt failed. Please try again in some minutes",Toast.LENGTH_LONG).show()
+                        Handler(Looper.getMainLooper()).post {
+                            binding.loginSpinerLayout.visibility = View.INVISIBLE
+                            Toast.makeText(
+                                requireActivity(),
+                                "Log in attempt failed. Please try again in some minutes",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                     }
                 }
             },
             {
-                Handler(Looper.getMainLooper()).post{
-                    loginSpinerLayout.visibility = View.INVISIBLE
-                    Toast.makeText(requireActivity(),"Log in attempt failed. Please try again in some minutes",Toast.LENGTH_LONG).show()
+                Handler(Looper.getMainLooper()).post {
+                    binding.loginSpinerLayout.visibility = View.INVISIBLE
+                    Toast.makeText(
+                        requireActivity(),
+                        "Log in attempt failed. Please try again in some minutes",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
-            },{})?.let{ bag.add(it)}
+            }, {})?.let { bag.add(it) }
         //android mutable live data observer
         viewModel?.user?.observe(viewLifecycleOwner, Observer {
-            if(!it.user.email.isNullOrEmpty()){
+            if (!it.user.email.isNullOrEmpty()) {
                 returnUserFromDBSuccess(it)
-            }else{
+            } else {
                 returnUserFromDBNull()
             }
         })
         //db getUser information request
         viewModel?.getUser()
-        return super.onCreateView(inflater, container, savedInstanceState)
+        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         //setting button click observers
-        loginResetPassword.setOnClickListener{
+        binding.loginResetPassword.setOnClickListener{
             callResetPasswordAlert()
         }
-        loginRegisterBtn.setOnClickListener {
+        binding.loginRegisterBtn.setOnClickListener {
             val action = LoginFragmentDirections.callRegisterFragment()
             findNavController().navigate(action)
         }
-        loginCancelBtn.setOnClickListener {
+        binding.loginCancelBtn.setOnClickListener {
             requireActivity().onBackPressed()
         }
-        loginLoginBtn.setOnClickListener {
+        binding.loginLoginBtn.setOnClickListener {
             logUserIn()
         }
     }
@@ -112,11 +124,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     //========================================================
     //HTTP REQUEST METHODS
     private fun logUserIn() {
-        if(!loginUserEmail.text.toString().isNullOrEmpty()&&!loginPassword.text.toString().isNullOrEmpty()){
+        if(!binding.loginUserEmail.text.toString().isNullOrEmpty()&&!binding.loginPassword.text.toString().isNullOrEmpty()){
             showSpinner(true)
             val body = FormBody.Builder()
-                .add("email",loginUserEmail.text.toString())
-                .add("password",loginPassword.text.toString())
+                .add("email",binding.loginUserEmail.text.toString())
+                .add("password",binding.loginPassword.text.toString())
                 .add("mobileOS","android")
                 .build()
             println(body)
@@ -147,7 +159,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                             viewModel?.insertAllUserInfo(user,socialM)
                         }else{
                            Handler(Looper.getMainLooper()).post{
-                               loginSpinerLayout.visibility = View.INVISIBLE
+                               binding.loginSpinerLayout.visibility = View.INVISIBLE
                                 Toast.makeText(requireActivity(),"Log in attempt failed with server message: ${json.getString("msg").toString()}",Toast.LENGTH_LONG).show()
                            }
                         }
@@ -195,7 +207,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         Log.d(TAG, "no data returned")
     }
     private fun returnUserFromDBSuccess(it: UserAndSocialMedia) {
-        loginUserEmail.setText(it.user.email)
+        binding.loginUserEmail.setText(it.user.email)
     }
     //========================================================
     //OTHER UI METHODS
@@ -203,14 +215,15 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         var textField = EditText(activity)
         textField.hint = "johndoe@mail.com"
         textField.setPadding(16,16,8,0)
-
         textField.setBackgroundResource(android.R.color.transparent)
+        textField.height = 68
+
         var dialogBuilder = AlertDialog.Builder(activity)
         dialogBuilder.setMessage("Please inform you user account e-mail address and click on Send.")
             .setView(textField)
             .setCancelable(false)
             .setPositiveButton("Send", DialogInterface.OnClickListener{
-                dialog, id ->
+                _, _ ->
                 if(!textField.text.toString().isNullOrEmpty()){
                     showSpinner(true)
                     recoverPasswordEmail(textField.text.toString())
@@ -218,14 +231,14 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     Toast.makeText(requireActivity(),"You must inform the e-mail",Toast.LENGTH_LONG).show()
                 }
             })
-            .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which -> print(dialog) })
+            .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, _ -> print(dialog) })
         val alert = dialogBuilder.create()
         alert.setTitle("Password recovery")
         alert.show()
     }
     private fun showSpinner(value: Boolean){
         Handler(Looper.getMainLooper()).post {
-            loginSpinerLayout.visibility =  when(value){
+            binding.loginSpinerLayout.visibility =  when(value){
                 true -> View.VISIBLE
                 else -> View.INVISIBLE
             }

@@ -16,8 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.android.synthetic.main.fragment_userinfo.*
+import me.dgmieth.kungfubbq.databinding.FragmentUserinfoBinding
 import me.dgmieth.kungfubbq.datatabase.room.Actions
 import me.dgmieth.kungfubbq.datatabase.room.KungfuBBQRoomDatabase
 import me.dgmieth.kungfubbq.datatabase.room.RoomViewModel
@@ -50,6 +49,9 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
         }
     }
 
+    private var _binding: FragmentUserinfoBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -67,7 +69,7 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
                     }
                     else -> {
                         Handler(Looper.getMainLooper()).post{
-                            loginSpinerLayout.visibility = View.INVISIBLE
+                            showSpinner(false)
                             Toast.makeText(requireActivity(),"The attempt to retrieve user information from the database failed",Toast.LENGTH_LONG).show()
                         }
                     }
@@ -75,7 +77,7 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
             },
             {
                 Handler(Looper.getMainLooper()).post{
-                    loginSpinerLayout.visibility = View.INVISIBLE
+                    showSpinner(false)
                     Toast.makeText(requireActivity(),"Log in attempt failed. Please try again in some minutes",Toast.LENGTH_LONG).show()
                 }
             },{})?.let{ bag.add(it)}
@@ -101,23 +103,24 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
             }
         })
         viewModel?.getUser()
-        return super.onCreateView(inflater, container, savedInstanceState)
+        _binding = FragmentUserinfoBinding.inflate(inflater, container, false)
+        return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         //click listeners
-        userInfoCancelBtn.setOnClickListener {
+        binding.userInfoCancelBtn.setOnClickListener {
             requireActivity().onBackPressed()
         }
-        userInfoUpdatePasswordBtn.setOnClickListener {
+        binding.userInfoUpdatePasswordBtn.setOnClickListener {
             val action = UserInfoFragmentDirections.callUpdatePassword(userInfo!!.user.token.toString(),userInfo!!.user.email,userInfo!!.user.userId.toString())
             findNavController().navigate(action)
         }
-        userInfoCancelBtn.setOnClickListener {
+        binding.userInfoCancelBtn.setOnClickListener {
             showSaveBtn(false)
         }
-        userInfoSaveBtn.setOnClickListener {
+        binding.userInfoSaveBtn.setOnClickListener {
             if(validateInfo()){
                 showSpinner(true)
                 updateInfo()
@@ -151,17 +154,17 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
     //===========================================================
     // validation
     private fun validateInfo():Boolean{
-        if(userInfoPhone.text.toString().isEmpty()){
+        if(binding.userInfoPhone.text.toString().isEmpty()){
             return true
         }else if(noFormatPhoneNbm==null){
             Handler(Looper.getMainLooper()).post{
                 Toast.makeText(requireActivity(),"Incorrect phone number",Toast.LENGTH_LONG).show()
             }
             return false
-        }else if(userInfoName.text.toString()==userInfo!!.user.name.toString() &&
+        }else if(binding.userInfoName.text.toString()==userInfo!!.user.name.toString() &&
             noFormatPhoneNbm==userInfo!!.user.phoneNumber.toString() &&
-                userInfoFacebookName.text.toString()==userInfo!!.socialMedias[0].socialMediaName.toString() &&
-            userInfoInstagramName.text.toString()==userInfo!!.socialMedias[1].socialMediaName.toString() ){
+            binding.userInfoFacebookName.text.toString()==userInfo!!.socialMedias[0].socialMediaName.toString() &&
+            binding.userInfoInstagramName.text.toString()==userInfo!!.socialMedias[1].socialMediaName.toString() ){
             Handler(Looper.getMainLooper()).post{
                 Toast.makeText(requireActivity(),"No user information was changed",Toast.LENGTH_LONG).show()
             }
@@ -173,12 +176,12 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
     // http requests
     private fun updateInfo(){
         val body = FormBody.Builder()
-            .add("email",if(userInfoUserName.text.toString().isNullOrEmpty()) "none" else userInfoUserName.text.toString())
-            .add("name",if(userInfoName.text.toString().isNullOrEmpty()) "none" else userInfoName.text.toString())
+            .add("email",if(binding.userInfoUserName.text.toString().isNullOrEmpty()) "none" else binding.userInfoUserName.text.toString())
+            .add("name",if(binding.userInfoName.text.toString().isNullOrEmpty()) "none" else binding.userInfoName.text.toString())
             .add("id",userInfo!!.user.userId.toString())
             .add("phoneNumber", if(noFormatPhoneNbm.isNullOrEmpty()) "none" else noFormatPhoneNbm!!)
-            .add("facebookName", if(userInfoFacebookName.text.toString().isNullOrEmpty()) "none" else userInfoFacebookName.text.toString())
-            .add("instagramName",if(userInfoInstagramName.text.toString().isNullOrEmpty()) "none" else userInfoInstagramName.text.toString())
+            .add("facebookName", if(binding.userInfoFacebookName.text.toString().isNullOrEmpty()) "none" else binding.userInfoFacebookName.text.toString())
+            .add("instagramName",if(binding.userInfoInstagramName.text.toString().isNullOrEmpty()) "none" else binding.userInfoInstagramName.text.toString())
             .build()
         HttpCtrl.shared.newCall(HttpCtrl.post(getString(R.string.kungfuServerUrl),"/api/user/updateInfo",body,userInfo!!.user.token.toString())).enqueue(object :
             Callback {
@@ -228,20 +231,20 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
     //===========================================
     //data manipulation
     private fun formatPhoneNumber() {
-        if(userInfoPhone.text.toString().length==10){
-            userInfoPhone.removeTextChangedListener(phoneTextWatcher)
-            noFormatPhoneNbm = userInfoPhone.text.toString()
-            var number = PhoneNumberUtils.formatNumber(userInfoPhone.text.toString(),"US")
-            userInfoPhone.setText(number)
-            userInfoPhone.setSelection(userInfoPhone.text.toString().length)
-            userInfoPhone.addTextChangedListener(phoneTextWatcher)
+        if(binding.userInfoPhone.text.toString().length==10){
+            binding.userInfoPhone.removeTextChangedListener(phoneTextWatcher)
+            noFormatPhoneNbm = binding.userInfoPhone.text.toString()
+            var number = PhoneNumberUtils.formatNumber(binding.userInfoPhone.text.toString(),"US")
+            binding.userInfoPhone.setText(number)
+            binding.userInfoPhone.setSelection(binding.userInfoPhone.text.toString().length)
+            binding.userInfoPhone.addTextChangedListener(phoneTextWatcher)
         }else{
-            var text = userInfoPhone.text.toString().replace("""[^0-9]""".toRegex(),"")
+            var text = binding.userInfoPhone.text.toString().replace("""[^0-9]""".toRegex(),"")
             noFormatPhoneNbm = null
-            userInfoPhone.removeTextChangedListener(phoneTextWatcher)
-            userInfoPhone.setText(text)
-            userInfoPhone.setSelection(userInfoPhone.text.toString().length)
-            userInfoPhone.addTextChangedListener(phoneTextWatcher)
+            binding.userInfoPhone.removeTextChangedListener(phoneTextWatcher)
+            binding.userInfoPhone.setText(text)
+            binding.userInfoPhone.setSelection(binding.userInfoPhone.text.toString().length)
+            binding.userInfoPhone.addTextChangedListener(phoneTextWatcher)
         }
     }
     //===========================================================
@@ -249,46 +252,46 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
     private fun showSaveBtn(value:Boolean){
         Handler(Looper.getMainLooper()).post {
             editItemBtn!!.isVisible = !value
-            userInfoBtnGroup.isVisible = value
-            userInfoUpdatePasswordBtn.isVisible = !value
-            userInfoName.isEnabled = value
-            userInfoPhone.isEnabled = value
-            userInfoFacebookName.isEnabled = value
-            userInfoInstagramName.isEnabled = value
+            binding.userInfoBtnGroup.isVisible = value
+            binding.userInfoUpdatePasswordBtn.isVisible = !value
+            binding.userInfoName.isEnabled = value
+            binding.userInfoPhone.isEnabled = value
+            binding.userInfoFacebookName.isEnabled = value
+            binding.userInfoInstagramName.isEnabled = value
             if(value){
-                userInfoName.setBackgroundColor(Color.WHITE)
-                userInfoPhone.setBackgroundColor(Color.WHITE)
-                userInfoFacebookName.setBackgroundColor(Color.WHITE)
-                userInfoInstagramName.setBackgroundColor(Color.WHITE)
+                binding.userInfoName.setBackgroundColor(Color.WHITE)
+                binding.userInfoPhone.setBackgroundColor(Color.WHITE)
+                binding.userInfoFacebookName.setBackgroundColor(Color.WHITE)
+                binding.userInfoInstagramName.setBackgroundColor(Color.WHITE)
             }else{
-                userInfoName.setBackgroundColor(Color.TRANSPARENT)
-                userInfoPhone.setBackgroundColor(Color.TRANSPARENT)
-                userInfoFacebookName.setBackgroundColor(Color.TRANSPARENT)
-                userInfoInstagramName.setBackgroundColor(Color.TRANSPARENT)
+                binding.userInfoName.setBackgroundColor(Color.TRANSPARENT)
+                binding.userInfoPhone.setBackgroundColor(Color.TRANSPARENT)
+                binding.userInfoFacebookName.setBackgroundColor(Color.TRANSPARENT)
+                binding.userInfoInstagramName.setBackgroundColor(Color.TRANSPARENT)
             }
         }
     }
     private fun setUIElements(user: UserAndSocialMedia){
         Handler(Looper.getMainLooper()).post {
-            userInfoPhone.removeTextChangedListener(phoneTextWatcher)
-            userInfoUserName.text = user.user.email
-            userInfoMemberSince.text = user.user.memberSince
-            userInfoName.setText(user.user.name)
+            binding.userInfoPhone.removeTextChangedListener(phoneTextWatcher)
+            binding.userInfoUserName.text = user.user.email
+            binding.userInfoMemberSince.text = user.user.memberSince
+            binding.userInfoName.setText(user.user.name)
             if(user.user.phoneNumber.toString().length==10){
                 var number = PhoneNumberUtils.formatNumber(user.user.phoneNumber.toString(),"US")
-                userInfoPhone.setText(number)
+                binding.userInfoPhone.setText(number)
                 noFormatPhoneNbm = user.user.phoneNumber.toString()
             }else{
-                userInfoPhone.setText(user.user.phoneNumber)
+                binding.userInfoPhone.setText(user.user.phoneNumber)
             }
-            userInfoFacebookName.setText(user.socialMedias[0].socialMediaName)
-            userInfoInstagramName.setText(user.socialMedias[1].socialMediaName)
-            userInfoPhone.addTextChangedListener(phoneTextWatcher)
+            binding.userInfoFacebookName.setText(user.socialMedias[0].socialMediaName)
+            binding.userInfoInstagramName.setText(user.socialMedias[1].socialMediaName)
+            binding.userInfoPhone.addTextChangedListener(phoneTextWatcher)
         }
     }
     private fun showSpinner(value: Boolean){
         Handler(Looper.getMainLooper()).post {
-            userInfoSpinnerLayout.visibility =  when(value){
+            binding.userInfoSpinnerLayout.visibility =  when(value){
                 true -> View.VISIBLE
                 else -> View.INVISIBLE
             }

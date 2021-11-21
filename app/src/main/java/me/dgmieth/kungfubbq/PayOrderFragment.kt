@@ -18,8 +18,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.android.synthetic.main.fragment_payorder.*
+import me.dgmieth.kungfubbq.databinding.FragmentPayorderBinding
 import me.dgmieth.kungfubbq.datatabase.room.Actions
 import me.dgmieth.kungfubbq.datatabase.room.KungfuBBQRoomDatabase
 import me.dgmieth.kungfubbq.datatabase.room.RoomViewModel
@@ -45,6 +44,9 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
 
     private val args : PayOrderFragmentArgs by navArgs()
 
+    private var _binding: FragmentPayorderBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -64,7 +66,7 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
                 when(it){
                     Actions.UserError ->{
                         Handler(Looper.getMainLooper()).post{
-                            loginSpinerLayout.visibility = View.INVISIBLE
+                            showSpinner(false)
                             Toast.makeText(requireActivity(),"It was not possible to authenticate this user in KungfuBBQ's server. Please try again in some minutes",Toast.LENGTH_LONG).show()
                         }
                     }
@@ -73,7 +75,7 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
             },
             {
                 Handler(Looper.getMainLooper()).post{
-                    loginSpinerLayout.visibility = View.INVISIBLE
+                    showSpinner(false)
                     Toast.makeText(requireActivity(),"Log in attempt failed. Please try again in some minutes",Toast.LENGTH_LONG).show()
                 }
             },{})?.let{ bag.add(it)}
@@ -103,9 +105,9 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
                 val cal = Calendar.getInstance()
                 cal.set(splitDate[0].toInt(), splitDate[1].toInt()-1, splitDate[2].toInt())
                 val dateStrParts = cal.time.toString().split(" ")
-                payOrderDate.text = "${dateStrParts[1]} ${dateStrParts[2]}"
+                binding.payOrderDate.text = "${dateStrParts[1]} ${dateStrParts[2]}"
                 //updating status
-                payOrderStatus.text = cd.cookingDateAndDishes.cookingDate.cookingStatus
+                binding.payOrderStatus.text = cd.cookingDateAndDishes.cookingDate.cookingStatus
                 //updating menu
                 var menuT = ""
                 var menuIndex = 1
@@ -115,16 +117,16 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
                     menuIndex += 1
                     mealsSum += m.dishPrice.toDouble()
                 }
-                payOrderMenu.text = menuT
+                binding.payOrderMenu.text = menuT
                 //updating maps
-                payOrderLocationText.text = "${cd.cookingDateAndDishes.cookingDate.street}, ${cd.cookingDateAndDishes.cookingDate.city}"
-                payOrderLocationMap.getMapAsync(this)
+                binding.payOrderLocationText.text = "${cd.cookingDateAndDishes.cookingDate.street}, ${cd.cookingDateAndDishes.cookingDate.city}"
+                binding.payOrderLocationMap.getMapAsync(this)
                 var priceString = "U$ ${String.format("%.2f",mealsSum)}"
                 //updating meal price
-                payOrderMealPrice.text = priceString
+                binding.payOrderMealPrice.text = priceString
                 //updating total meal price
-                payOrderNumberOfMeals.text = cd.order[0].dishes[0].dishQuantity.toString()
-                payOrderTotalPrice.text = "U$ ${String.format("%.2f",mealsSum*cd.order[0].dishes[0].dishQuantity)}"
+                binding.payOrderNumberOfMeals.text = cd.order[0].dishes[0].dishQuantity.toString()
+                binding.payOrderTotalPrice.text = "U$ ${String.format("%.2f",mealsSum*cd.order[0].dishes[0].dishQuantity)}"
             }
         },{
             Log.d("CookingDateObservable","error is $it")
@@ -149,17 +151,18 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
             alert.setTitle("Database communication failure")
             alert.show()
         }
-        return super.onCreateView(inflater, container, savedInstanceState)
+        _binding = FragmentPayorderBinding.inflate(inflater, container, false)
+        return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initGoogleMap(savedInstanceState)
         showSpinner(true)
-        payOrderMenu.movementMethod = ScrollingMovementMethod()
+        binding.payOrderMenu.movementMethod = ScrollingMovementMethod()
         //click listeners
-        payOrderCancelBtn.setOnClickListener {
+        binding.payOrderCancelBtn.setOnClickListener {
             deleteOrderAlert()
         }
-        payOrderPayBtn.setOnClickListener {
+        binding.payOrderPayBtn.setOnClickListener {
             val action = PayOrderFragmentDirections.callPay(
                 userPayOrder!!.user.email,
                 userPayOrder!!.user.userId,
@@ -177,19 +180,19 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
     }
     override fun onStart() {
         super.onStart()
-        payOrderLocationMap.onStart()
+        binding.payOrderLocationMap.onStart()
     }
     override fun onResume() {
         super.onResume()
-        payOrderLocationMap.onResume()
+        binding.payOrderLocationMap.onResume()
     }
     override fun onPause() {
         super.onPause()
-        payOrderLocationMap.onPause()
+        binding.payOrderLocationMap.onPause()
     }
     override fun onStop() {
         super.onStop()
-        payOrderLocationMap.onStop()
+        binding.payOrderLocationMap.onStop()
     }
     override fun onDestroy() {
         super.onDestroy()
@@ -198,11 +201,11 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
     }
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        payOrderLocationMap.onSaveInstanceState(outState)
+        binding.payOrderLocationMap.onSaveInstanceState(outState)
     }
     override fun onLowMemory() {
         super.onLowMemory()
-        payOrderLocationMap.onLowMemory()
+        binding.payOrderLocationMap.onLowMemory()
     }
     //============================================================
     // maps
@@ -211,8 +214,8 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
         if (savedInstanceState != null) {
             mapViewBundle = savedInstanceState.getBundle(MAPS_API_KEY)
         }
-        payOrderLocationMap.onCreate(mapViewBundle)
-        payOrderLocationMap.getMapAsync(this)
+        binding.payOrderLocationMap.onCreate(mapViewBundle)
+        binding.payOrderLocationMap.getMapAsync(this)
     }
     override fun onMapReady(map: GoogleMap) {
         cookingDate?.let {
@@ -350,7 +353,7 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
     */
     private fun showSpinner(value: Boolean){
         Handler(Looper.getMainLooper()).post {
-            payOrderSpinnerLayout.visibility =  when(value){
+            binding.payOrderSpinnerLayout.visibility =  when(value){
                 true -> View.VISIBLE
                 else -> View.INVISIBLE
             }
