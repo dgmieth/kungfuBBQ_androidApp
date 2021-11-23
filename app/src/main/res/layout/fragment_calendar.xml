@@ -15,7 +15,7 @@
         android:layout_width="1dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.65" />
+        app:layout_constraintGuide_percent="0.6" />
 
     <com.applandeo.materialcalendarview.CalendarView
         android:id="@+id/calendarCalendar"
@@ -46,6 +46,20 @@
         />
 
     <TextView
+        android:id="@+id/calendarDateLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/calendar_date_lbl"
+        android:textColor="@color/i_black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
+
+    <TextView
         android:id="@+id/calendarStatusLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -64,7 +78,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="36dp"
         android:fontFamily="@font/palatino"
         android:text="@string/calendar_menu_lbl"
         android:textColor="@color/i_black"
@@ -96,6 +110,38 @@
 <!--        tools:text="Teste" />-->
 
     <TextView
+        android:id="@+id/calendarDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/palatino"
+        android:textColor="@color/i_black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/calendarDateLbl"
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        tools:text="Jun 16th 2021" />
+
+    <TextView
+        android:id="@+id/calendarStatus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/palatino"
+        android:lines="2"
+        android:textColor="@color/i_black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/calendarStatusLbl"
+        app:layout_constraintTop_toBottomOf="@+id/calendarDate"
+        tools:text="opened to pre-orders" />
+
+
+    <TextView
         android:id="@+id/calendarMenu"
         android:layout_width="0dp"
         android:layout_height="48dp"
@@ -115,126 +161,81 @@
         app:layout_constraintStart_toEndOf="@+id/calendarMenuLbl"
         app:layout_constraintTop_toBottomOf="@+id/calendarStatus" />
 
-    <TextView
-        android:id="@+id/calendarStatus"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:fontFamily="@font/palatino"
-        android:lines="2"
-        android:textColor="@color/i_black"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/calendarStatusLbl"
-        app:layout_constraintTop_toBottomOf="@+id/calendarDate"
-        tools:text="opened to pre-orders" />
-    <TextView
-        android:id="@+id/calendarDateLbl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/palatino"
-        android:text="@string/calendar_date_lbl"
-        android:textColor="@color/i_black"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline" />
-
-    <TextView
-        android:id="@+id/calendarDate"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:fontFamily="@font/palatino"
-        android:textColor="@color/i_black"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/calendarDateLbl"
-        app:layout_constraintTop_toTopOf="@+id/guideline"
-        tools:text="Jun 16th 2021" />
-
-
     <Button
         android:id="@+id/calendarPreOrder"
         android:layout_width="0dp"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/btn_height"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/i_yellow"
         android:fontFamily="@font/palatino"
         android:text="@string/btn_preorder"
         android:textAllCaps="false"
         android:textColor="@color/i_black"
-        android:textSize="28sp"
+        android:textSize="@dimen/btn_text_size"
         android:textStyle="bold"
         android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendarMenu" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/calendarUpdateOrder"
         android:layout_width="0dp"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/btn_height"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/i_yellow"
         android:fontFamily="@font/palatino"
         android:text="@string/btn_updateorder"
         android:textAllCaps="false"
         android:textColor="@color/i_black"
-        android:textSize="28sp"
+        android:textSize="@dimen/btn_text_size"
         android:textStyle="bold"
         android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendarMenu" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/calendarPayOrder"
         android:layout_width="0dp"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/btn_height"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/i_yellow"
         android:fontFamily="@font/palatino"
         android:text="@string/btn_payorder"
         android:textAllCaps="false"
         android:textColor="@color/i_black"
-        android:textSize="28sp"
+        android:textSize="@dimen/btn_text_size"
         android:textStyle="bold"
         android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendarMenu" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/calendarPaidOrder"
         android:layout_width="0dp"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/btn_height"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/i_yellow"
         android:fontFamily="@font/palatino"
         android:text="@string/btn_paidorder"
         android:textAllCaps="false"
         android:textColor="@color/i_black"
-        android:textSize="28sp"
+        android:textSize="@dimen/btn_text_size"
         android:textStyle="bold"
         android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendarMenu" />
+        app:layout_constraintStart_toStartOf="parent" />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/calendarNoCookingDate"
         android:layout_width="match_parent"
@@ -264,7 +265,7 @@
             android:fontFamily="@font/palatino"
             android:text="@string/calendar_no_cooking_msg"
             android:textColor="@color/i_black"
-            android:textSize="38sp"
+            android:textSize="30sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView"

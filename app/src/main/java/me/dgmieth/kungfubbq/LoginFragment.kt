@@ -9,7 +9,10 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.EditText
+import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getColor
+import androidx.core.view.marginLeft
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.Observer
@@ -216,7 +219,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         textField.hint = "johndoe@mail.com"
         textField.setPadding(16,16,8,0)
         textField.setBackgroundResource(android.R.color.transparent)
-        textField.height = 68
+        textField.setHintTextColor(resources.getColor(R.color.textEditHint))
+        textField.height = 135
+        textField.setPadding(60,0,60,0)
+        textField.textSize  = 22.0F
 
         var dialogBuilder = AlertDialog.Builder(activity)
         dialogBuilder.setMessage("Please inform you user account e-mail address and click on Send.")

@@ -18,7 +18,7 @@
     <string name="textview_login_register">Don\'t have an account with us?</string>
     <string name="edittext_register_inivitationcodelbl">Inform your invitation code:</string>
     <string name="edittext_register_invitatinocode_hint">KgfBBQ@.......</string>
-    <string name="edittext_register_emaillbl">Informe the e-mail you sent to KungfuBBQ:</string>
+    <string name="edittext_register_emaillbl">Inform the e-mail you sent to KungfuBBQ:</string>
     <string name="edittext_register_password">Create a password:</string>
     <string name="edittext_register_confirmpassword">Confirm your password:</string>
     <string name="userinfo_email">E-mail:</string>
@@ -75,5 +75,7 @@
     <string name="calendar_no_cooking_msg">"Sorry! We are not cooking today... "</string>
     <string name="btn_register_register">Register</string>
     <string name="paidorder_ordernumber">Order nr:</string>
+    <string name="edittext_currentpassword">Current password</string>
+    <string name="john_doe">John Doe</string>
 
 </resources>

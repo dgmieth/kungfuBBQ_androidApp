@@ -26,5 +26,6 @@
     <!--other colors-->
     <color name="fontColor">#FFFFFF</color>
     <color name="textEditBackgroundColor">#F1F3F3</color>
-
+    <color name="textEditHint">#8a8686</color>
+    <color name="colorForLink">#0f5dff</color>
 </resources>

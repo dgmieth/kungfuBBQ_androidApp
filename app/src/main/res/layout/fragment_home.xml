@@ -12,8 +12,8 @@
 
     <ImageView
         android:id="@+id/homeAppLogo"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="175dp"
+        android:layout_height="175dp"
         android:layout_marginTop="45dp"
         android:src="@drawable/appico500by500"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,7 +23,7 @@
     <Button
         android:id="@+id/homeLoginBtn"
         android:layout_width="0dp"
-        android:layout_height="68dp"
+        android:layout_height="62dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
@@ -33,8 +33,8 @@
 
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="36sp"
-        android:textStyle="bold"
+        android:textSize="30sp"
+        android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +44,7 @@
     <Button
         android:id="@+id/homeCalendarBtn"
         android:layout_width="0dp"
-        android:layout_height="68dp"
+        android:layout_height="62dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="16dp"
@@ -54,7 +54,7 @@
         android:text="@string/btn_calendar"
         android:textAllCaps="false"
         android:textColor="@color/fontColor"
-        android:textSize="36sp"
+        android:textSize="30sp"
         android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -64,7 +64,7 @@
     <Button
         android:id="@+id/homeCateringBtn"
         android:layout_width="0dp"
-        android:layout_height="68dp"
+        android:layout_height="62dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="128dp"
         android:layout_marginEnd="16dp"
@@ -73,7 +73,7 @@
         android:text="@string/btn_catering"
         android:textAllCaps="false"
         android:textColor="@color/fontColor"
-        android:textSize="36sp"
+        android:textSize="30sp"
         android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

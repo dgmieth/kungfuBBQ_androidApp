@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.onesignal.OneSignal
 import io.reactivex.disposables.CompositeDisposable
 import me.dgmieth.kungfubbq.databinding.FragmentRegisterBinding
 import me.dgmieth.kungfubbq.datatabase.room.Actions
@@ -33,6 +34,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     private var viewModel: RoomViewModel? = null
     private val bag = CompositeDisposable()
+    private var userId = 0
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
@@ -51,6 +53,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                     Actions.UserComplete ->{
                         Handler(Looper.getMainLooper()).post{
                             showSpinner(false)
+                            OneSignal.setExternalUserId(userId.toString())
                             val action = NavGraphDirections.callHome(true)
                             findNavController().navigate(action)
                         }
@@ -138,6 +141,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                                 var sMInfo = SocialMediaInfo(s.getString("socialMedia"),s.getString("socialMediaName"),u.getInt("id"))
                                 socialM.add(sMInfo)
                             }
+                            userId = user.userId
                             viewModel?.insertAllUserInfo(user,socialM)
                         }else{
                             if(json.getInt("errorCode")==-3){

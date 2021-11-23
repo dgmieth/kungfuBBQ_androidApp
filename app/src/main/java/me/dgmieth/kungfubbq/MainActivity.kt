@@ -1,7 +1,10 @@
 package me.dgmieth.kungfubbq
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.StrictMode
+import android.util.Log
 import android.view.Menu
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -9,8 +12,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.onesignal.OneSignal
 import me.dgmieth.kungfubbq.databinding.ActivityMainBinding
+import java.util.concurrent.Executors
 
 const val ONESIGNAL_APP_ID = "oneSignalAppID"
+const val DEVELOPER_MODE = true
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,6 +37,31 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.findNavController()
         setSupportActionBar(binding.toolbar)
         setupActionBarWithNavController(navController)
+        if (DEVELOPER_MODE) {
+            Log.d("MainActivity", "inside DEVELOPER_MODE")
+            StrictMode.setThreadPolicy(
+                StrictMode.ThreadPolicy.Builder()
+                .detectDiskReads()
+                .detectDiskWrites()
+                .detectNetwork()   // or .detectAll() for all detectable problems
+                .penaltyLog()
+                .build());
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                StrictMode.setVmPolicy(
+                    StrictMode.VmPolicy.Builder()
+                    .detectNonSdkApiUsage()
+                    .penaltyListener( Executors.newSingleThreadExecutor() , StrictMode.OnVmViolationListener(){
+                        Log.d("MainActivity", "inside strictMode.setVmPolicy")
+                    } )
+                    .detectLeakedSqlLiteObjects()
+                    .detectLeakedClosableObjects()
+                    .penaltyLog()
+                    .penaltyDeath()
+                    .build())
+            };
+
+        }
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_bar, menu)

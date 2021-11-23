@@ -11,14 +11,14 @@
     <!--user email-->
     <TextView
         android:id="@+id/userInfoUserNameLbl"
-        android:layout_width="85dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/palatino"
         android:text="@string/userinfo_email"
         android:textColor="@color/i_black"
-        android:textSize="24sp"
+        android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,14 +26,17 @@
     <TextView
         android:id="@+id/userInfoUserName"
         android:layout_width="0dp"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/palatino"
         android:text="@string/edittext_login_username"
         android:textColor="@color/i_black"
-        android:textSize="24sp"
+        android:textSize="@dimen/global_textsize"
+        app:autoSizeMaxTextSize="20sp"
+        app:autoSizeMinTextSize="14sp"
+        app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/userInfoUserNameLbl"
@@ -41,14 +44,14 @@
     <!--member since-->
     <TextView
         android:id="@+id/userInfoMemberSinceLbl"
-        android:layout_width="170dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/palatino"
         android:text="@string/userinfo_membersince"
         android:textColor="@color/i_black"
-        android:textSize="24sp"
+        android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userInfoUserName" />
@@ -62,7 +65,7 @@
         android:fontFamily="@font/palatino"
         android:text="@string/register_membersince_value_label"
         android:textColor="@color/i_black"
-        android:textSize="24sp"
+        android:textSize="@dimen/global_textsize"
         app:layout_constraintBottom_toBottomOf="@+id/userInfoMemberSinceLbl"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/userInfoMemberSinceLbl" />
@@ -72,11 +75,11 @@
         android:layout_width="85dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/palatino"
         android:text="@string/userinfo_name_label"
         android:textColor="@color/i_black"
-        android:textSize="24sp"
+        android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userInfoMemberSinceLbl" />
@@ -86,21 +89,25 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:background="@android:color/transparent"
         android:enabled="false"
         android:fontFamily="@font/palatino"
-        android:hint="John Doe"
+        android:hint="@string/john_doe"
         android:importantForAutofill="no"
         android:inputType="text"
         android:minHeight="48dp"
         android:paddingStart="8dp"
+        android:paddingLeft="8dp"
+        android:paddingEnd="8dp"
+        android:paddingRight="8dp"
         android:textColor="@color/i_black"
-        android:textSize="22sp"
+        android:textSize="@dimen/global_textsize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/userInfoNameLbl"
         app:layout_constraintTop_toBottomOf="@+id/userInfoMemberSince"
+        tools:ignore="DuplicateSpeakableTextCheck"
         tools:text="John Doe" />
     <!--user phoneNumber-->
     <TextView
@@ -108,11 +115,11 @@
         android:layout_width="85dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="18dp"
         android:fontFamily="@font/palatino"
         android:text="@string/userinfo_phonenumber_label"
         android:textColor="@color/i_black"
-        android:textSize="24sp"
+        android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userInfoName" />
@@ -120,8 +127,9 @@
     <EditText
         android:id="@+id/userInfoPhone"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="6dp"
         android:layout_marginEnd="16dp"
         android:background="@android:color/transparent"
         android:enabled="false"
@@ -132,11 +140,14 @@
         android:maxLength="14"
         android:minHeight="48dp"
         android:paddingStart="8dp"
+        android:paddingLeft="8dp"
+        android:paddingEnd="8dp"
+        android:paddingRight="8dp"
         android:textColor="@color/i_black"
-        android:textSize="22sp"
-        app:layout_constraintBottom_toBottomOf="@+id/userInfoPhoneLbl"
+        android:textSize="@dimen/global_textsize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/userInfoPhoneLbl"
+        app:layout_constraintTop_toBottomOf="@+id/userInfoName"
         tools:text="(000) 000-0000" />
     <!--user facebook name-->
     <TextView
@@ -144,21 +155,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="32dp"
         android:fontFamily="@font/palatino"
         android:text="@string/userinfo_facebookname_label"
         android:textColor="@color/i_black"
-        android:textSize="24sp"
+        android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userInfoPhoneLbl" />
+        app:layout_constraintTop_toBottomOf="@+id/userInfoPhone" />
 
     <EditText
         android:id="@+id/userInfoFacebookName"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:background="@android:color/transparent"
         android:enabled="false"
@@ -167,14 +178,16 @@
         android:importantForAutofill="no"
 
         android:inputType="text"
-        android:minHeight="48dp"
         android:paddingStart="8dp"
+        android:paddingLeft="8dp"
+        android:paddingEnd="8dp"
+        android:paddingRight="8dp"
         android:textColor="@color/i_black"
-        android:textSize="22sp"
+        android:textSize="@dimen/global_textsize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userInfoFacebookNameLbl"
-        tools:text="John Doe" />
+        tools:text="@string/john_doe" />
 
     <!--user facebook name-->
 
@@ -183,11 +196,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="4dp"
         android:fontFamily="@font/palatino"
         android:text="@string/userinfo_instagramname_label"
         android:textColor="@color/i_black"
-        android:textSize="24sp"
+        android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userInfoFacebookName" />
@@ -197,7 +210,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:background="@android:color/transparent"
         android:enabled="false"
@@ -208,32 +221,33 @@
         android:inputType="text"
         android:minHeight="48dp"
         android:paddingStart="8dp"
+        android:paddingLeft="8dp"
+        android:paddingEnd="8dp"
+        android:paddingRight="8dp"
         android:textColor="@color/i_black"
-        android:textSize="22sp"
+        android:textSize="@dimen/global_textsize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userInfoInstagramNameLbl"
-        tools:text="John Doe" />
+        tools:text="@string/john_doe" />
 
     <Button
         android:id="@+id/userInfoUpdatePasswordBtn"
         android:layout_width="0dp"
-        android:layout_height="68dp"
+        android:layout_height="@dimen/btn_height"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:layout_weight="1"
         android:backgroundTint="@color/i_reda"
         android:fontFamily="@font/palatino"
-        android:paddingStart="22dp"
         android:text="@string/btn_updatepassword"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="28sp"
+        android:textSize="@dimen/btn_text_size"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userInfoInstagramName" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
         android:id="@+id/userInfoBtnGroup"
@@ -255,15 +269,14 @@
         <Button
             android:id="@+id/userInfoCancelBtn"
             android:layout_width="wrap_content"
-            android:layout_height="68dp"
+            android:layout_height="@dimen/btn_height"
             android:layout_weight="1"
             android:backgroundTint="@color/secondary"
             android:fontFamily="@font/palatino"
-            android:paddingStart="22dp"
             android:text="@string/btn_cancel"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="28sp"
+            android:textSize="@dimen/btn_text_size"
             android:textStyle="bold" />
 
         <Space
@@ -274,15 +287,14 @@
         <Button
             android:id="@+id/userInfoSaveBtn"
             android:layout_width="wrap_content"
-            android:layout_height="68dp"
+            android:layout_height="@dimen/btn_height"
             android:layout_weight="1"
             android:backgroundTint="@color/i_reda"
             android:fontFamily="@font/palatino"
-            android:paddingStart="22dp"
             android:text="@string/btn_save"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="28sp"
+            android:textSize="@dimen/btn_text_size"
             android:textStyle="bold" />
 
         <Space
@@ -290,6 +302,7 @@
             android:layout_height="wrap_content"
             android:layout_weight=".33" />
     </LinearLayout>
+
     <FrameLayout
         android:id="@+id/userInfoSpinnerLayout"
         android:layout_width="0dp"
@@ -298,8 +311,10 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
         <ProgressBar
             android:id="@+id/loginProgressBar"
