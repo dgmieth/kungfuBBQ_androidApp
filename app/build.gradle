@@ -21,9 +21,11 @@ android {
         applicationId "me.dgmieth.kungfubbq"
         minSdk 21
         targetSdk 30
-        versionCode 2
+        versionCode 3
         //version "1.0" -> using kotlin sythetics
-        versionName "1.1" //-> using viewBiding
+        //versionName "1.1" -> using viewBiding
+        //versionName "1.2" -> skipped
+        versionName "1.3" //working on smaller screen devices // oneSignal registration at registerfragment 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
