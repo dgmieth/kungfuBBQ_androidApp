@@ -84,13 +84,13 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                 }
                 datesArray = dArray
                 Handler(Looper.getMainLooper()).post{
-                    binding.calendarSpinnerLayout.isVisible = false
-                    ifSelectedDateHasCookingDateMath(binding.calendarCalendar.firstSelectedDate.time.toString())
+                    ifSelectedDateHasCookingDateMatch(binding.calendarCalendar.firstSelectedDate.time.toString())
                     binding.calendarCalendar.setEvents(events)
                     binding.calendarCalendar.setOnDayClickListener { eventDay ->
-                        ifSelectedDateHasCookingDateMath(eventDay.calendar.time.toString())
+                        ifSelectedDateHasCookingDateMatch(eventDay.calendar.time.toString())
                         println(eventDay.calendar.time.toString())
                     }
+                    binding.calendarSpinnerLayout.isVisible = false
                 }
             }
         },{
@@ -124,7 +124,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         val min = Calendar.getInstance()
         val max = Calendar.getInstance()
         val todayCal = Calendar.getInstance()
-        min.set(year,month,date)
+        min.set(year,month,date,0,0,0)
         min.add(Calendar.DAY_OF_MONTH,-1)
         todayCal.set(year,month,date,0,0,0)
         binding.calendarCalendar.setDate(todayCal)
@@ -166,7 +166,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
     /*
     OTHER METHODS
      */
-    private fun ifSelectedDateHasCookingDateMath(eventDay:String){
+    private fun ifSelectedDateHasCookingDateMatch(eventDay:String){
         datesArray?.let { it ->
             for(i in it){
                 if(i.first==eventDay){
@@ -189,6 +189,12 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                     break
                 }else{
                     binding.calendarNoCookingDate.visibility = View.VISIBLE
+                    showOrderBtns(
+                        placeOrder= false,
+                        updateOrder = false,
+                        payOrder = false,
+                        paidOrder = false
+                    )
                 }
             }
         }

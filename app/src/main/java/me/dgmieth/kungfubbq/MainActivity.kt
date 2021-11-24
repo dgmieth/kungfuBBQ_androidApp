@@ -37,31 +37,30 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.findNavController()
         setSupportActionBar(binding.toolbar)
         setupActionBarWithNavController(navController)
-        if (DEVELOPER_MODE) {
-            Log.d("MainActivity", "inside DEVELOPER_MODE")
-            StrictMode.setThreadPolicy(
-                StrictMode.ThreadPolicy.Builder()
-                .detectDiskReads()
-                .detectDiskWrites()
-                .detectNetwork()   // or .detectAll() for all detectable problems
-                .penaltyLog()
-                .build());
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                StrictMode.setVmPolicy(
-                    StrictMode.VmPolicy.Builder()
-                    .detectNonSdkApiUsage()
-                    .penaltyListener( Executors.newSingleThreadExecutor() , StrictMode.OnVmViolationListener(){
-                        Log.d("MainActivity", "inside strictMode.setVmPolicy")
-                    } )
-                    .detectLeakedSqlLiteObjects()
-                    .detectLeakedClosableObjects()
-                    .penaltyLog()
-                    .penaltyDeath()
-                    .build())
-            };
-
-        }
+//        if (DEVELOPER_MODE) {
+//            Log.d("MainActivity", "inside DEVELOPER_MODE")
+//            StrictMode.setThreadPolicy(
+//                StrictMode.ThreadPolicy.Builder()
+//                .detectDiskReads()
+//                .detectDiskWrites()
+//                .detectNetwork()   // or .detectAll() for all detectable problems
+//                .penaltyLog()
+//                .build());Stric
+//
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+//                StrictMode.setVmPolicy(
+//                    StrictMode.VmPolicy.Builder()
+//                    .detectNonSdkApiUsage()
+//                    .penaltyListener( Executors.newSingleThreadExecutor() , StrictMode.OnVmViolationListener(){
+//                        Log.d("MainActivity", "inside strictMode.setVmPolicy")
+//                    } )
+//                    .detectLeakedSqlLiteObjects()
+//                    .detectLeakedClosableObjects()
+//                    .penaltyLog()
+//                    .penaltyDeath()
+//                    .build())
+//            }
+//        }
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_bar, menu)
