@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/headerTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/palatino"
+        android:padding="5dp"
+        android:textAlignment="center"
+        android:textColor="@color/i_yellow"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="October 2019" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:orientation="horizontal"
+        android:weightSum="7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerTextView">
+
+        <TextView
+            android:id="@+id/Sun"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Sun"
+            android:textAlignment="center"
+            android:textColor="@color/i_reda"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/Mon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Mon"
+            android:textAlignment="center"
+            android:textColor="@color/i_reda"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/Tue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Tue"
+            android:textAlignment="center"
+            android:textColor="@color/i_reda"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/Wed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Wed"
+            android:textAlignment="center"
+            android:textColor="@color/i_reda"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/Thu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Thu"
+            android:textAlignment="center"
+            android:textColor="@color/i_reda"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/Fri"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Fri"
+            android:textAlignment="center"
+            android:textColor="@color/i_reda"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/Sat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Sat"
+            android:textAlignment="center"
+            android:textColor="@color/i_reda"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

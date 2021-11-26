@@ -17,33 +17,84 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.6" />
 
-    <com.applandeo.materialcalendarview.CalendarView
-        android:id="@+id/calendarCalendar"
+<!--    <com.applandeo.materialcalendarview.CalendarView-->
+<!--        android:id="@+id/calendarCalendar"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:fadeScrollbars="false"-->
+<!--        android:fitsSystemWindows="true"-->
+<!--        android:scrollbars="vertical"-->
+<!--        android:weightSum="1"-->
+<!--        app:abbreviationsBarColor="@color/i_black"-->
+<!--        app:abbreviationsLabelsColor="@color/i_reda"-->
+<!--        app:anotherMonthsDaysLabelsColor="@color/secondary"-->
+<!--        app:daysLabelsColor="@color/fontColor"-->
+<!--        app:eventsEnabled="true"-->
+<!--        app:headerColor="@color/i_black"-->
+<!--        app:headerLabelColor="@color/i_yellow"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/guideline"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.0"-->
+<!--        app:pagesColor="@color/i_black"-->
+<!--        app:selectionColor="@color/calendarDayColor"-->
+<!--        app:selectionLabelColor="@color/i_black"-->
+<!--        app:todayLabelColor="@color/i_yellow"-->
+<!--        app:type="one_day_picker"-->
+<!--        />-->
+
+<!--    <com.shuhart.materialcalendarview.MaterialCalendarView-->
+<!--        android:id="@+id/calendarCalendar"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:background="@color/black"-->
+<!--        android:backgroundTintMode="add"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/guideline"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:mcv_allowClickDaysOutsideCurrentMonth="false"-->
+<!--        app:mcv_arrowColor="@color/i_reda"-->
+<!--        app:mcv_calendarMode="month"-->
+<!--        app:mcv_dateTextAppearance="@style/DaysFontAndColor"-->
+<!--        app:mcv_firstDayOfWeek="sunday"-->
+<!--        app:mcv_headerTextAppearance="@style/MonthLabelsAndFont"-->
+<!--        app:mcv_selectionColor="@color/calendarDayColor"-->
+<!--        app:mcv_selectionMode="single"-->
+<!--        app:mcv_tileHeight="match_parent"-->
+<!--        app:mcv_tileSize="match_parent"-->
+<!--        app:mcv_tileWidth="match_parent"-->
+<!--        app:mcv_titleAnimationOrientation="horizontal"-->
+<!--        app:mcv_weekDayTextAppearance="@style/WeekdaysLabelAndFont" />-->
+    <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fadeScrollbars="false"
-        android:fitsSystemWindows="true"
-        android:scrollbars="vertical"
-        android:weightSum="1"
-        app:abbreviationsBarColor="@color/i_black"
-        app:abbreviationsLabelsColor="@color/i_reda"
-        app:anotherMonthsDaysLabelsColor="@color/secondary"
-        app:daysLabelsColor="@color/fontColor"
-        app:eventsEnabled="true"
-        app:headerColor="@color/i_black"
-        app:headerLabelColor="@color/i_yellow"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:pagesColor="@color/i_black"
-        app:selectionColor="@color/calendarDayColor"
-        app:selectionLabelColor="@color/i_black"
-        app:todayLabelColor="@color/i_yellow"
-        app:type="one_day_picker"
-        />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.kizitonwose.calendarview.CalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/black"
+                android:isScrollContainer="true"
+                android:overScrollMode="ifContentScrolls"
+                app:cv_dayViewResource="@layout/calendar_day_layout"
+                app:cv_monthHeaderResource="@layout/calendar_month_header_layout"
+                app:cv_orientation="horizontal"
+                app:cv_scrollMode="paged"
+                tools:ignore="SpeakableTextPresentCheck" />
+        </LinearLayout>
+    </ScrollView>
 
     <TextView
         android:id="@+id/calendarDateLbl"
@@ -236,6 +287,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/calendarNoCookingDate"
         android:layout_width="match_parent"
@@ -251,6 +303,7 @@
             android:id="@+id/imageView"
             android:layout_width="130dp"
             android:layout_height="130dp"
+            android:contentDescription="@string/sad_face"
             android:src="@mipmap/ic_sad_face_foreground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -270,12 +323,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <FrameLayout
         android:id="@+id/calendarSpinnerLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#7EF5DF27"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -288,5 +342,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical" />
+
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

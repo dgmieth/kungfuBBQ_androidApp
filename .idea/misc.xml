@@ -3,9 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../../../layout/custom_preview.xml" value="0.24739583333333334" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.30625" />
         <entry key="app/src/main/res/drawable/app_icon_background.xml" value="0.23072916666666668" />
         <entry key="app/src/main/res/drawable/calendar_icon_background.xml" value="0.246875" />
+        <entry key="app/src/main/res/drawable/circle.xml" value="0.18" />
         <entry key="app/src/main/res/drawable/ic_dot.xml" value="0.23854166666666668" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.30625" />
         <entry key="app/src/main/res/drawable/ic_logout.xml" value="0.234375" />
@@ -17,6 +19,8 @@
         <entry key="app/src/main/res/drawable/menu_userInfo.xml" value="0.23802083333333332" />
         <entry key="app/src/main/res/font/fonts.xml" value="0.24479166666666666" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1831306990881459" />
+        <entry key="app/src/main/res/layout/calendar_day_layout.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/calendar_month_header_layout.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_about.xml" value="0.75" />
         <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.24039735099337747" />
         <entry key="app/src/main/res/layout/fragment_catering.xml" value="0.75" />

@@ -77,5 +77,6 @@
     <string name="paidorder_ordernumber">Order nr:</string>
     <string name="edittext_currentpassword">Current password</string>
     <string name="john_doe">John Doe</string>
+    <string name="sad_face">Sad face</string>
 
 </resources>

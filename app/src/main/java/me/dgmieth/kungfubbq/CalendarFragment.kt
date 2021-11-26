@@ -2,6 +2,7 @@ package me.dgmieth.kungfubbq
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,8 +15,15 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.Observer
-import com.applandeo.materialcalendarview.EventDay
+import com.kizitonwose.calendarview.model.CalendarDay
+import com.kizitonwose.calendarview.model.CalendarMonth
+import com.kizitonwose.calendarview.model.DayOwner
+import com.kizitonwose.calendarview.ui.DayBinder
+import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
+import com.kizitonwose.calendarview.ui.ViewContainer
 import io.reactivex.disposables.CompositeDisposable
+import me.dgmieth.kungfubbq.databinding.CalendarDayLayoutBinding
+import me.dgmieth.kungfubbq.databinding.CalendarMonthHeaderLayoutBinding
 import me.dgmieth.kungfubbq.databinding.FragmentCalendarBinding
 import me.dgmieth.kungfubbq.datatabase.room.Actions
 import me.dgmieth.kungfubbq.datatabase.room.KungfuBBQRoomDatabase
@@ -25,16 +33,18 @@ import me.dgmieth.kungfubbq.httpCtrl.HttpCtrl
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
-import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.YearMonth
+import java.time.format.DateTimeFormatter
+import java.time.temporal.WeekFields
 import java.util.*
 
-class CalendarFragment : Fragment(R.layout.fragment_calendar) {
+class CalendarFragment : Fragment(R.layout.fragment_calendar){
 
     private val TAG = "CalendarFragment"
-
-    private val events : MutableList<EventDay> = mutableListOf()
+    private val events : MutableList<LocalDate> = mutableListOf()
     private var cookingDates : List<CookingDateAndCookingDateDishesWithOrder>? = null
-    private var datesArray : MutableList<Pair<String,Int>>? = null
+    private var datesArray : MutableList<Pair<LocalDate,Int>>? = null
     private var selectedCookingDate = 0
 
     private var _binding: FragmentCalendarBinding? = null
@@ -42,6 +52,10 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
 
     private var viewModel: RoomViewModel? = null
     private var bag = CompositeDisposable()
+
+    private var selectedDate = LocalDate.now()
+    private var todayDate = LocalDate.now()
+    private val dateFormatterCV = DateTimeFormatter.ofPattern("dd")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +70,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         viewModel?.getDbInstance(KungfuBBQRoomDatabase.getInstance(requireActivity()))
         //subscribing to returnMsg
         viewModel?.returnMsg?.subscribe({
+            showSpinner(false)
             when(it){
                 Actions.CookingDatesComplete -> {
                     viewModel?.getCookingDates()
@@ -66,31 +81,35 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                     }
                 }
             }
-        },{},{})?.let {
+        },{
+            showSpinner(false)
+            Handler(Looper.getMainLooper()).post{
+                Toast.makeText(requireActivity(),"It was not possible to retrieve information from kungfuBBQ server. Please try again later.",Toast.LENGTH_LONG).show()
+            }
+        },{})?.let {
             bag.add(it)
         }
         //Subscribing to cookingD
         viewModel?.cookingDates?.subscribe({
             cookingDates = it
             cookingDates?.let{ cd ->
-                var dArray : MutableList<Pair<String,Int>> = mutableListOf()
+                var dArray : MutableList<Pair<LocalDate,Int>> = mutableListOf()
                 for(i in cd) {
-                    val cal = Calendar.getInstance()
                     var splitDate =
                         (i.cookingDateAndDishes.cookingDate.cookingDate.split(" ")[0]).split("-")
-                    cal.set(splitDate[0].toInt(), splitDate[1].toInt()-1, splitDate[2].toInt())
-                    events.add(EventDay(cal, R.drawable.icon_calendar))
-                    dArray.add(Pair(cal.time.toString(),i.cookingDateAndDishes.cookingDate.cookingDateId))
+                    val localDate = LocalDate.of(splitDate[0].toInt(),splitDate[1].toInt(),splitDate[2].toInt())
+                    events.add(localDate)
+                    Handler(Looper.getMainLooper()).post {
+                        binding.calendarView?.notifyDateChanged(localDate)
+                    }
+                    dArray.add(Pair(localDate,i.cookingDateAndDishes.cookingDate.cookingDateId))
                 }
                 datesArray = dArray
                 Handler(Looper.getMainLooper()).post{
-                    ifSelectedDateHasCookingDateMatch(binding.calendarCalendar.firstSelectedDate.time.toString())
-                    binding.calendarCalendar.setEvents(events)
-                    binding.calendarCalendar.setOnDayClickListener { eventDay ->
-                        ifSelectedDateHasCookingDateMatch(eventDay.calendar.time.toString())
-                        println(eventDay.calendar.time.toString())
-                    }
-                    binding.calendarSpinnerLayout.isVisible = false
+                    val oldDate = selectedDate
+                    refreshCalendarView(todayDate,oldDate)
+                    ifSelectedDateHasCookingDateMatch(selectedDate)
+                    showSpinner(false)
                 }
             }
         },{
@@ -111,36 +130,89 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        showSpinner(true)
         binding.calendarMenu.movementMethod = ScrollingMovementMethod()
-        binding.calendarSpinnerLayout.visibility = View.VISIBLE
-        val today = Date()
-        val dateFormatter = SimpleDateFormat()
-        dateFormatter.applyPattern("y")
-        val year = (dateFormatter.format(today).toString()).toInt()
-        dateFormatter.applyPattern("M")
-        var month = (dateFormatter.format(today).toString()).toInt()-1
-        dateFormatter.applyPattern("d")
-        val date = (dateFormatter.format(today).toString()).toInt()
-        val min = Calendar.getInstance()
-        val max = Calendar.getInstance()
-        val todayCal = Calendar.getInstance()
-        min.set(year,month,date,0,0,0)
-        min.add(Calendar.DAY_OF_MONTH,-1)
-        todayCal.set(year,month,date,0,0,0)
-        binding.calendarCalendar.setDate(todayCal)
+
         //setting min date in calendar
-        binding.calendarCalendar.setMinimumDate(min)
-        month += 1
-        if(month > 11){
-            max.set(Calendar.YEAR, year + 1)
-            max.set(Calendar.MONTH, 0)
-        }else{
-            max.set(Calendar.YEAR, year)
-            max.set(Calendar.MONTH, month)
+        class MonthViewContainer(view: View) : ViewContainer(view) {
+            val bind = CalendarMonthHeaderLayoutBinding.bind(view)
+            fun bind(day: CalendarMonth) {
+                bind.headerTextView.text = day.yearMonth.month.name
+            }
         }
-        //setting max date
-        max.set(Calendar.DATE, max.getActualMaximum(Calendar.DATE))
-        binding.calendarCalendar.setMaximumDate(max)
+        binding.calendarView.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
+            override fun create(view: View) = MonthViewContainer(view)
+            override fun bind(container: MonthViewContainer, month: CalendarMonth) = container.bind(month)
+        }
+        class DayViewContainer(view: View) : ViewContainer(view) {
+            val bind = CalendarDayLayoutBinding.bind(view)
+            lateinit var day: CalendarDay
+
+            init {
+                view.setOnClickListener {
+                    if(day.owner == DayOwner.THIS_MONTH){
+                        if(day.date >= todayDate){
+                            if (selectedDate != day.date) {
+                                val oldDate = selectedDate
+                                selectedDate = day.date
+                                Log.d(TAG,"newSelectedDate is $selectedDate")
+                                refreshCalendarView(day.date,oldDate)
+                                ifSelectedDateHasCookingDateMatch(selectedDate)
+                            }
+                        }
+                    }
+                }
+            }
+            fun bind(day: CalendarDay) {
+                Log.d(TAG, "bind called")
+                this.day = day
+                bind.todayDay.text = dateFormatterCV.format(day.date)
+                datesArray?.let{
+                    if(it.size>0){
+                        for(i in it){
+                            if(i.first==day.date){
+                                bind.kungfuBBQImg.visibility = View.VISIBLE
+                            }
+                        }
+                    }
+                }
+                if(selectedDate==day.date){
+                    bind.selectionCircle.visibility = View.VISIBLE
+                    bind.todayDay.setTextColor(Color.BLACK)
+                    return
+                }
+                bind.selectionCircle.visibility = View.INVISIBLE
+                if(day.date == todayDate){
+                    bind.todayCircle.visibility = View.VISIBLE
+                    bind.todayDay.setTextColor(Color.BLACK)
+                } else {
+                    if (day.owner == DayOwner.THIS_MONTH) {
+                        if (day.date < todayDate) {
+                            bind.todayDay.setTextColor(Color.GRAY)
+                        }else {
+                            bind.todayDay.setTextColor(Color.WHITE)
+                        }
+                    } else {
+                        bind.todayDay.setTextColor(Color.BLACK)
+                        bind.kungfuBBQImg.visibility = View.INVISIBLE
+                    }
+                    bind.todayCircle.isVisible = false
+                }
+            }
+        }
+        binding.calendarView.dayBinder = object : DayBinder<DayViewContainer> {
+            override fun create(view: View) = DayViewContainer(view)
+            override fun bind(container: DayViewContainer, day: CalendarDay) {
+                container.bind(day)
+            }
+        }
+        val currentMonth = YearMonth.now()
+        // Value for firstDayOfWeek does not matter since inDates and outDates are not generated.
+        val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
+        binding.calendarView.setup(currentMonth, currentMonth.plusMonths(1), firstDayOfWeek)
+        binding.calendarView.scrollToDate(LocalDate.now())
+        binding.calendarView.scrollToDate(selectedDate)
+
         //setting onClickListener
         binding.calendarPreOrder.setOnClickListener {
             val action = CalendarFragmentDirections.callPreOrder(selectedCookingDate)
@@ -164,18 +236,131 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         menu.clear()
     }
     /*
-    OTHER METHODS
+     * HTTP request
      */
-    private fun ifSelectedDateHasCookingDateMatch(eventDay:String){
+    private fun getActiveCookingDatesWithinSixtyDays(it: UserAndSocialMedia) {
+        var httpUrl = HttpUrl.Builder()
+            .scheme("https")
+            .host("${getString(R.string.kungfuServerUrlNoSchema)}")
+            .addQueryParameter("email",it.user.email)
+            .addQueryParameter("id",it.user.userId.toString())
+            .addPathSegments("api/cookingCalendar/activeCookingDatesWithinSixtyDays")
+            .build()
+        HttpCtrl.shared.newCall(HttpCtrl.get("","",httpUrl,it.user.token)).enqueue(object :
+            Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+                Log.d(TAG, "return is $e")
+                Handler(Looper.getMainLooper()).post{
+                    Toast.makeText(requireActivity(),"The attempt to retrieve data from KungfuBBQ server failed with generalized error message: ${e.localizedMessage}",
+                        Toast.LENGTH_LONG).show()
+                }
+            }
+            override fun onResponse(call: Call, response: Response) {
+                response.use {
+                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
+                    val json = JSONObject(response.body!!.string())
+                    if(!json.getBoolean("hasErrors")){
+                        var cDates = json.getJSONArray("msg").getJSONArray(0)
+                        var orders = json.getJSONArray("msg").getJSONArray(1)
+                        var listCDates : MutableList<CookingDateDB> = arrayListOf()
+                        var listOrders : MutableList<OrderDB> = arrayListOf()
+                        var listCDatesDishes : MutableList<CookingDateDishesDB> = arrayListOf()
+                        var listOrderDishes : MutableList<OrderDishesDB> = arrayListOf()
+                        for(i in 0 until cDates.length()){
+                            val iJ = cDates.getJSONObject(i)
+                            listCDates.add(CookingDateDB(
+                                iJ.getInt("cookingDateId"),
+                                iJ.getString("cookingDate"),
+                                iJ.getInt("mealsForThis"),
+                                iJ.getInt("addressId"),
+                                iJ.getString("street"),
+                                iJ.getString("complement"),
+                                iJ.getString("city"),
+                                iJ.getString("state"),
+                                iJ.getString("zipcode"),
+                                iJ.getString("country"),
+                                iJ.getDouble("lat"),
+                                iJ.getDouble("lng"),
+                                iJ.getInt("cookingStatusId"),
+                                iJ.getString("cookingStatus"),
+                                iJ.getInt("menuID")))
+                            for(x in 0 until iJ.getJSONArray("dishes").length()){
+                                val ds = iJ.getJSONArray("dishes").getJSONObject(x)
+                                listCDatesDishes.add(CookingDateDishesDB(ds.getInt("dishId"),
+                                    ds.getString("dishName"),
+                                    ds.getString("dishPrice"),
+                                    ds.getString("dishIngredients"),
+                                    ds.getString("dishDescription"),
+                                    iJ.getInt("cookingDateId")))
+                            }
+                        }
+                        for(i in 0 until orders.length()){
+                            val iO = orders.getJSONObject(i)
+                            listOrders.add(OrderDB(iO.getInt("orderId"),
+                                iO.getString("orderDate"),
+                                iO.getInt("cookingDateId"),
+                                iO.getInt("orderStatusId"),
+                                iO.getString("orderStatusName"),
+                                iO.getInt("userId"),
+                                iO.getString("userName"),
+                                iO.getString("userEmail"),
+                                iO.getString("userPhoneNumber")))
+                            for(x in 0 until iO.getJSONArray("dishes").length()){
+                                val ds = iO.getJSONArray("dishes").getJSONObject(x)
+                                listOrderDishes.add(OrderDishesDB(ds.getInt("dishId"),
+                                    ds.getString("dishName"),
+                                    ds.getString("dishPrice"),
+                                    ds.getInt("dishQtty"),
+                                    ds.getString("observation"),
+                                    iO.getInt("orderId")))
+                            }
+                        }
+                        viewModel?.insertAllCookingDates(listCDates,listCDatesDishes,listOrders,listOrderDishes)
+                    }else{
+                        if(json.getInt("errorCode")==-1){
+                            Handler(Looper.getMainLooper()).post{
+                                Toast.makeText(requireActivity(),"You are not authenticated in Kungfu BBQ server anylonger. Please log in again.",
+                                    Toast.LENGTH_LONG).show()
+                                val action = NavGraphDirections.callHome(false)
+                                findNavController().navigate(action)
+                            }
+                        }else{
+                            Handler(Looper.getMainLooper()).post{
+                                Toast.makeText(requireActivity(),"The attempt to retrieve data from KungfuBBQ server failed with server message: ${json.getString("msg")}",
+                                    Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    }
+    // ==============================================
+    // UI update
+    private fun ifSelectedDateHasCookingDateMatch(eventDay:LocalDate){
         datesArray?.let { it ->
             for(i in it){
                 if(i.first==eventDay){
                     binding.calendarNoCookingDate.visibility = View.INVISIBLE
                     val cdAr = cookingDates!!.filter {cd ->  cd.cookingDateAndDishes.cookingDate.cookingDateId == i.second }
                     val cd = cdAr[0]
-                    val dates =  i.first.split(" ")
+                    val month = when(i.first.month.value-1) {
+                        0 -> "Jan"
+                        1 -> "Feb"
+                        2 -> "Mar"
+                        3 -> "Apr"
+                        4 -> "May"
+                        5 -> "Jun"
+                        6 -> "Jul"
+                        7 -> "Aug"
+                        8 -> "Sep"
+                        9 -> "Oct"
+                        10 -> "Nov"
+                        else -> "Dec"
+                    }
                     val complement = if (cd.cookingDateAndDishes.cookingDate.complement == "Not informed") "" else ", ${cd.cookingDateAndDishes.cookingDate.complement}"
-                    var dateAddress = "${dates[1]} ${dates[2]} at ${cd.cookingDateAndDishes.cookingDate.street}${complement}"
+                    var dateAddress = "$month ${i.first.dayOfMonth} at ${cd.cookingDateAndDishes.cookingDate.street}${complement}"
                     dateAddress.also { binding.calendarDate.text = it }
                     binding.calendarStatus.text = cd.cookingDateAndDishes.cookingDate.cookingStatus
                     var menu = ""
@@ -294,106 +479,12 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             Toast.makeText(requireActivity(),"It was not possible to recover data from app`s database. Please restart the app.",Toast.LENGTH_LONG).show()
         }
     }
-    //===============================================================
-    //
-    private fun getActiveCookingDatesWithinSixtyDays(it: UserAndSocialMedia) {
-        var httpUrl = HttpUrl.Builder()
-            .scheme("https")
-            .host("${getString(R.string.kungfuServerUrlNoSchema)}")
-            .addQueryParameter("email",it.user.email)
-            .addQueryParameter("id",it.user.userId.toString())
-            .addPathSegments("api/cookingCalendar/activeCookingDatesWithinSixtyDays")
-            .build()
-        HttpCtrl.shared.newCall(HttpCtrl.get("","",httpUrl,it.user.token)).enqueue(object :
-            Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                e.printStackTrace()
-                Log.d(TAG, "return is $e")
-                Handler(Looper.getMainLooper()).post{
-                    Toast.makeText(requireActivity(),"The attempt to retrieve data from KungfuBBQ server failed with generalized error message: ${e.localizedMessage}",
-                        Toast.LENGTH_LONG).show()
-                }
-            }
-            override fun onResponse(call: Call, response: Response) {
-                response.use {
-                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
-                    val json = JSONObject(response.body!!.string())
-                    if(!json.getBoolean("hasErrors")){
-                        var cDates = json.getJSONArray("msg").getJSONArray(0)
-                        var orders = json.getJSONArray("msg").getJSONArray(1)
-                        var listCDates : MutableList<CookingDateDB> = arrayListOf()
-                        var listOrders : MutableList<OrderDB> = arrayListOf()
-                        var listCDatesDishes : MutableList<CookingDateDishesDB> = arrayListOf()
-                        var listOrderDishes : MutableList<OrderDishesDB> = arrayListOf()
-                        for(i in 0 until cDates.length()){
-                            val iJ = cDates.getJSONObject(i)
-                            listCDates.add(CookingDateDB(
-                                iJ.getInt("cookingDateId"),
-                                iJ.getString("cookingDate"),
-                                iJ.getInt("mealsForThis"),
-                                iJ.getInt("addressId"),
-                                iJ.getString("street"),
-                                iJ.getString("complement"),
-                                iJ.getString("city"),
-                                iJ.getString("state"),
-                                iJ.getString("zipcode"),
-                                iJ.getString("country"),
-                                iJ.getDouble("lat"),
-                                iJ.getDouble("lng"),
-                                iJ.getInt("cookingStatusId"),
-                                iJ.getString("cookingStatus"),
-                                iJ.getInt("menuID")))
-                            for(x in 0 until iJ.getJSONArray("dishes").length()){
-                                val ds = iJ.getJSONArray("dishes").getJSONObject(x)
-                                listCDatesDishes.add(CookingDateDishesDB(ds.getInt("dishId"),
-                                    ds.getString("dishName"),
-                                    ds.getString("dishPrice"),
-                                    ds.getString("dishIngredients"),
-                                    ds.getString("dishDescription"),
-                                    iJ.getInt("cookingDateId")))
-                            }
-                        }
-                        for(i in 0 until orders.length()){
-                            val iO = orders.getJSONObject(i)
-                            listOrders.add(OrderDB(iO.getInt("orderId"),
-                                iO.getString("orderDate"),
-                                iO.getInt("cookingDateId"),
-                                iO.getInt("orderStatusId"),
-                                iO.getString("orderStatusName"),
-                                iO.getInt("userId"),
-                                iO.getString("userName"),
-                                iO.getString("userEmail"),
-                                iO.getString("userPhoneNumber")))
-                            for(x in 0 until iO.getJSONArray("dishes").length()){
-                                val ds = iO.getJSONArray("dishes").getJSONObject(x)
-                                listOrderDishes.add(OrderDishesDB(ds.getInt("dishId"),
-                                    ds.getString("dishName"),
-                                    ds.getString("dishPrice"),
-                                    ds.getInt("dishQtty"),
-                                    ds.getString("observation"),
-                                    iO.getInt("orderId")))
-                            }
-                        }
-                        viewModel?.insertAllCookingDates(listCDates,listCDatesDishes,listOrders,listOrderDishes)
-                    }else{
-                        if(json.getInt("errorCode")==-1){
-                            Handler(Looper.getMainLooper()).post{
-                                Toast.makeText(requireActivity(),"You are not authenticated in Kungfu BBQ server anylonger. Please log in again.",
-                                    Toast.LENGTH_LONG).show()
-                                val action = NavGraphDirections.callHome(false)
-                                findNavController().navigate(action)
-                            }
-                        }else{
-                            Handler(Looper.getMainLooper()).post{
-                                Toast.makeText(requireActivity(),"The attempt to retrieve data from KungfuBBQ server failed with server message: ${json.getString("msg")}",
-                                    Toast.LENGTH_LONG).show()
-                            }
-                        }
-                    }
-                }
-            }
-        })
+    private fun refreshCalendarView(newDate:LocalDate,oldDate:LocalDate){
+        binding.calendarView.notifyDateChanged(newDate)
+        oldDate?.let { binding.calendarView.notifyDateChanged(it) }
     }
+
+
     private fun showAlert(message:String,title:String){
         Handler(Looper.getMainLooper()).post{
             var dialogBuilder = AlertDialog.Builder(activity)
@@ -408,6 +499,14 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             val alert = dialogBuilder.create()
             alert.setTitle(title)
             alert.show()
+        }
+    }
+    private fun showSpinner(value: Boolean){
+        Handler(Looper.getMainLooper()).post {
+            binding.calendarSpinnerLayout.visibility =  when(value){
+                true -> View.VISIBLE
+                else -> View.INVISIBLE
+            }
         }
     }
 }
