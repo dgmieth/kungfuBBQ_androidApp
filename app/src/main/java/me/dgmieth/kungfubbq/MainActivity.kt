@@ -25,42 +25,25 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("MainActivity","onCreate called")
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
-        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE)
-        OneSignal.initWithContext(this)
-        OneSignal.setAppId(getString(R.string.oneSignalAppID))
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.findNavController()
         setSupportActionBar(binding.toolbar)
         setupActionBarWithNavController(navController)
-//        if (DEVELOPER_MODE) {
-//            Log.d("MainActivity", "inside DEVELOPER_MODE")
-//            StrictMode.setThreadPolicy(
-//                StrictMode.ThreadPolicy.Builder()
-//                .detectDiskReads()
-//                .detectDiskWrites()
-//                .detectNetwork()   // or .detectAll() for all detectable problems
-//                .penaltyLog()
-//                .build());Stric
-//
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-//                StrictMode.setVmPolicy(
-//                    StrictMode.VmPolicy.Builder()
-//                    .detectNonSdkApiUsage()
-//                    .penaltyListener( Executors.newSingleThreadExecutor() , StrictMode.OnVmViolationListener(){
-//                        Log.d("MainActivity", "inside strictMode.setVmPolicy")
-//                    } )
-//                    .detectLeakedSqlLiteObjects()
-//                    .detectLeakedClosableObjects()
-//                    .penaltyLog()
-//                    .penaltyDeath()
-//                    .build())
-//            }
-//        }
+    }
+    override fun onStart() {
+        super.onStart()
+        Log.d("MainActivity","onStart called")
+        oneSignalConfiguration()
+    }
+    private fun oneSignalConfiguration(){
+        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE)
+        OneSignal.initWithContext(this)
+        OneSignal.setAppId(getString(R.string.oneSignalAppID))
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_bar, menu)
@@ -69,10 +52,9 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
-
     override fun onDestroy() {
-        super.onDestroy()
-        Log.d("MainActivity","onDestroy called")
+        Log.d("MainActivity","onStop called")
         OneSignal.removeExternalUserId()
+        super.onDestroy()
     }
 }
