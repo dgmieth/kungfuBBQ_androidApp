@@ -22,5 +22,4 @@
         <item name="android:fontFamily">@font/palatino</item>
         <item name="android:textSize">@dimen/global_textsize</item>
     </style>
-
 </resources>

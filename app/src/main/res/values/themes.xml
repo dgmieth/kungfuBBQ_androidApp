@@ -6,11 +6,12 @@
         <item name="colorPrimaryDark">@color/i_black</item>
         <item name="android:windowBackground">@android:color/black</item>
         <item name="colorAccent">@color/i_black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>
+<!--        &lt;!&ndash; Status bar color. &ndash;&gt;-->
+<!--        <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>-->
         <!-- Fonts -->
         <item name="android:textViewStyle">@style/PalatinoStyle</item>
         <item name="android:buttonStyle">@style/PalatinoBtnStyle</item>
+        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
     </style>
     <style name="AppTheme.Picker" parent="Theme.AppCompat.Light.NoActionBar" >
         <item name="android:textColorPrimary">@color/i_black</item>
@@ -22,5 +23,16 @@
     <style name="PalatinoBtnStyle" parent="android:Widget.Holo.Button">
         <item name="android:fontFamily">@font/palatino</item>
         <item name="backgroundColor">@color/i_black</item>
+    </style>
+    <style name="AlertDialogTheme" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+    </style>
+    <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/i_reda</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/i_black</item>
     </style>
 </resources>

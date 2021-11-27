@@ -99,6 +99,7 @@
 
     <NumberPicker
         android:id="@+id/payCardYear"
+        android:theme="@style/AppTheme.Picker"
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_marginStart="48dp"
@@ -110,6 +111,7 @@
 
     <NumberPicker
         android:id="@+id/payCardMonth"
+        android:theme="@style/AppTheme.Picker"
         android:layout_width="85dp"
         android:layout_height="100dp"
         android:layout_marginStart="75dp"
@@ -124,6 +126,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="4dp"
         android:descendantFocusability="blocksDescendants"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -140,7 +143,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/btn_height"
             android:layout_weight="1"
-            android:backgroundTint="@color/i_gray"
+            android:background="@color/i_gray"
             android:fontFamily="@font/palatino"
             android:text="@string/btn_cancel"
             android:textAllCaps="false"
@@ -158,7 +161,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/btn_height"
             android:layout_weight="1"
-            android:backgroundTint="@color/i_reda"
+            android:background="@color/i_reda"
             android:fontFamily="@font/palatino"
             android:text="@string/btn_payorder"
             android:textAllCaps="false"

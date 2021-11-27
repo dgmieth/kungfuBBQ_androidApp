@@ -1,6 +1,6 @@
 package me.dgmieth.kungfubbq
 
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
@@ -110,6 +110,11 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                     refreshCalendarView(todayDate,oldDate)
                     ifSelectedDateHasCookingDateMatch(selectedDate)
                     showSpinner(false)
+                    binding.calendarView.monthScrollListener = {month ->
+                        var oldDate: LocalDate
+                        selectedDate = null
+                        binding.calendarView.notifyCalendarChanged()
+                    }
                 }
             }
         },{
@@ -155,7 +160,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                             if (selectedDate != day.date) {
                                 val oldDate = selectedDate
                                 selectedDate = day.date
-                                Log.d(TAG,"newSelectedDate is $selectedDate")
                                 refreshCalendarView(day.date,oldDate)
                                 ifSelectedDateHasCookingDateMatch(selectedDate)
                             }
@@ -164,7 +168,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                 }
             }
             fun bind(day: CalendarDay) {
-                Log.d(TAG, "bind called")
                 this.day = day
                 bind.todayDay.text = dateFormatterCV.format(day.date)
                 datesArray?.let{
@@ -212,7 +215,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
         binding.calendarView.setup(currentMonth, currentMonth.plusMonths(1), firstDayOfWeek)
         binding.calendarView.scrollToDate(LocalDate.now())
         binding.calendarView.scrollToDate(selectedDate)
-
         //setting onClickListener
         binding.calendarPreOrder.setOnClickListener {
             val action = CalendarFragmentDirections.callPreOrder(selectedCookingDate)
@@ -250,7 +252,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
             Callback {
             override fun onFailure(call: Call, e: IOException) {
                 e.printStackTrace()
-                Log.d(TAG, "return is $e")
                 Handler(Looper.getMainLooper()).post{
                     Toast.makeText(requireActivity(),"The attempt to retrieve data from KungfuBBQ server failed with generalized error message: ${e.localizedMessage}",
                         Toast.LENGTH_LONG).show()
@@ -479,20 +480,17 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
             Toast.makeText(requireActivity(),"It was not possible to recover data from app`s database. Please restart the app.",Toast.LENGTH_LONG).show()
         }
     }
-    private fun refreshCalendarView(newDate:LocalDate,oldDate:LocalDate){
-        binding.calendarView.notifyDateChanged(newDate)
+    private fun refreshCalendarView(newDate:LocalDate?,oldDate:LocalDate?){
+        newDate?.let { binding.calendarView.notifyDateChanged(it) }
         oldDate?.let { binding.calendarView.notifyDateChanged(it) }
     }
 
 
     private fun showAlert(message:String,title:String){
         Handler(Looper.getMainLooper()).post{
-            var dialogBuilder = AlertDialog.Builder(activity)
+            var dialogBuilder = AlertDialog.Builder(requireContext())
             dialogBuilder.setMessage(message)
                 .setCancelable(true)
-                .setNegativeButton("Cancel",DialogInterface.OnClickListener{
-                        _, _ ->
-                })
                 .setPositiveButton("Ok", DialogInterface.OnClickListener{
                         _, _ ->
                 })

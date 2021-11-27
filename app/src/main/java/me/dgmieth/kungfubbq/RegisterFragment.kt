@@ -1,6 +1,6 @@
 package me.dgmieth.kungfubbq
 
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
@@ -77,7 +77,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var dialogBuilder = AlertDialog.Builder(activity)
+        var dialogBuilder = AlertDialog.Builder(requireContext())
         setHasOptionsMenu(true)
         dialogBuilder.setMessage("In order to register with Kungfu BBQ you need to have an INVITATION CODE. If you don't have one, please message Kungfu BBQ requesting one. IMPORTANT: on the message, you MUST send the e-mail you want to create the account with.")
             .setCancelable(false)

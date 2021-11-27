@@ -1,6 +1,6 @@
 package me.dgmieth.kungfubbq
 
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
@@ -130,7 +130,7 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
         if(args.cookingDateId != 0) {
             viewModel?.getUser()
         }else{
-            var dialogBuilder = AlertDialog.Builder(activity)
+            var dialogBuilder = AlertDialog.Builder(requireContext())
             dialogBuilder.setMessage("Communication with this apps's database failed. Please restart the app.")
                 .setCancelable(false)
                 .setPositiveButton("Ok", DialogInterface.OnClickListener{
@@ -258,7 +258,7 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
                     val json = JSONObject(response.body!!.string())
                     if(!json.getBoolean("hasErrors")){
                         Handler(Looper.getMainLooper()).post{
-                            var dialogBuilder = AlertDialog.Builder(activity)
+                            var dialogBuilder = AlertDialog.Builder(requireContext())
                             dialogBuilder.setMessage("${json.getString("msg")}")
                                 .setCancelable(false)
                                 .setPositiveButton("Ok", DialogInterface.OnClickListener{

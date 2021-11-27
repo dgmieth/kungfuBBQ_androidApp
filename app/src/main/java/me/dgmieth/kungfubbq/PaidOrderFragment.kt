@@ -1,6 +1,6 @@
 package me.dgmieth.kungfubbq
 
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
@@ -108,7 +108,7 @@ class PaidOrderFragment : Fragment(R.layout.fragment_paidorder),OnMapReadyCallba
         if(args.cookingDateId != 0) {
             viewModel?.getUser()
         }else{
-            var dialogBuilder = AlertDialog.Builder(activity)
+            var dialogBuilder = AlertDialog.Builder(requireContext())
             dialogBuilder.setMessage("Communication with this apps's database failed. Please restart the app.")
                 .setCancelable(false)
                 .setPositiveButton("Ok", DialogInterface.OnClickListener{

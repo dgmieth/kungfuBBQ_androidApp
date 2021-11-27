@@ -2,7 +2,7 @@ package me.dgmieth.kungfubbq
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
@@ -64,7 +64,7 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
         savedInstanceState: Bundle?
     ): View? {
         if(args.coookingDateId == 0 && args.orderId ==0 && args.userEmail == "noValue" && args.userId == 0 && args.userToken == "noValue") {
-            var dialogBuilder = AlertDialog.Builder(activity)
+            var dialogBuilder = AlertDialog.Builder(requireContext())
             dialogBuilder.setMessage("Communication with this apps's database failed. Please restart the app.")
                 .setCancelable(false)
                 .setPositiveButton("Ok", DialogInterface.OnClickListener{
@@ -182,9 +182,8 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
                     val json = JSONObject(response.body!!.string())
                     if(!json.getBoolean("hasErrors")){
-                        Log.d(TAG, "values are $json")
                         Handler(Looper.getMainLooper()).post{
-                            var dialogBuilder = AlertDialog.Builder(activity)
+                            var dialogBuilder = AlertDialog.Builder(requireContext())
                             dialogBuilder.setMessage("${json.getString("msg")}")
                                 .setCancelable(false)
                                 .setPositiveButton("Ok", DialogInterface.OnClickListener{

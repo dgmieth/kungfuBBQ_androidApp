@@ -108,6 +108,7 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
                 binding.updateOrderMealPrice.text = priceString
                 //updating total meal price
                 binding.updateOrderNumberOfMeals.value = cd.order[0].dishes[0].dishQuantity
+                selectedQtty = cd.order[0].dishes[0].dishQuantity
                 binding.updateOrderTotalPrice.text = "U$ ${String.format("%.2f",mealsSum*cd.order[0].dishes[0].dishQuantity)}"
             }
         },{

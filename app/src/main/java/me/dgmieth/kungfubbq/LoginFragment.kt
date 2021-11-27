@@ -1,6 +1,6 @@
 package me.dgmieth.kungfubbq
 
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
@@ -224,7 +224,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         textField.setPadding(60,0,60,0)
         textField.textSize  = 22.0F
 
-        var dialogBuilder = AlertDialog.Builder(activity)
+        var dialogBuilder = AlertDialog.Builder(requireContext())
         dialogBuilder.setMessage("Please inform you user account e-mail address and click on Send.")
             .setView(textField)
             .setCancelable(false)
@@ -238,6 +238,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 }
             })
             .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, _ -> print(dialog) })
+
         val alert = dialogBuilder.create()
         alert.setTitle("Password recovery")
         alert.show()

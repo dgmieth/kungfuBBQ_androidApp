@@ -1,6 +1,6 @@
 package me.dgmieth.kungfubbq
 
-import android.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
@@ -137,7 +137,7 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
         if(args.cookingDateId != 0) {
             viewModel?.getUser()
         }else{
-            var dialogBuilder = AlertDialog.Builder(activity)
+            var dialogBuilder = AlertDialog.Builder(requireContext())
             dialogBuilder.setMessage("Communication with this apps's database failed. Please restart the app.")
                 .setCancelable(false)
                 .setPositiveButton("Ok", DialogInterface.OnClickListener{
@@ -232,7 +232,7 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
     *   http requests
     * */
     private fun deleteOrderAlert() {
-        var dialogBuilder = AlertDialog.Builder(activity)
+        var dialogBuilder = AlertDialog.Builder(requireContext())
         dialogBuilder.setMessage("Are you sure you want to delete your order? This action cannot be undone.")
             .setCancelable(true)
             .setNegativeButton("Cancel", DialogInterface.OnClickListener{
@@ -274,7 +274,7 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
                     val json = JSONObject(response.body!!.string())
                     if(!json.getBoolean("hasErrors")){
                         Handler(Looper.getMainLooper()).post{
-                            var dialogBuilder = AlertDialog.Builder(activity)
+                            var dialogBuilder = AlertDialog.Builder(requireContext())
                             dialogBuilder.setMessage("${json.getString("msg")}")
                                 .setCancelable(false)
                                 .setPositiveButton("Ok", DialogInterface.OnClickListener{
