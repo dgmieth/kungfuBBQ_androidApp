@@ -69,4 +69,10 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("MainActivity","onDestroy called")
+        OneSignal.removeExternalUserId()
+    }
 }
