@@ -39,7 +39,7 @@
     <string name="userinfo_name_hint">John Doe</string>
     <string name="btn_send">Send</string>
     <string name="about_appname">Kungfu BBQ app</string>
-    <string name="about_version" >version 1.0</string>
+    <string name="about_version">version 1.0</string>
     <string name="avout_developedby">developed by dgmieth.me</string>
     <string name="about_copyritght">© 2021</string>
     <string name="about_visit">Please visit</string>
