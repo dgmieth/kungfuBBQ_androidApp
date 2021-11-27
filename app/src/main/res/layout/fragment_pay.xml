@@ -99,9 +99,9 @@
 
     <NumberPicker
         android:id="@+id/payCardYear"
-        android:layout_width="75dp"
+        android:layout_width="0dp"
         android:layout_height="100dp"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="75dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -110,7 +110,7 @@
 
     <NumberPicker
         android:id="@+id/payCardMonth"
-        android:layout_width="0dp"
+        android:layout_width="85dp"
         android:layout_height="100dp"
         android:layout_marginStart="75dp"
         android:layout_marginTop="4dp"
@@ -140,7 +140,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/btn_height"
             android:layout_weight="1"
-            android:backgroundTint="@color/secondary"
+            android:backgroundTint="@color/i_gray"
             android:fontFamily="@font/palatino"
             android:text="@string/btn_cancel"
             android:textAllCaps="false"
