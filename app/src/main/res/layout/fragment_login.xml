@@ -87,7 +87,7 @@
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="60dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/palatino"
         android:text="@string/textview_login_forgot_password"
@@ -101,11 +101,26 @@
         app:layout_constraintTop_toBottomOf="@+id/loginPassword" />
 
     <TextView
+        android:id="@+id/loginHintPassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/palatino"
+        android:text="* At least one CAPITAL letter and one number required"
+        android:textColor="@color/i_black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginPassword" />
+
+    <TextView
         android:id="@+id/loginRegisterLbl"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:fontFamily="@font/palatino"
         android:text="@string/textview_login_register"
@@ -113,18 +128,19 @@
         android:textColor="@color/i_black"
         android:textSize="@dimen/global_textsize"
         android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@+id/registerBtnView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginResetPassword" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
         android:id="@+id/registerBtnView"
         android:layout_width="0dp"
-        android:layout_height="68dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginRegisterLbl">
+        app:layout_constraintStart_toStartOf="parent">
 
         <Space
             android:layout_width="wrap_content"
@@ -159,12 +175,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="4dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginResetPassword">
 
         <Space
             android:layout_width="wrap_content"
@@ -225,6 +242,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical" />
+
     </FrameLayout>
 
 

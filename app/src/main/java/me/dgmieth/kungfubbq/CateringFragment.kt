@@ -64,8 +64,11 @@ class CateringFragment : Fragment(R.layout.fragment_catering) {
     private fun formatPhoneNumber() {
         if(binding.cateringPhone.text.toString().length==10){
             binding.cateringPhone.removeTextChangedListener(phoneTextWatcher)
-            var number = PhoneNumberUtils.formatNumber(binding.cateringPhone.text.toString(),"US")
-            binding.cateringPhone.setText(number)
+//            var number = PhoneNumberUtils.formatNumber(binding.cateringPhone.text.toString(),"US")
+//            binding.cateringPhone.setText(number)
+            var number = binding.cateringPhone.text.toString()
+            var formattedNumber = "(${number.subSequence(0,3)}) ${number.subSequence(3,6)}-${number.subSequence(6,number.length)}"
+            binding.cateringPhone.setText(formattedNumber)
             binding.cateringPhone.setSelection(binding.cateringPhone.text.toString().length)
             binding.cateringPhone.addTextChangedListener(phoneTextWatcher)
         }else{

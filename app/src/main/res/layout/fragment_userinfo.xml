@@ -132,6 +132,8 @@
         android:layout_marginTop="6dp"
         android:layout_marginEnd="16dp"
         android:background="@android:color/transparent"
+        android:digits="() 0123456789-"
+        android:imeOptions="actionNext"
         android:enabled="false"
         android:fontFamily="@font/palatino"
         android:hint="(001) 123-4567"

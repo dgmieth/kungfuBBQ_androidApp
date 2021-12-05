@@ -119,6 +119,7 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
         }
         binding.userInfoCancelBtn.setOnClickListener {
             showSaveBtn(false)
+            userInfo?.let { it1 -> setUIElements(it1) }
         }
         binding.userInfoSaveBtn.setOnClickListener {
             if(validateInfo()){
@@ -155,7 +156,15 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
     // validation
     private fun validateInfo():Boolean{
         if(binding.userInfoPhone.text.toString().isEmpty()){
-            return true
+            Handler(Looper.getMainLooper()).post{
+                Toast.makeText(requireActivity(),"You must inform a valid phone number.",Toast.LENGTH_LONG).show()
+            }
+            return false
+        }else if(binding.userInfoName.text.toString().isEmpty()){
+            Handler(Looper.getMainLooper()).post{
+                Toast.makeText(requireActivity(),"You must inform your name.",Toast.LENGTH_LONG).show()
+            }
+            return false
         }else if(noFormatPhoneNbm==null){
             Handler(Looper.getMainLooper()).post{
                 Toast.makeText(requireActivity(),"Incorrect phone number",Toast.LENGTH_LONG).show()
@@ -234,8 +243,11 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
         if(binding.userInfoPhone.text.toString().length==10){
             binding.userInfoPhone.removeTextChangedListener(phoneTextWatcher)
             noFormatPhoneNbm = binding.userInfoPhone.text.toString()
-            var number = PhoneNumberUtils.formatNumber(binding.userInfoPhone.text.toString(),"US")
-            binding.userInfoPhone.setText(number)
+//            var number = PhoneNumberUtils.formatNumber(binding.userInfoPhone.text.toString(),"US")
+//            binding.userInfoPhone.setText(number)
+            var number = binding.userInfoPhone.text.toString()
+            var formattedNumber = "(${number.subSequence(0,3)}) ${number.subSequence(3,6)}-${number.subSequence(6,number.length)}"
+            binding.userInfoPhone.setText(formattedNumber)
             binding.userInfoPhone.setSelection(binding.userInfoPhone.text.toString().length)
             binding.userInfoPhone.addTextChangedListener(phoneTextWatcher)
         }else{
@@ -278,8 +290,11 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
             binding.userInfoMemberSince.text = user.user.memberSince
             binding.userInfoName.setText(user.user.name)
             if(user.user.phoneNumber.toString().length==10){
-                var number = PhoneNumberUtils.formatNumber(user.user.phoneNumber.toString(),"US")
-                binding.userInfoPhone.setText(number)
+//                var number = PhoneNumberUtils.formatNumber(user.user.phoneNumber.toString(),"US")
+//                binding.userInfoPhone.setText(number)
+                var number = user.user.phoneNumber.toString()
+                var formattedNumber = "(${number.subSequence(0,3)}) ${number.subSequence(3,6)}-${number.subSequence(6,number.length)}"
+                binding.userInfoPhone.setText(formattedNumber)
                 noFormatPhoneNbm = user.user.phoneNumber.toString()
             }else{
                 binding.userInfoPhone.setText(user.user.phoneNumber)

@@ -3,12 +3,12 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="btn_login">Log In</string>
-    <string name="btn_catering">Need catering?</string>
+    <string name="btn_catering">Need Catering?</string>
     <string name="menu_btn_aboutapp">About</string>
     <string name="menu_btn_userInfo">User info</string>
     <string name="btn_calendar">Calendar</string>
     <string name="edittext_login_username">johndoe@mail.com</string>
-    <string name="edittext_login_password">8 alphanumerical characters</string>
+    <string name="edittext_login_password">8 characters only</string>
     <string name="btn_cancel">Cancel</string>
     <string name="menu_btn_logout">Log out</string>
     <string name="textview_login_email">Inform your e-mail:</string>
@@ -78,5 +78,11 @@
     <string name="edittext_currentpassword">Current password</string>
     <string name="john_doe">John Doe</string>
     <string name="sad_face">Sad face</string>
+    <string name="btn_back"><![CDATA[<< Back]]></string>
+    <string name="next_btn"><![CDATA[Next >>]]></string>
+    <string name="register_name">* Inform your name:</string>
+    <string name="register_phone">* Inform your phone number:</string>
+    <string name="register_facebook">** Facebook name:</string>
+    <string name="register_instagram">** Instagram name:</string>
 
 </resources>

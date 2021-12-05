@@ -5,8 +5,14 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.telephony.PhoneNumberUtils
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.*
+import android.view.animation.AlphaAnimation
+import android.view.animation.AnimationSet
+import android.view.animation.DecelerateInterpolator
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
@@ -35,6 +41,16 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private var viewModel: RoomViewModel? = null
     private val bag = CompositeDisposable()
     private var userId = 0
+
+    private var noFormatPhoneNbm : String? = null
+
+    private val phoneTextWatcher = object: TextWatcher {
+        override fun afterTextChanged(s: Editable?) {}
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            formatPhoneNumber()
+        }
+    }
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
@@ -83,15 +99,41 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             .setCancelable(false)
             .setPositiveButton("ok", DialogInterface.OnClickListener{
                     _, _ ->    })
+        enableHideSecondViewButtons(false)
         val alert = dialogBuilder.create()
         alert.setTitle("Invitation code needed")
         alert.show()
         //setting click listeners
+        binding.registerPhone.addTextChangedListener(phoneTextWatcher)
         binding.registerCancelBtn.setOnClickListener {
             requireActivity().onBackPressed()
         }
         binding.registerRegisterBtn.setOnClickListener {
-            registerUser()
+            Log.d(TAG,"registerClicked")
+            if(validateInfo()){
+                registerUser()
+            }
+        }
+        binding.registerBackBtn.setOnClickListener{
+            binding.personalInfo.animate().withEndAction{
+                enableHideSecondViewButtons(false)
+                binding.personalInfo.visibility = View.INVISIBLE
+            }.alpha(0f).duration = 300
+        }
+        binding.registerNextBtn.setOnClickListener{
+            Log.d(TAG, "nextClick")
+            if(!binding.registerInvitationCodeEditText.text.toString().isNullOrEmpty() &&
+                !binding.registerConfirmPasswordEditText.text.toString().isNullOrEmpty() &&
+                !binding.registerPasswordEditText.text.toString().isNullOrEmpty() &&
+                !binding.registerEmailEditText.text.toString().isNullOrEmpty()){
+                binding.personalInfo.visibility = View.VISIBLE
+                binding.personalInfo.animate().alpha(1f).duration = 300
+                enableHideSecondViewButtons(true)
+            }else{
+                showSpinner(false)
+                Toast.makeText(requireActivity(),"You must inform your invitation code, your email, your password and confirm your password.", Toast.LENGTH_LONG).show()
+            }
+
         }
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -106,16 +148,21 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     //========================================================
     //EVENT LISTENER FOR BUTTONS
     private fun registerUser() {
+        var face = if(binding.registerFacebook.text.toString().isNullOrEmpty()) "none" else binding.registerFacebook.text.toString()
+        var inst = if(binding.registerInstagram.text.toString().isNullOrEmpty()) "none" else binding.registerInstagram.text.toString()
+
         showSpinner(true)
-        if(!binding.registerInvitationCodeEditText.text.toString().isNullOrEmpty() &&
-                !binding.registerConfirmPasswordEditText.text.toString().isNullOrEmpty() &&
-                !binding.registerPasswordEditText.text.toString().isNullOrEmpty() &&
-                !binding.registerEmailEditText.text.toString().isNullOrEmpty()){
+        if(!binding.registerName.text.toString().isNullOrEmpty() &&
+                !binding.registerPhone.text.toString().isNullOrEmpty() && noFormatPhoneNbm != null){
             val body = FormBody.Builder()
                 .add("code",binding.registerInvitationCodeEditText.text.toString())
                 .add("email",binding.registerEmailEditText.text.toString())
                 .add("password",binding.registerPasswordEditText.text.toString())
                 .add("confirmPassword",binding.registerConfirmPasswordEditText.text.toString())
+                .add("phoneNumber",noFormatPhoneNbm.toString())
+                .add("name",binding.registerName.text.toString())
+                .add("facebookName",face)
+                .add("instagramName",inst)
                 .add("mobileOS","android")
                 .build()
             HttpCtrl.shared.newCall(HttpCtrl.post(getString(R.string.kungfuServerUrl),"/login/register",body)).enqueue(object :
@@ -160,7 +207,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 }
             })
         }else{
-            Toast.makeText(requireActivity(),"You must inform your invitation code, your email, your password and confirm your password.", Toast.LENGTH_LONG).show()
+            showSpinner(false)
+            Toast.makeText(requireActivity(),"You must inform your name and a valid phone number.", Toast.LENGTH_LONG).show()
         }
     }
     //===============================================
@@ -172,5 +220,50 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 else -> View.INVISIBLE
             }
         }
+    }
+    private fun formatPhoneNumber() {
+        if(binding.registerPhone.text.toString().length==10){
+            binding.registerPhone.removeTextChangedListener(phoneTextWatcher)
+            noFormatPhoneNbm = binding.registerPhone.text.toString()
+            var number = binding.registerPhone.text.toString()
+            var formattedNumber = "(${number.subSequence(0,3)}) ${number.subSequence(3,6)}-${number.subSequence(6,number.length)}"
+            binding.registerPhone.setText(formattedNumber)
+            binding.registerPhone.setSelection(binding.registerPhone.text.toString().length)
+            binding.registerPhone.addTextChangedListener(phoneTextWatcher)
+        }else{
+            var text = binding.registerPhone.text.toString().replace("""[^0-9]""".toRegex(),"")
+            noFormatPhoneNbm = null
+            binding.registerPhone.removeTextChangedListener(phoneTextWatcher)
+            binding.registerPhone.setText(text)
+            binding.registerPhone.setSelection(binding.registerPhone.text.toString().length)
+            binding.registerPhone.addTextChangedListener(phoneTextWatcher)
+        }
+    }
+    private fun validateInfo():Boolean{
+        when {
+            binding.registerName.text.toString().isEmpty() -> {
+                Handler(Looper.getMainLooper()).post{
+                    Toast.makeText(requireActivity(),"You must inform your name.",Toast.LENGTH_LONG).show()
+                }
+                return false
+            }
+            binding.registerPhone.text.toString().isEmpty() -> {
+                Handler(Looper.getMainLooper()).post{
+                    Toast.makeText(requireActivity(),"You must inform a valid phone number.",Toast.LENGTH_LONG).show()
+                }
+                return false
+            }
+            noFormatPhoneNbm==null -> {
+                Handler(Looper.getMainLooper()).post{
+                    Toast.makeText(requireActivity(),"Incorrect phone number",Toast.LENGTH_LONG).show()
+                }
+                return false
+            }
+            else -> return true
+        }
+    }
+    private fun enableHideSecondViewButtons(enable:Boolean){
+        binding.registerBackBtn.isEnabled = enable
+        binding.registerRegisterBtn.isEnabled = enable
     }
 }
