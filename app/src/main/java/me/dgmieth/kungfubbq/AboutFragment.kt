@@ -3,6 +3,7 @@ package me.dgmieth.kungfubbq
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import me.dgmieth.kungfubbq.databinding.FragmentAboutBinding
@@ -26,6 +27,7 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.aboutVersion.text = "Version ${BuildConfig.VERSION_NAME}"
         binding.aboutLink.setOnClickListener {
             val url = "https://dgmieth.me"
             val i = Intent(Intent.ACTION_VIEW)
