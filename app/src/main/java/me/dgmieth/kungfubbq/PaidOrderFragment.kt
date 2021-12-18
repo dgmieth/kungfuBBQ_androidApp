@@ -31,6 +31,7 @@ class PaidOrderFragment : Fragment(R.layout.fragment_paidorder),OnMapReadyCallba
     private var viewModel: RoomViewModel? = null
     private var cookingDate : CookingDateAndCookingDateDishesWithOrder? = null
     private var userPaidOrder : UserAndSocialMedia? = null
+    private var btnClick = true
 
     private var bag = CompositeDisposable()
 
@@ -158,6 +159,11 @@ class PaidOrderFragment : Fragment(R.layout.fragment_paidorder),OnMapReadyCallba
     override fun onResume() {
         super.onResume()
         binding.paidOrderLocationMap.onResume()
+        if(!btnClick){
+            val action = HomeFragmentDirections.callHome(true)
+            findNavController().navigate(action)
+        }
+        btnClick = false
     }
     override fun onPause() {
         super.onPause()

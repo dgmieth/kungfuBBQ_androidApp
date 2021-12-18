@@ -49,6 +49,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
 
     private var _binding: FragmentCalendarBinding? = null
     private val binding get() = _binding!!
+    private var btnClick = true
 
     private var viewModel: RoomViewModel? = null
     private var bag = CompositeDisposable()
@@ -217,18 +218,22 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
         binding.calendarView.scrollToDate(selectedDate)
         //setting onClickListener
         binding.calendarPreOrder.setOnClickListener {
+            btnClick = true
             val action = CalendarFragmentDirections.callPreOrder(selectedCookingDate)
             findNavController().navigate(action)
         }
         binding.calendarUpdateOrder.setOnClickListener {
+            btnClick = true
             val action = CalendarFragmentDirections.callUpdateOrder(selectedCookingDate)
             findNavController().navigate(action)
         }
         binding.calendarPayOrder.setOnClickListener {
+            btnClick = true
             val action = CalendarFragmentDirections.callPayOrder(selectedCookingDate)
             findNavController().navigate(action)
         }
         binding.calendarPaidOrder.setOnClickListener {
+            btnClick = true
             val action = CalendarFragmentDirections.callPaidOrder(selectedCookingDate)
             findNavController().navigate(action)
         }
@@ -236,6 +241,15 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         menu.clear()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(!btnClick){
+            val action = HomeFragmentDirections.callHome(true)
+            findNavController().navigate(action)
+        }
+        btnClick = false
     }
     /*
      * HTTP request

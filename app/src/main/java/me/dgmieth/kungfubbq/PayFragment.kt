@@ -31,6 +31,7 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
     private val args : PayFragmentArgs by navArgs()
     private var cardNumber : String? = null
     private var cardCode : String? = null
+    private var btnClick = true
     var yearsFirst = arrayListOf<String>()
     private val cardNumberWatcher = object: TextWatcher {
         override fun afterTextChanged(s: Editable?) { }
@@ -117,6 +118,14 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         menu.clear()
+    }
+    override fun onResume() {
+        super.onResume()
+        if(!btnClick){
+            val action = HomeFragmentDirections.callHome(true)
+            findNavController().navigate(action)
+        }
+        btnClick = false
     }
     private fun formatPhoneNumber() {
         if(binding.payCardNumber.text.toString().length==16){
