@@ -39,7 +39,6 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
     private var viewModel: RoomViewModel? = null
     private var cookingDate : CookingDateAndCookingDateDishesWithOrder? = null
     private var userPayOrder : UserAndSocialMedia? = null
-    private var btnClick = true
 
     private var bag = CompositeDisposable()
 
@@ -164,7 +163,6 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
             deleteOrderAlert()
         }
         binding.payOrderPayBtn.setOnClickListener {
-            btnClick = true
             val action = PayOrderFragmentDirections.callPay(
                 userPayOrder!!.user.email,
                 userPayOrder!!.user.userId,
@@ -187,11 +185,6 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
     override fun onResume() {
         super.onResume()
         binding.payOrderLocationMap.onResume()
-        if(!btnClick){
-            val action = HomeFragmentDirections.callHome(true)
-            findNavController().navigate(action)
-        }
-        btnClick = false
     }
     override fun onPause() {
         super.onPause()

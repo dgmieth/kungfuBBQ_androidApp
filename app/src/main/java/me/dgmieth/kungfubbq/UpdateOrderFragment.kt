@@ -42,7 +42,6 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
     private var userUpdateOrder : UserAndSocialMedia? = null
     private var selectedQtty = 1
     private var editItemBtn : MenuItem? = null
-    private var btnClick = true
 
     private var bag = CompositeDisposable()
 
@@ -190,11 +189,6 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
     override fun onResume() {
         super.onResume()
         binding.updateOrderLocationMap.onResume()
-        if(!btnClick){
-            val action = HomeFragmentDirections.callHome(true)
-            findNavController().navigate(action)
-        }
-        btnClick = false
     }
     override fun onPause() {
         super.onPause()
