@@ -21,7 +21,7 @@ android {
         applicationId "me.dgmieth.kungfubbq"
         minSdk 23
         targetSdk 30
-        versionCode 7
+        versionCode 8
         //version "1.0" -> using kotlin synthetics
         //versionName "1.1" -> using viewBiding
         //versionName "1.2" -> skipped
@@ -29,7 +29,8 @@ android {
         //versionName "1.4" //debugging code deleted
         //versionName "1.5" //recyclerView calendar implemented - minimun API version set to 23 - Android Marshmallow
         //versionName "1.6" //splashScreen -- icons for notifications -- and other xml attributes
-        versionName "1.7" //new registration flow
+        //versionName "1.7" //new registration flow
+        versionName "1.8" //go to home when fragment resumes if it wasnt called by a button of the UI
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

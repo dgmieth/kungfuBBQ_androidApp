@@ -52,6 +52,8 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
 
     private var viewModel: RoomViewModel? = null
     private var bag = CompositeDisposable()
+    private var value = 0
+    private var btnClick = true
 
     private var selectedDate = LocalDate.now()
     private var todayDate = LocalDate.now()
@@ -60,12 +62,14 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        Log.d(TAG,"onCreate called")
     }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d(TAG,"onCreateView called")
         viewModel = ViewModelProviders.of(this).get(RoomViewModel::class.java)
         viewModel?.getDbInstance(KungfuBBQRoomDatabase.getInstance(requireActivity()))
         //subscribing to returnMsg
@@ -135,6 +139,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG,"onViewCreated called")
         showSpinner(true)
         binding.calendarMenu.movementMethod = ScrollingMovementMethod()
 
@@ -217,18 +222,22 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
         binding.calendarView.scrollToDate(selectedDate)
         //setting onClickListener
         binding.calendarPreOrder.setOnClickListener {
+            btnClick = true
             val action = CalendarFragmentDirections.callPreOrder(selectedCookingDate)
             findNavController().navigate(action)
         }
         binding.calendarUpdateOrder.setOnClickListener {
+            btnClick = true
             val action = CalendarFragmentDirections.callUpdateOrder(selectedCookingDate)
             findNavController().navigate(action)
         }
         binding.calendarPayOrder.setOnClickListener {
+            btnClick = true
             val action = CalendarFragmentDirections.callPayOrder(selectedCookingDate)
             findNavController().navigate(action)
         }
         binding.calendarPaidOrder.setOnClickListener {
+            btnClick = true
             val action = CalendarFragmentDirections.callPaidOrder(selectedCookingDate)
             findNavController().navigate(action)
         }
@@ -236,6 +245,15 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         menu.clear()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(!btnClick){
+            val action = HomeFragmentDirections.callHome(true)
+            findNavController().navigate(action)
+        }
+        btnClick = false
     }
     /*
      * HTTP request
@@ -431,6 +449,12 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                         /*create user alert*/
                         showAlert("Your order did not make it to this list, but you are on the waiting list for drop out orders. You'll receive a notification if your order gets onto this list",
                                 "Order status")
+                        showOrderBtns(
+                            placeOrder = false,
+                            updateOrder = false,
+                            payOrder = false,
+                            paidOrder = false
+                        )
                     }
                     if (arrayListOf<Int>(5,8,9,10,11).contains(order.orderStatusId) ){ /*5-Confirmed/paid by user 8-Waiting order pickup alert 9- Waiting pickup 10- Delivered 11-Closed  */
                         /*show checkout pair order btn*/
@@ -445,16 +469,34 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                         /*create user alert*/
                         showAlert("You cancelled this order if you wish to order food from us, please choose another available cooking date",
                             "Order status")
+                        showOrderBtns(
+                            placeOrder = false,
+                            updateOrder = false,
+                            payOrder = false,
+                            paidOrder = false
+                        )
                     }
                     if (order.orderStatusId == 7 ){ /*Not made to this cookingCalendar date list*/
                         /*create user alert*/
                         showAlert("We are sorry! Unfortunately your order did not make to the final list on this cooking date. Please, order from us again on another available cooking date",
                             "Order status")
+                        showOrderBtns(
+                            placeOrder = false,
+                            updateOrder = false,
+                            payOrder = false,
+                            paidOrder = false
+                        )
                     }
                     if (order.orderStatusId == 12 ){ /*The cooking calendar register was excluded by the database administrator, application user or routine*/
                         /*create user alert*/
                         showAlert("You missed the time you had to confirm the order. Please order again from another available cooking date.",
                             "Order status")
+                        showOrderBtns(
+                            placeOrder = false,
+                            updateOrder = false,
+                            payOrder = false,
+                            paidOrder = false
+                        )
                     }
                 }else{
                     Log.d(TAG,"order is emtpy")

@@ -43,6 +43,7 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
     private var cookingDate : CookingDateAndCookingDateDishesWithOrder? = null
     private var userPreOrder : UserAndSocialMedia? = null
     private var selectedQtty = 1
+    private var btnClick = true
 
     private var bag = CompositeDisposable()
 
@@ -180,6 +181,11 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
     override fun onResume() {
         super.onResume()
         binding.preOrderLocationMap.onResume()
+        if(!btnClick){
+            val action = HomeFragmentDirections.callHome(true)
+            findNavController().navigate(action)
+        }
+        btnClick = false
     }
     override fun onPause() {
         super.onPause()
