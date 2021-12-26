@@ -69,14 +69,17 @@
 <!--        app:mcv_titleAnimationOrientation="horizontal"-->
 <!--        app:mcv_weekDayTextAppearance="@style/WeekdaysLabelAndFont" />-->
     <ScrollView
+        android:id="@+id/calendarScroll"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:fillViewport="true">
 
         <LinearLayout
+            android:id="@+id/calendarScrolInnerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -92,7 +95,8 @@
                 app:cv_monthHeaderResource="@layout/calendar_month_header_layout"
                 app:cv_orientation="horizontal"
                 app:cv_scrollMode="paged"
-                tools:ignore="SpeakableTextPresentCheck" />
+                tools:ignore="SpeakableTextPresentCheck"
+                android:layout_weight="1"/>
         </LinearLayout>
     </ScrollView>
 

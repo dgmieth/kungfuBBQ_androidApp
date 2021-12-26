@@ -138,7 +138,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
         super.onViewCreated(view, savedInstanceState)
         showSpinner(true)
         binding.calendarMenu.movementMethod = ScrollingMovementMethod()
-
         //setting min date in calendar
         class MonthViewContainer(view: View) : ViewContainer(view) {
             val bind = CalendarMonthHeaderLayoutBinding.bind(view)
@@ -186,21 +185,21 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                     return
                 }
                 bind.selectionCircle.visibility = View.INVISIBLE
-                if(day.date == todayDate){
-                    bind.todayCircle.visibility = View.VISIBLE
-                    bind.todayDay.setTextColor(Color.BLACK)
-                } else {
-                    if (day.owner == DayOwner.THIS_MONTH) {
-                        if (day.date < todayDate) {
-                            bind.todayDay.setTextColor(Color.GRAY)
-                        }else {
-                            bind.todayDay.setTextColor(Color.WHITE)
-                        }
-                    } else {
+                bind.todayCircle.visibility = View.INVISIBLE
+                bind.todayDay.setTextColor(Color.BLACK)
+
+                if (day.owner == DayOwner.THIS_MONTH) {
+                    if(day.date == todayDate){
+                        bind.todayCircle.visibility = View.VISIBLE
                         bind.todayDay.setTextColor(Color.BLACK)
-                        bind.kungfuBBQImg.visibility = View.INVISIBLE
+                    }else if (day.date < todayDate) {
+                        bind.todayDay.setTextColor(Color.GRAY)
+                    }else {
+                        bind.todayDay.setTextColor(Color.WHITE)
                     }
-                    bind.todayCircle.isVisible = false
+                } else {
+                    bind.todayDay.setTextColor(Color.BLACK)
+                    bind.kungfuBBQImg.visibility = View.INVISIBLE
                 }
             }
         }
