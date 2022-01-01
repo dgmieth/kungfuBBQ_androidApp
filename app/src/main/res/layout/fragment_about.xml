@@ -5,8 +5,7 @@
     android:id="@+id/aboutFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/i_yellow"
-    android:backgroundTint="@color/i_yellow"
+    android:background="@color/lessDarkBlue"
     android:gravity="center"
     tools:context=".AboutFragment">
 
@@ -32,7 +31,7 @@
             android:gravity="center"
             android:text="@string/about_appname"
             android:textAlignment="center"
-            android:textColor="@color/i_black"
+            android:textColor="@color/white"
             android:textSize="@dimen/global_textsize"
             android:textStyle="bold" />
 
@@ -44,7 +43,7 @@
             android:gravity="center"
             android:text="@string/about_version"
             android:textAlignment="center"
-            android:textColor="@color/i_black"
+            android:textColor="@color/white"
             android:textSize="@dimen/global_textsize"
             android:textStyle="bold" />
 
@@ -56,7 +55,7 @@
             android:gravity="center"
             android:text="@string/avout_developedby"
             android:textAlignment="center"
-            android:textColor="@color/i_black"
+            android:textColor="@color/white"
             android:textSize="@dimen/global_textsize"
             android:textStyle="bold" />
 
@@ -68,7 +67,7 @@
             android:gravity="center"
             android:text="@string/about_copyritght"
             android:textAlignment="center"
-            android:textColor="@color/i_black"
+            android:textColor="@color/white"
             android:textSize="@dimen/global_textsize"
             android:textStyle="bold" />
 
@@ -80,7 +79,7 @@
             android:gravity="center"
             android:text="@string/about_visit"
             android:textAlignment="center"
-            android:textColor="@color/i_black"
+            android:textColor="@color/white"
             android:textSize="@dimen/global_textsize"
             android:textStyle="bold" />
 
@@ -92,7 +91,7 @@
             android:gravity="center"
             android:text="@string/about_link"
             android:textAlignment="center"
-            android:textColor="@color/colorForLink"
+            android:textColor="@color/white"
             android:textSize="@dimen/global_textsize" />
 
     </LinearLayout>

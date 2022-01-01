@@ -5,8 +5,7 @@
     android:id="@+id/preOrderFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/i_yellow"
-    android:backgroundTint="@color/i_yellow"
+    android:background="@color/lessDarkBlue"
     android:gravity="center"
     tools:context=".UpdateOrderFragment">
 
@@ -18,7 +17,7 @@
         android:layout_marginTop="4dp"
         android:fontFamily="@font/palatino"
         android:text="@string/preorder_date_lbl"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +31,7 @@
         android:layout_marginTop="4dp"
         android:fontFamily="@font/palatino"
         android:text="@string/preorder_status_lbl"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +45,7 @@
         android:layout_marginTop="16dp"
         android:fontFamily="@font/palatino"
         android:text="@string/preorder_menu_lbl"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +59,7 @@
         android:layout_marginTop="50dp"
         android:fontFamily="@font/palatino"
         android:text="@string/preorder_location_lbl"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +73,7 @@
         android:layout_marginTop="26dp"
         android:fontFamily="@font/palatino"
         android:text="@string/preorder_numberofmeals_lbl"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -88,7 +87,7 @@
         android:layout_marginTop="4dp"
         android:fontFamily="@font/palatino"
         android:text="@string/preorder_mealprice_lbl"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -102,7 +101,7 @@
         android:layout_marginTop="4dp"
         android:fontFamily="@font/palatino"
         android:text="@string/preorder_totalprice_lbl"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -117,7 +116,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/palatino"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/updateOrderDateLbl"
@@ -132,7 +131,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/palatino"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/updateOrderMealPriceLbl"
@@ -147,7 +146,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/palatino"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/updateOrderTotalPriceLbl"
@@ -163,7 +162,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/palatino"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/updateOrderLocationLbl"
@@ -171,7 +170,6 @@
         tools:text="Jun 16th 2021" />
 
     <NumberPicker
-        android:theme="@style/AppTheme.Picker"
         android:id="@+id/updateOrderNumberOfMeals"
         android:layout_width="100dp"
         android:layout_height="75dp"
@@ -179,6 +177,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:descendantFocusability="blocksDescendants"
+        android:theme="@style/picker"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/updateOrderNumberOfMealsLbl"
         app:layout_constraintTop_toBottomOf="@+id/updateOrderLocationMap" />
@@ -193,7 +192,7 @@
         android:fontFamily="@font/palatino"
         android:lines="2"
         android:textAlignment="viewEnd"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/updateOrderStatusLbl"
@@ -221,25 +220,25 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/updateOrderMenuLbl"
         app:layout_constraintTop_toBottomOf="@+id/updateOrderStatus" />
-<!--    <EditText-->
-<!--        android:id="@+id/updateOrderMenu"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        android:layout_marginTop="4dp"-->
-<!--        android:layout_marginEnd="8dp"-->
-<!--        android:background="@color/white"-->
-<!--        android:ems="10"-->
-<!--        android:gravity="start|top"-->
-<!--        android:inputType="textMultiLine"-->
-<!--        android:lines="3"-->
-<!--        android:maxLines="5"-->
-<!--        android:minLines="3"-->
-<!--        android:text="teste"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="1.0"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/updateOrderMenuLbl"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/updateOrderStatus" />-->
+    <!--    <EditText-->
+    <!--        android:id="@+id/updateOrderMenu"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="8dp"-->
+    <!--        android:layout_marginTop="4dp"-->
+    <!--        android:layout_marginEnd="8dp"-->
+    <!--        android:background="@color/white"-->
+    <!--        android:ems="10"-->
+    <!--        android:gravity="start|top"-->
+    <!--        android:inputType="textMultiLine"-->
+    <!--        android:lines="3"-->
+    <!--        android:maxLines="5"-->
+    <!--        android:minLines="3"-->
+    <!--        android:text="teste"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="1.0"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/updateOrderMenuLbl"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/updateOrderStatus" />-->
 
     <Button
         android:id="@+id/updateOrderDeleteOrder"
@@ -248,7 +247,7 @@
         android:layout_marginStart="48dp"
         android:layout_marginEnd="48dp"
         android:layout_marginBottom="4dp"
-        android:background="@color/i_gray"
+        android:background="@drawable/button_negative_action"
         android:fontFamily="@font/palatino"
         android:text="@string/btn_deleteorder"
         android:textAllCaps="false"
@@ -284,7 +283,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/btn_height"
             android:layout_weight="1"
-            android:background="@color/i_gray"
+            android:background="@drawable/button_negative_action"
             android:fontFamily="@font/palatino"
             android:text="@string/btn_cancel"
             android:textAllCaps="false"
@@ -302,11 +301,11 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/btn_height"
             android:layout_weight="1"
-            android:background="@color/i_reda"
+            android:background="@drawable/button_affimative_action"
             android:fontFamily="@font/palatino"
             android:text="@string/btn_updateorder"
             android:textAllCaps="false"
-            android:textColor="@color/white"
+            android:textColor="@color/i_black"
             android:textSize="@dimen/btn_text_size"
             android:textStyle="bold" />
 
@@ -332,7 +331,7 @@
         android:id="@+id/updateOrderSpinerLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#7EF5DF27"
+        android:background="@color/spinnerBlue"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -341,7 +340,7 @@
 
         <ProgressBar
             android:id="@+id/loginProgressBar"
-            style="?android:attr/progressBarStyle"
+            android:background="@drawable/spiner_ic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical" />

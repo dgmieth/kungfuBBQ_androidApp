@@ -5,8 +5,7 @@
     android:id="@+id/cateringFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/i_yellow"
-    android:backgroundTint="@color/i_yellow"
+    android:background="@color/lessDarkBlue"
     android:gravity="center"
     tools:context=".CateringFragment">
 
@@ -21,7 +20,7 @@
         android:fontFamily="@font/palatino"
         android:text="@string/catering_textview_explanatorytext"
         android:textAlignment="center"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="17sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,7 +35,7 @@
         android:layout_marginTop="15dp"
         android:fontFamily="@font/palatino"
         android:text="@string/userinfo_name_label"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +49,7 @@
         android:layout_marginTop="26dp"
         android:fontFamily="@font/palatino"
         android:text="@string/userinfo_email"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,7 +63,7 @@
         android:layout_marginTop="26dp"
         android:fontFamily="@font/palatino"
         android:text="@string/userinfo_phonenumber_label"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -76,11 +75,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="6dp"
-        android:fontFamily="@font/palatino"
         android:digits="() 0123456789-"
+        android:fontFamily="@font/palatino"
         android:imeOptions="actionNext"
         android:text="@string/catering_description_hint"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -120,6 +119,7 @@
         android:background="@color/white"
         android:ems="10"
         android:hint="@string/edittext_login_username"
+        android:importantForAutofill="no"
         android:inputType="textWebEmailAddress"
         android:minHeight="48dp"
         android:paddingStart="8dp"
@@ -128,8 +128,7 @@
         android:textSize="@dimen/global_textsize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cateringEmailLbl"
-        app:layout_constraintTop_toBottomOf="@+id/cateringName"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/cateringName" />
 
     <EditText
         android:id="@+id/cateringPhone"
@@ -141,6 +140,7 @@
         android:background="@color/white"
         android:ems="10"
         android:hint="@string/userinfo_phonenumber_hint"
+        android:importantForAutofill="no"
         android:inputType="phone"
         android:maxLength="14"
         android:minHeight="48dp"
@@ -150,8 +150,7 @@
         android:textSize="@dimen/global_textsize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cateringPhoneLbl"
-        app:layout_constraintTop_toBottomOf="@+id/cateringEmail"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toBottomOf="@+id/cateringEmail" />
 
     <EditText
         android:id="@+id/cateringDescription"
@@ -165,6 +164,7 @@
         android:ems="10"
         android:fontFamily="@font/palatino"
         android:gravity="top|start"
+        android:importantForAutofill="no"
         android:inputType="textMultiLine"
         android:maxLines="100"
         android:minLines="1"
@@ -176,8 +176,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cateringDescriptionLbl"
-        tools:ignore="SpeakableTextPresentCheck"
-        android:importantForAutofill="no" />
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <LinearLayout
         android:id="@+id/cateringButtons"
@@ -201,7 +200,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/btn_height"
             android:layout_weight="1"
-            android:background="@color/i_gray"
+            android:background="@drawable/button_negative_action"
             android:fontFamily="@font/palatino"
             android:text="@string/btn_cancel"
             android:textAllCaps="false"
@@ -219,11 +218,11 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/btn_height"
             android:layout_weight="1"
-            android:background="@color/i_reda"
+            android:background="@drawable/button_affimative_action"
             android:fontFamily="@font/palatino"
             android:text="@string/btn_send"
             android:textAllCaps="false"
-            android:textColor="@color/white"
+            android:textColor="@color/i_black"
             android:textSize="@dimen/btn_text_size"
             android:textStyle="bold" />
 
@@ -232,11 +231,12 @@
             android:layout_height="wrap_content"
             android:layout_weight=".33" />
     </LinearLayout>
+
     <FrameLayout
         android:id="@+id/cateringSpinerLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#7EF5DF27"
+        android:background="@color/spinnerBlue"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -245,7 +245,7 @@
 
         <ProgressBar
             android:id="@+id/cateringProgressBar"
-            style="?android:attr/progressBarStyle"
+            android:background="@drawable/spiner_ic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical" />

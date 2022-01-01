@@ -28,4 +28,16 @@
     <color name="textEditBackgroundColor">#F1F3F3</color>
     <color name="textEditHint">#8a8686</color>
     <color name="colorForLink">#0f5dff</color>
+    <!--new logo theme coloer-->
+    <color name="darkerBlue">#262E40</color>
+    <color name="lessDarkBlue">#313B50</color>
+    <color name="logoRed">#D0260D</color>
+    <color name="logoRose">#D69892</color>
+    <color name="logoBrown">#592A0B</color>
+    <color name="logoOrange">#D08E20</color>
+    <color name="logoYellow">#F4E91D</color>
+    <color name="spinnerBlue">#70313B50</color>
+    <color name="homeButtons">#B3000000</color>
+    <color name="blockedTextInputsHintColor">#AAAAAA</color>
+    <color name="notBlockedTextInputsHintColor">#808080</color>
 </resources>

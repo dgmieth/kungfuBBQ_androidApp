@@ -3,10 +3,11 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/i_yellow</item>
-        <item name="colorPrimaryDark">@color/i_black</item>
-        <item name="android:windowBackground">@android:color/black</item>
-        <item name="colorAccent">@color/i_black</item>
+        <item name="colorPrimary">@color/lessDarkBlue</item>
+        <item name="colorPrimaryDark">@color/darkerBlue</item>
+        <item name="android:windowBackground">@color/lessDarkBlue</item>
+        <item name="colorAccent">@color/lessDarkBlue</item>
+        <item name="android:navigationBarColor">@color/lessDarkBlue</item>
     </style>
     <style name="WeekdaysLabelAndFont" parent="android:TextAppearance.Large">
         <item name="android:textColor">@color/i_reda</item>
@@ -21,5 +22,14 @@
         <item name="android:textColor">@color/i_gray</item>
         <item name="android:fontFamily">@font/palatino</item>
         <item name="android:textSize">@dimen/global_textsize</item>
+    </style>
+    <style name="picker" parent="AppTheme.Picker">
+        <item name="colorPrimary">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/i_black</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="color">@color/white</item>
+        <item name="colorControlNormal">@color/white</item>
+
     </style>
 </resources>

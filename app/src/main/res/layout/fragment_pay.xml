@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/i_yellow"
-    android:backgroundTint="@color/i_yellow"
+    android:background="@color/lessDarkBlue"
     android:gravity="center"
     tools:context=".PayFragment">
 
@@ -17,7 +16,7 @@
         android:layout_marginTop="30dp"
         android:fontFamily="@font/palatino"
         android:text="@string/pay_cardnumber_lbl"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +30,7 @@
         android:layout_marginTop="8dp"
         android:fontFamily="@font/palatino"
         android:text="@string/pay_cardcode_lbl"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +44,7 @@
         android:layout_marginTop="8dp"
         android:fontFamily="@font/palatino"
         android:text="@string/pay_validthrough_lbl"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -99,24 +98,24 @@
 
     <NumberPicker
         android:id="@+id/payCardYear"
-        android:theme="@style/AppTheme.Picker"
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_marginStart="48dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="75dp"
+        android:theme="@style/picker"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/payCardMonth"
         app:layout_constraintTop_toBottomOf="@+id/payValidLbl" />
 
     <NumberPicker
         android:id="@+id/payCardMonth"
-        android:theme="@style/AppTheme.Picker"
         android:layout_width="85dp"
         android:layout_height="100dp"
         android:layout_marginStart="75dp"
         android:layout_marginTop="4dp"
         android:descendantFocusability="blocksDescendants"
+        android:theme="@style/picker"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/payValidLbl" />
 
@@ -174,11 +173,12 @@
             android:layout_height="wrap_content"
             android:layout_weight=".33" />
     </LinearLayout>
+
     <FrameLayout
         android:id="@+id/paySpinnerLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#7EF5DF27"
+        android:background="@color/spinnerBlue"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -187,7 +187,7 @@
 
         <ProgressBar
             android:id="@+id/loginProgressBar"
-            style="?android:attr/progressBarStyle"
+            android:background="@drawable/spiner_ic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical" />

@@ -5,8 +5,7 @@
     android:id="@+id/preOrderFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/i_yellow"
-    android:backgroundTint="@color/i_yellow"
+    android:background="@color/lessDarkBlue"
     android:gravity="center"
     tools:context=".PaidOrderFragment">
 
@@ -18,7 +17,7 @@
         android:layout_marginTop="4dp"
         android:fontFamily="@font/palatino"
         android:text="@string/preorder_date_lbl"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +31,7 @@
         android:layout_marginTop="4dp"
         android:fontFamily="@font/palatino"
         android:text="@string/preorder_status_lbl"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +45,7 @@
         android:layout_marginTop="16dp"
         android:fontFamily="@font/palatino"
         android:text="@string/preorder_menu_lbl"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +59,7 @@
         android:layout_marginTop="50dp"
         android:fontFamily="@font/palatino"
         android:text="@string/preorder_location_lbl"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +73,7 @@
         android:layout_marginTop="4dp"
         android:fontFamily="@font/palatino"
         android:text="@string/preorder_numberofmeals_lbl"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -88,7 +87,7 @@
         android:layout_marginTop="4dp"
         android:fontFamily="@font/palatino"
         android:text="@string/preorder_mealprice_lbl"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -102,7 +101,7 @@
         android:layout_marginTop="4dp"
         android:fontFamily="@font/palatino"
         android:text="@string/preorder_totalprice_lbl"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -116,7 +115,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/palatino"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/paidOrderDateLbl"
@@ -130,7 +129,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/palatino"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         app:layout_constraintBottom_toBottomOf="@+id/paidOrderMealPriceLbl"
         app:layout_constraintEnd_toEndOf="parent"
@@ -145,7 +144,7 @@
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/palatino"
         android:textAlignment="textStart"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         app:layout_constraintBottom_toBottomOf="@+id/paidOrderNumberOfMealsLbl"
         app:layout_constraintEnd_toEndOf="parent"
@@ -160,7 +159,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/palatino"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/paidOrderTotalPriceLbl"
@@ -175,7 +174,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/palatino"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/paidOrderLocationLbl"
@@ -192,7 +191,7 @@
         android:fontFamily="@font/palatino"
         android:lines="2"
         android:textAlignment="textEnd"
-        android:textColor="@color/i_black"
+        android:textColor="@color/white"
         android:textSize="@dimen/global_textsize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/paidOrderStatusLbl"
@@ -220,25 +219,25 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/paidOrderMenuLbl"
         app:layout_constraintTop_toBottomOf="@+id/paidOrderStatus" />
-<!--    <EditText-->
-<!--        android:id="@+id/paidOrderMenu"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        android:layout_marginTop="4dp"-->
-<!--        android:layout_marginEnd="8dp"-->
-<!--        android:background="@color/white"-->
-<!--        android:ems="10"-->
-<!--        android:gravity="start|top"-->
-<!--        android:inputType="textMultiLine"-->
-<!--        android:lines="3"-->
-<!--        android:maxLines="5"-->
-<!--        android:minLines="3"-->
-<!--        android:text="teste"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="1.0"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/paidOrderMenuLbl"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/paidOrderStatus" />-->
+    <!--    <EditText-->
+    <!--        android:id="@+id/paidOrderMenu"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="8dp"-->
+    <!--        android:layout_marginTop="4dp"-->
+    <!--        android:layout_marginEnd="8dp"-->
+    <!--        android:background="@color/white"-->
+    <!--        android:ems="10"-->
+    <!--        android:gravity="start|top"-->
+    <!--        android:inputType="textMultiLine"-->
+    <!--        android:lines="3"-->
+    <!--        android:maxLines="5"-->
+    <!--        android:minLines="3"-->
+    <!--        android:text="teste"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="1.0"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/paidOrderMenuLbl"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/paidOrderStatus" />-->
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/paidOrderLocationMap"
@@ -259,7 +258,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:background="@color/i_gray"
+        android:background="@color/logoRose"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -272,7 +271,7 @@
             android:layout_marginTop="1dp"
             android:fontFamily="@font/palatino"
             android:text="@string/paidorder_ordernumber"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="@dimen/global_textsize" />
 
         <TextView
@@ -282,7 +281,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="3dp"
             android:fontFamily="@font/palatino"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold"
             tools:text="35099962050" />

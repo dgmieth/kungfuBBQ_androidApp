@@ -5,31 +5,34 @@
     android:id="@+id/homeFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/i_yellow"
-    android:backgroundTint="@color/i_yellow"
+    android:background="@color/lessDarkBlue"
     android:gravity="center"
-    tools:context=".HomeFragment">
+    tools:context=".HomeFragment"
+    android:theme="@style/AppTheme">
 
     <ImageView
         android:id="@+id/homeAppLogo"
-        android:layout_width="175dp"
-        android:layout_height="175dp"
-        android:layout_marginTop="45dp"
-        android:src="@drawable/appico500by500"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/logo1200_"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/homeLoginBtn"
         android:layout_width="0dp"
         android:layout_height="62dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="150dp"
         android:layout_marginEnd="16dp"
-        android:background="@color/i_black"
-        android:fontFamily="@font/palatino"
+        android:background="@drawable/button_home"
 
+        android:fontFamily="@font/palatino"
         android:text="@string/btn_login"
         android:textAllCaps="false"
         android:textColor="@color/white"
@@ -38,7 +41,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/homeAppLogo"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="DuplicateClickableBoundsCheck" />
 
     <Button
@@ -46,29 +49,30 @@
         android:layout_width="0dp"
         android:layout_height="62dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="150dp"
 
-        android:background="@color/i_black"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/button_home"
         android:fontFamily="@font/palatino"
         android:text="@string/btn_calendar"
         android:textAllCaps="false"
         android:textColor="@color/fontColor"
         android:textSize="30sp"
         android:textStyle="bold|italic"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/homeAppLogo" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/homeCateringBtn"
         android:layout_width="0dp"
         android:layout_height="62dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="285dp"
         android:layout_marginEnd="16dp"
-        android:background="@color/i_black"
+        android:background="@drawable/button_home"
         android:fontFamily="@font/palatino"
         android:text="@string/btn_catering"
         android:textAllCaps="false"
@@ -77,6 +81,6 @@
         android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/homeAppLogo" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

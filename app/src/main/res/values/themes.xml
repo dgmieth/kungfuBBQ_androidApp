@@ -2,10 +2,13 @@
     <!-- Base application theme. -->
     <style name="Theme.KungfuBBQ" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorOnPrimary">@color/i_yellow</item>
-        <item name="colorPrimaryDark">@color/i_black</item>
-        <item name="android:windowBackground">@android:color/black</item>
-        <item name="colorAccent">@color/i_black</item>
+        <item name="colorPrimary">@color/lessDarkBlue</item>
+        <item name="colorPrimaryDark">@color/darkerBlue</item>
+        <item name="colorOnSecondary">@color/darkerBlue</item>
+        <item name="android:windowBackground">@color/lessDarkBlue</item>
+        <item name="colorAccent">@color/lessDarkBlue</item>
+        <item name="android:navigationBarColor">@color/lessDarkBlue</item>
+        <item name="android:itemBackground">@color/lessDarkBlue</item>
 <!--        &lt;!&ndash; Status bar color. &ndash;&gt;-->
 <!--        <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>-->
         <!-- Fonts -->
@@ -34,5 +37,8 @@
 
     <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <item name="android:textColor">@color/i_black</item>
+    </style>
+    <style name="spinner" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:colorPrimary">@color/white</item>
     </style>
 </resources>

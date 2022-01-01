@@ -88,15 +88,15 @@
                 android:id="@+id/calendarView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/black"
+                android:layout_weight="1"
+                android:background="@color/lessDarkBlue"
                 android:isScrollContainer="true"
                 android:overScrollMode="ifContentScrolls"
                 app:cv_dayViewResource="@layout/calendar_day_layout"
                 app:cv_monthHeaderResource="@layout/calendar_month_header_layout"
                 app:cv_orientation="horizontal"
                 app:cv_scrollMode="paged"
-                tools:ignore="SpeakableTextPresentCheck"
-                android:layout_weight="1"/>
+                tools:ignore="SpeakableTextPresentCheck" />
         </LinearLayout>
     </ScrollView>
 
@@ -334,8 +334,8 @@
         android:id="@+id/calendarSpinnerLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#7EF5DF27"
-        android:visibility="invisible"
+        android:background="@color/spinnerBlue"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -343,7 +343,7 @@
 
         <ProgressBar
             android:id="@+id/loginProgressBar"
-            style="?android:attr/progressBarStyle"
+            android:background="@drawable/spiner_ic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical" />

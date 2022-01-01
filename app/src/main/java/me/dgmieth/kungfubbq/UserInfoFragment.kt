@@ -275,11 +275,27 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
                 binding.userInfoPhone.setBackgroundColor(Color.WHITE)
                 binding.userInfoFacebookName.setBackgroundColor(Color.WHITE)
                 binding.userInfoInstagramName.setBackgroundColor(Color.WHITE)
+                binding.userInfoName.setTextColor(Color.BLACK)
+                binding.userInfoPhone.setTextColor(Color.BLACK)
+                binding.userInfoFacebookName.setTextColor(Color.BLACK)
+                binding.userInfoInstagramName.setTextColor(Color.BLACK)
+                binding.userInfoName.setHintTextColor(requireContext().getColor(R.color.notBlockedTextInputsHintColor))
+                binding.userInfoPhone.setHintTextColor(requireContext().getColor(R.color.notBlockedTextInputsHintColor))
+                binding.userInfoFacebookName.setHintTextColor(requireContext().getColor(R.color.notBlockedTextInputsHintColor))
+                binding.userInfoInstagramName.setHintTextColor(requireContext().getColor(R.color.notBlockedTextInputsHintColor))
             }else{
                 binding.userInfoName.setBackgroundColor(Color.TRANSPARENT)
                 binding.userInfoPhone.setBackgroundColor(Color.TRANSPARENT)
                 binding.userInfoFacebookName.setBackgroundColor(Color.TRANSPARENT)
                 binding.userInfoInstagramName.setBackgroundColor(Color.TRANSPARENT)
+                binding.userInfoName.setTextColor(Color.WHITE)
+                binding.userInfoPhone.setTextColor(Color.WHITE)
+                binding.userInfoFacebookName.setTextColor(Color.WHITE)
+                binding.userInfoInstagramName.setTextColor(Color.WHITE)
+                binding.userInfoName.setHintTextColor(requireContext().getColor(R.color.blockedTextInputsHintColor))
+                binding.userInfoPhone.setHintTextColor(requireContext().getColor(R.color.blockedTextInputsHintColor))
+                binding.userInfoFacebookName.setHintTextColor(requireContext().getColor(R.color.blockedTextInputsHintColor))
+                binding.userInfoInstagramName.setHintTextColor(requireContext().getColor(R.color.blockedTextInputsHintColor))
             }
         }
     }

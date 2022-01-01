@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/lessDarkBlue">
 
     <TextView
         android:id="@+id/headerTextView"
@@ -12,7 +13,7 @@
         android:fontFamily="@font/palatino"
         android:padding="5dp"
         android:textAlignment="center"
-        android:textColor="@color/i_yellow"
+        android:textColor="@color/logoYellow"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,7 +38,7 @@
             android:layout_weight="1"
             android:text="Sun"
             android:textAlignment="center"
-            android:textColor="@color/i_reda"
+            android:textColor="@color/logoRed"
             android:textSize="16sp" />
 
         <TextView
@@ -47,7 +48,7 @@
             android:layout_weight="1"
             android:text="Mon"
             android:textAlignment="center"
-            android:textColor="@color/i_reda"
+            android:textColor="@color/logoRed"
             android:textSize="16sp" />
 
         <TextView
@@ -57,7 +58,7 @@
             android:layout_weight="1"
             android:text="Tue"
             android:textAlignment="center"
-            android:textColor="@color/i_reda"
+            android:textColor="@color/logoRed"
             android:textSize="16sp" />
 
         <TextView
@@ -67,7 +68,7 @@
             android:layout_weight="1"
             android:text="Wed"
             android:textAlignment="center"
-            android:textColor="@color/i_reda"
+            android:textColor="@color/logoRed"
             android:textSize="16sp" />
 
         <TextView
@@ -77,7 +78,7 @@
             android:layout_weight="1"
             android:text="Thu"
             android:textAlignment="center"
-            android:textColor="@color/i_reda"
+            android:textColor="@color/logoRed"
             android:textSize="16sp" />
 
         <TextView
@@ -87,7 +88,7 @@
             android:layout_weight="1"
             android:text="Fri"
             android:textAlignment="center"
-            android:textColor="@color/i_reda"
+            android:textColor="@color/logoRed"
             android:textSize="16sp" />
 
         <TextView
@@ -97,7 +98,7 @@
             android:layout_weight="1"
             android:text="Sat"
             android:textAlignment="center"
-            android:textColor="@color/i_reda"
+            android:textColor="@color/logoRed"
             android:textSize="16sp" />
 
     </LinearLayout>

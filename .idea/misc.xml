@@ -6,6 +6,9 @@
         <entry key="../../../../../../../layout/custom_preview.xml" value="0.24739583333333334" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.30625" />
         <entry key="app/src/main/res/drawable/app_icon_background.xml" value="0.23072916666666668" />
+        <entry key="app/src/main/res/drawable/button_affimative_action.xml" value="0.52" />
+        <entry key="app/src/main/res/drawable/button_home.xml" value="0.52" />
+        <entry key="app/src/main/res/drawable/button_negative_action.xml" value="0.52" />
         <entry key="app/src/main/res/drawable/calendar_icon_background.xml" value="0.246875" />
         <entry key="app/src/main/res/drawable/circle.xml" value="0.18" />
         <entry key="app/src/main/res/drawable/ic_dot.xml" value="0.23854166666666668" />
@@ -17,28 +20,32 @@
         <entry key="app/src/main/res/drawable/icon_edit.xml" value="0.3104166666666667" />
         <entry key="app/src/main/res/drawable/icon_userinfo.xml" value="0.234375" />
         <entry key="app/src/main/res/drawable/menu_userInfo.xml" value="0.23802083333333332" />
+        <entry key="app/src/main/res/drawable/spiner_ic.xml" value="0.50125" />
+        <entry key="app/src/main/res/drawable/spinner_ic.xml" value="0.50125" />
         <entry key="app/src/main/res/font/fonts.xml" value="0.24479166666666666" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1831306990881459" />
         <entry key="app/src/main/res/layout/activity_startup.xml" value="0.6140873015873016" />
         <entry key="app/src/main/res/layout/activity_startup2.xml" value="0.21666666666666667" />
-        <entry key="app/src/main/res/layout/calendar_day_layout.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/calendar_month_header_layout.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/calendar_day_layout.xml" value="0.45" />
+        <entry key="app/src/main/res/layout/calendar_month_header_layout.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_about.xml" value="0.75" />
-        <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.24039735099337747" />
-        <entry key="app/src/main/res/layout/fragment_catering.xml" value="0.35924932975871315" />
+        <entry key="app/src/main/res/layout/fragment_calendar.xml" value="2.0" />
+        <entry key="app/src/main/res/layout/fragment_catering.xml" value="0.48125" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.745" />
-        <entry key="app/src/main/res/layout/fragment_paidorder.xml" value="1.0" />
-        <entry key="app/src/main/res/layout/fragment_pay.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.6459731543624161" />
+        <entry key="app/src/main/res/layout/fragment_paidorder.xml" value="0.8020833333333334" />
+        <entry key="app/src/main/res/layout/fragment_pay.xml" value="0.6416666666666667" />
         <entry key="app/src/main/res/layout/fragment_payorder.xml" value="0.67" />
-        <entry key="app/src/main/res/layout/fragment_preorder.xml" value="0.6982035928143713" />
-        <entry key="app/src/main/res/layout/fragment_register.xml" value="0.738562091503268" />
+        <entry key="app/src/main/res/layout/fragment_preorder.xml" value="0.6887298747763864" />
+        <entry key="app/src/main/res/layout/fragment_register.xml" value="0.6514382402707276" />
         <entry key="app/src/main/res/layout/fragment_updateOrder.xml" value="0.2078125" />
-        <entry key="app/src/main/res/layout/fragment_updateorder.xml" value="0.7492795389048992" />
+        <entry key="app/src/main/res/layout/fragment_updateorder.xml" value="0.6427378964941569" />
         <entry key="app/src/main/res/layout/fragment_updatepassword.xml" value="0.6506696428571429" />
-        <entry key="app/src/main/res/layout/fragment_userinfo.xml" value="0.75" />
-        <entry key="app/src/main/res/menu/menu_bar.xml" value="0.22135416666666666" />
+        <entry key="app/src/main/res/layout/fragment_userinfo.xml" value="0.6416666666666667" />
+        <entry key="app/src/main/res/layout/progress_icon.xml" value="0.46130952380952384" />
+        <entry key="app/src/main/res/menu/menu_bar.xml" value="0.625" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/app_icon.xml" value="0.23072916666666668" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/app_icon500x500.xml" value="0.52" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/app_icon500x500_round.xml" value="0.1703125" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/calendar_icon.xml" value="0.3260416666666667" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/calendar_icon_round.xml" value="0.3260416666666667" />
@@ -46,6 +53,8 @@
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_logout.xml" value="0.30625" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_logout_round.xml" value="0.30625" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_sad_face.xml" value="0.35260416666666666" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/new_logo_1200.xml" value="0.53" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/new_logo_1200_round.xml" value="0.53" />
       </map>
     </option>
   </component>
