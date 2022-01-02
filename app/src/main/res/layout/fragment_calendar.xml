@@ -204,7 +204,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:height="48dp"
-        android:background="@color/i_yellow"
+        android:background="@color/logoYellow"
         android:fontFamily="@font/palatino"
         android:isScrollContainer="true"
         android:maxHeight="48dp"
@@ -223,7 +223,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        android:background="@color/i_yellow"
+        android:background="@drawable/button_affimative_action"
         android:fontFamily="@font/palatino"
         android:text="@string/btn_preorder"
         android:textAllCaps="false"
@@ -242,7 +242,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        android:background="@color/i_yellow"
+        android:background="@drawable/button_affimative_action"
         android:fontFamily="@font/palatino"
         android:text="@string/btn_updateorder"
         android:textAllCaps="false"
@@ -261,7 +261,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        android:background="@color/i_yellow"
+        android:background="@drawable/button_affimative_action"
         android:fontFamily="@font/palatino"
         android:text="@string/btn_payorder"
         android:textAllCaps="false"
@@ -280,7 +280,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        android:background="@color/i_yellow"
+        android:background="@drawable/button_affimative_action"
         android:fontFamily="@font/palatino"
         android:text="@string/btn_paidorder"
         android:textAllCaps="false"
@@ -335,7 +335,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/spinnerBlue"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -343,10 +343,10 @@
 
         <ProgressBar
             android:id="@+id/loginProgressBar"
-            android:background="@drawable/spiner_ic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical" />
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:background="@drawable/spiner_ic" />
 
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
