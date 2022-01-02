@@ -50,6 +50,6 @@
         android:layout_height="13dp"
         android:layout_marginTop="28dp"
         android:visibility="invisible"
-        app:srcCompat="@drawable/icon_calendar" />
+        app:srcCompat="@drawable/icon_calendar_old" />
 
 </FrameLayout>
