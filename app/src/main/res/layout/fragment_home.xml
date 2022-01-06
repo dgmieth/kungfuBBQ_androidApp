@@ -8,7 +8,7 @@
     android:background="@color/lessDarkBlue"
     android:gravity="center"
     tools:context=".HomeFragment"
-    android:theme="@style/AppTheme">
+    android:theme="@style/Theme.KungfuBBQ">
 
     <ImageView
         android:id="@+id/homeAppLogo"
@@ -31,13 +31,13 @@
         android:layout_marginTop="150dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/button_home"
-
         android:fontFamily="@font/palatino"
         android:text="@string/btn_login"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="30sp"
         android:textStyle="bold|italic"
+        android:theme="@style/Theme.KungfuBBQ"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,6 +59,7 @@
         android:textColor="@color/fontColor"
         android:textSize="30sp"
         android:textStyle="bold|italic"
+        android:theme="@style/Theme.KungfuBBQ"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -73,14 +74,95 @@
         android:layout_marginTop="285dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/button_home"
-        android:fontFamily="@font/palatino"
+        android:fontFamily="@font/font_palatino"
         android:text="@string/btn_catering"
         android:textAllCaps="false"
+        android:textAppearance="@style/Theme.KungfuBBQ"
         android:textColor="@color/fontColor"
         android:textSize="30sp"
         android:textStyle="bold|italic"
+        android:theme="@style/Theme.KungfuBBQ"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/home_view_height"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/button_home"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/homeContactLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/font_palatino"
+        android:text="Contact information"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintTop_toTopOf="@+id/view"
+        android:theme="@style/Theme.KungfuBBQ"
+        />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="@dimen/btn_height"
+        android:orientation="horizontal"
+        android:weightSum="5"
+        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintStart_toStartOf="@+id/view">
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".75" />
+
+        <Button
+            android:id="@+id/homeCallButton"
+            style="@style/PalatinoStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/btn_height"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@android:drawable/stat_sys_speakerphone"
+            android:fontFamily="@font/font_palatino"
+            android:text="Call us"
+            android:textAppearance="@style/Theme.KungfuBBQ"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5" />
+
+        <Button
+            android:id="@+id/homeDMButton"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/btn_height"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/facebookreallysmall"
+            android:fontFamily="@font/font_palatino"
+            android:text="Facebook"
+            android:textAppearance="@style/Theme.KungfuBBQ"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".75" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,7 +21,7 @@ android {
         applicationId "me.dgmieth.kungfubbq"
         minSdk 23
         targetSdk 30
-        versionCode 11
+        versionCode 13
         //version "1.0" -> using kotlin synthetics
         //versionName "1.1" -> using viewBiding
         //versionName "1.2" -> skipped
@@ -33,7 +33,9 @@ android {
         //versionName "1.8" //go to home when fragment resumes if it wasnt called by a button of the UI
         //versionName "1.9" //updates in calendar screen
         //versionName "2.0" //updates in calendar screen -> enabling scrolling
-        versionName "2.1" // new logo and new theme
+        //versionName "2.1" // new logo and new theme
+        //versionName "2.2" // new logo and new theme and final details corrected
+        versionName "2.3" // contact info
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -68,7 +70,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0-alpha03'
+    androidTestImplementation 'androidx.test:rules:1.4.1-alpha03'
     //implementation 'com.applandeo:material-calendar-view:1.7.0'
 //    implementation 'com.airbnb.android:airmapview:1.8.0'
 //    implementation 'com.github.prolificinteractive:material-calendarview:2.0.1'

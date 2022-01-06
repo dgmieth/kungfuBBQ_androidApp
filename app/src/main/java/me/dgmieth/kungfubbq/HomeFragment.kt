@@ -1,13 +1,16 @@
 package me.dgmieth.kungfubbq
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import me.dgmieth.kungfubbq.databinding.FragmentHomeBinding
-import me.dgmieth.kungfubbq.databinding.FragmentLoginBinding
+import java.lang.Exception
 
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -37,6 +40,24 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.homeLoginBtn.setOnClickListener { goToLoginFragment() }
         binding.homeCateringBtn.setOnClickListener { goToCateringFragment() }
         binding.homeCalendarBtn.setOnClickListener { goToCalendarFragment() }
+        binding.homeCallButton.setOnClickListener{
+            Log.d(TAG,"callBtn called")
+            val intent = Intent(Intent.ACTION_DIAL).apply {
+                data = Uri.parse("tel:${getString(R.string.kungfuPhoneNumber)}")
+            }
+            requireContext().startActivity(intent)
+        }
+        binding.homeDMButton.setOnClickListener {
+            try {
+                requireContext().packageManager.getPackageInfo("com.facebook.katana", 0)
+                var intent = Intent(Intent.ACTION_VIEW, Uri.parse("${getString(R.string.kungfuFacebookPage)}"))
+                requireContext().startActivity(intent)
+            } catch (e: Exception) {
+                var intent = Intent(Intent.ACTION_VIEW, Uri.parse("${getString(R.string.kungfuFacebookLink)}"))
+                requireContext().startActivity(intent)
+
+            }
+        }
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)

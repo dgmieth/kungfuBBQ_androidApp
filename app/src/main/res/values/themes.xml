@@ -7,7 +7,7 @@
         <item name="colorOnSecondary">@color/darkerBlue</item>
         <item name="android:windowBackground">@color/lessDarkBlue</item>
         <item name="colorAccent">@color/lessDarkBlue</item>
-        <item name="android:navigationBarColor">@color/lessDarkBlue</item>
+        <item name="android:navigationBarColor">@color/darkerBlue</item>
         <item name="android:itemBackground">@color/lessDarkBlue</item>
 <!--        &lt;!&ndash; Status bar color. &ndash;&gt;-->
 <!--        <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>-->
@@ -22,6 +22,7 @@
     </style>
     <style name="PalatinoStyle" parent="android:Widget.TextView">
         <item name="android:fontFamily">@font/palatino</item>
+        <item name="fontFamily">@font/palatino</item>
     </style>
     <style name="PalatinoBtnStyle" parent="android:Widget.Holo.Button">
         <item name="android:fontFamily">@font/palatino</item>

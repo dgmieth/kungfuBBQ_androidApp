@@ -141,13 +141,19 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     showSpinner(false)
                     e.printStackTrace()
                     Handler(Looper.getMainLooper()).post{
-                        Toast.makeText(requireActivity(),"Log in attempt failed with error message: ${e.localizedMessage}",Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireActivity(),"Log in attempt failed.",Toast.LENGTH_LONG).show()
                     }
                 }
                 override fun onResponse(call: Call, response: Response) {
                     showSpinner(false)
                     response.use {
-                        if (!response.isSuccessful) throw IOException("Unexpected code $response")
+                        if (!response.isSuccessful) {
+                            Handler(Looper.getMainLooper()).post {
+                                Toast.makeText(requireActivity(),"KungfuBBQ server is not online",Toast.LENGTH_LONG).show()
+                                val action = HomeFragmentDirections.callHome(false)
+                                findNavController().navigate(action)
+                            }
+                        }
                         val json = JSONObject(response.body!!.string())
                         if(!json.getBoolean("hasErrors")){
                             val u = json.getJSONObject("data")
@@ -161,10 +167,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                             userId = user.userId
                             viewModel?.insertAllUserInfo(user,socialM)
                         }else{
-                           Handler(Looper.getMainLooper()).post{
-                               binding.loginSpinerLayout.visibility = View.INVISIBLE
+                            Handler(Looper.getMainLooper()).post{
+                                binding.loginSpinerLayout.visibility = View.INVISIBLE
                                 Toast.makeText(requireActivity(),"Log in attempt failed with server message: ${json.getString("msg").toString()}",Toast.LENGTH_LONG).show()
-                           }
+                            }
                         }
                     }
                 }
@@ -189,7 +195,13 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             override fun onResponse(call: Call, response: Response) {
                 response.use {
                     showSpinner(false)
-                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
+                    if (!response.isSuccessful) {
+                        Handler(Looper.getMainLooper()).post {
+                            Toast.makeText(requireActivity(),"KungfuBBQ server is not online",Toast.LENGTH_LONG).show()
+                            val action = HomeFragmentDirections.callHome(false)
+                            findNavController().navigate(action)
+                        }
+                    }
                     val json = JSONObject(response.body!!.string())
                     if(!json.getBoolean("hasErrors")){
                         Handler(Looper.getMainLooper()).post {

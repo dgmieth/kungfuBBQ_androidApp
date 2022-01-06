@@ -2,5 +2,6 @@
 <resources>
     <dimen name="btn_text_size">26sp</dimen>
     <dimen name="btn_height">52dp</dimen>
+    <dimen name="home_view_height">90dp</dimen>
     <dimen name="global_textsize">20sp</dimen>
 </resources>
