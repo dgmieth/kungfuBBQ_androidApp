@@ -80,8 +80,8 @@
     <string name="sad_face">Sad face</string>
     <string name="btn_back"><![CDATA[<< Back]]></string>
     <string name="next_btn"><![CDATA[Next >>]]></string>
-    <string name="register_name">* Inform your name:</string>
-    <string name="register_phone">* Inform your phone number:</string>
+    <string name="register_name">* Fill in with your name:</string>
+    <string name="register_phone">* Fill in with your phone number:</string>
     <string name="register_facebook">** Facebook name:</string>
     <string name="register_instagram">** Instagram name:</string>
 

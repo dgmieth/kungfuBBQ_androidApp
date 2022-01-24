@@ -3,7 +3,6 @@ package me.dgmieth.kungfubbq
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.telephony.PhoneNumberUtils
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*

@@ -142,7 +142,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/btn_height"
             android:layout_weight="1"
-            android:background="@color/i_gray"
+            android:background="@drawable/button_negative_action"
             android:fontFamily="@font/palatino"
             android:text="@string/btn_cancel"
             android:textAllCaps="false"
@@ -160,11 +160,11 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/btn_height"
             android:layout_weight="1"
-            android:background="@color/i_reda"
+            android:background="@drawable/button_affimative_action"
             android:fontFamily="@font/palatino"
             android:text="@string/btn_payorder"
             android:textAllCaps="false"
-            android:textColor="@color/white"
+            android:textColor="@color/i_black"
             android:textSize="@dimen/btn_text_size"
             android:textStyle="bold" />
 

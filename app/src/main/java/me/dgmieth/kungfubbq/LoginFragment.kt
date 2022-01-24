@@ -1,5 +1,6 @@
 package me.dgmieth.kungfubbq
 
+import me.dgmieth.kungfubbq.supporFunctions.encryption.CryptLib
 import androidx.appcompat.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
@@ -9,10 +10,7 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.EditText
-import android.widget.RelativeLayout
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getColor
-import androidx.core.view.marginLeft
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.Observer
@@ -127,6 +125,13 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     //========================================================
     //HTTP REQUEST METHODS
     private fun logUserIn() {
+        val plainText = "this is my plain text"
+        val key = "your key"
+
+        val cryptLib = CryptLib()
+
+        val cipherText = cryptLib.encryptPlainTextWithRandomIV(binding.loginUserEmail.text.toString(), key)
+        Log.d(TAG,"cipherText $cipherText")
         if(!binding.loginUserEmail.text.toString().isNullOrEmpty()&&!binding.loginPassword.text.toString().isNullOrEmpty()){
             showSpinner(true)
             val body = FormBody.Builder()
@@ -134,7 +139,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 .add("password",binding.loginPassword.text.toString())
                 .add("mobileOS","android")
                 .build()
-            println(body)
+            Log.d(TAG,body.toString())
+
             HttpCtrl.shared.newCall(HttpCtrl.post(getString(R.string.kungfuServerUrl),"/login/login",body)).enqueue(object :
                 Callback {
                 override fun onFailure(call: Call, e: IOException) {

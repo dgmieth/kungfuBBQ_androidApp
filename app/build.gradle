@@ -19,9 +19,9 @@ android {
             resolutionStrategy { force 'androidx.core:core-ktx:1.6.0' }
         }
         applicationId "me.dgmieth.kungfubbq"
-        minSdk 23
+        minSdk 24
         targetSdk 30
-        versionCode 13
+        versionCode 16
         //version "1.0" -> using kotlin synthetics
         //versionName "1.1" -> using viewBiding
         //versionName "1.2" -> skipped
@@ -35,7 +35,10 @@ android {
         //versionName "2.0" //updates in calendar screen -> enabling scrolling
         //versionName "2.1" // new logo and new theme
         //versionName "2.2" // new logo and new theme and final details corrected
-        versionName "2.3" // contact info
+        //versionName "2.3" // contact info
+        //versionName "2.4" // facebook profile id correction
+        //versionName "2.5" // correction to paid order view and change in mimSDK to 24
+        versionName "2.6" // changed to fragment_pay.xml
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
