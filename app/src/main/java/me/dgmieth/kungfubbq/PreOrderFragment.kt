@@ -6,10 +6,10 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Html
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -28,6 +28,7 @@ import me.dgmieth.kungfubbq.datatabase.room.RoomViewModel
 import me.dgmieth.kungfubbq.datatabase.roomEntities.CookingDateAndCookingDateDishesWithOrder
 import me.dgmieth.kungfubbq.datatabase.roomEntities.UserAndSocialMedia
 import me.dgmieth.kungfubbq.httpCtrl.HttpCtrl
+import me.dgmieth.kungfubbq.support.formatter.FormatObject
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
@@ -67,10 +68,7 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
         viewModel?.returnMsg?.subscribe({
             when(it){
                 else -> {
-                    Handler(Looper.getMainLooper()).post{
-                        Toast.makeText(requireActivity(),"It was not possible to retrieve information from kungfuBBQ server. Please try again later.",
-                            Toast.LENGTH_LONG).show()
-                    }
+                    showAlert("It was not possible to retrieve information from kungfuBBQ server. Please try again later.","Error!")
                 }
             }
         },{},{})?.let {
@@ -82,27 +80,29 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
             cookingDate = cdArray[0]
             cookingDate?.let { cd ->
                 //updating date
-                val splitDate = (cd.cookingDateAndDishes.cookingDate.cookingDate.split(" ")[0]).split("-")
-                val cal = Calendar.getInstance()
-                cal.set(splitDate[0].toInt(), splitDate[1].toInt()-1, splitDate[2].toInt())
-                val dateStrParts = cal.time.toString().split(" ")
-                binding.preOrderDate.text = "${dateStrParts[1]} ${dateStrParts[2]}"
+//                val splitDate = (cd.cookingDateAndDishes.cookingDate.cookingDate.split(" ")[0]).split("-")
+//                val cal = Calendar.getInstance()
+//                cal.set(splitDate[0].toInt(), splitDate[1].toInt()-1, splitDate[2].toInt())
+//                val dateStrParts = cal.time.toString().split(" ")
+//                binding.preOrderDate.text = "${dateStrParts[1]} ${dateStrParts[2]}"
+                binding.preOrderDate.text = FormatObject.returnEventTime()
                 //updating status
                 binding.preOrderStatus.text = cd.cookingDateAndDishes.cookingDate.cookingStatus
                 //updating menu
-                var menuT = ""
-                var menuIndex = 1
-                var mealsSum = 0.0
-                for(m in cd.cookingDateAndDishes.cookingDateDishes){
-                    menuT = "${menuT}${menuIndex}- ${m.dishName} - U$${m.dishPrice}\n"
-                    menuIndex += 1
-                    mealsSum += m.dishPrice.toDouble()
-                }
-                binding.preOrderMenu.text = menuT
+//                var menuT = ""
+//                var menuIndex = 1
+//                var mealsSum = 0.0
+//                for(m in cd.cookingDateAndDishes.cookingDateDishes){
+//                    menuT = "${menuT}${menuIndex}- ${m.dishName} - U$${m.dishPrice}\n"
+//                    menuIndex += 1
+//                    mealsSum += m.dishPrice.toDouble()
+//                }
+//                binding.preOrderMenu.text = menuT
+                binding.preOrderMenu.text = Html.fromHtml(FormatObject.formatDishesListForMenuScrollViews(cd.cookingDateAndDishes.cookingDateDishes),Html.FROM_HTML_MODE_COMPACT)
                 //updating maps
-                binding.preOrderLocationText.text = "${cd.cookingDateAndDishes.cookingDate.street}, ${cd.cookingDateAndDishes.cookingDate.city}"
+                binding.preOrderLocationText.text = FormatObject.returnAddress()
                 binding.preOrderLocationMap.getMapAsync(this)
-                var priceString = "U$ ${String.format("%.2f",mealsSum)}"
+                var priceString = "U$ ${String.format("%.2f",FormatObject.returnMealBoxTotalAmount())}"
                 //updating meal price
                 binding.preOrderMealPrice.text = priceString
                 //updating total meal price
@@ -119,31 +119,14 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
                 userPreOrder = it
                 viewModel?.getCookingDates()
             }else{
-                Handler(Looper.getMainLooper()).post{
-                    Toast.makeText(requireActivity(),"It was not possible to retrieve information from this app's database. Please restart the app.",
-                        Toast.LENGTH_LONG).show()
-                    var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
-                    findNavController().navigate(action)
-                }
+                showAlert("It was not possible to retrieve information from this app's database. Please restart the app.","Database error!")
             }
         })
         //db getUser information request
         if(args.cookingDateId != 0) {
             viewModel?.getUser()
         }else{
-            var dialogBuilder = AlertDialog.Builder(requireContext())
-            dialogBuilder.setMessage("Communication with this apps's database failed. Please restart the app.")
-                .setCancelable(false)
-                .setPositiveButton("Ok", DialogInterface.OnClickListener{
-                        _, _ ->
-                    Handler(Looper.getMainLooper()).post {
-                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
-                        findNavController().navigate(action)
-                    }
-                })
-            val alert = dialogBuilder.create()
-            alert.setTitle("Database communication failure")
-            alert.show()
+            showAlert("It was not possible to retrieve information from this app's database. Please restart the app.","Database error!")
         }
         _binding = FragmentPreorderBinding.inflate(inflater, container, false)
         return binding.root
@@ -157,8 +140,8 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
         binding.preOrderNumberOfMeals.wrapSelectorWheel = true
         binding.preOrderNumberOfMeals.setOnValueChangedListener{_,_,newVal ->
             selectedQtty = newVal
-            val mealsPrice = (binding.preOrderMealPrice.text.toString().split(" ")[1].toDouble())
-            val total = mealsPrice * newVal
+//            val mealsPrice = (binding.preOrderMealPrice.text.toString().split(" ")[1].toDouble())
+            val total = FormatObject.returnMealBoxTotalAmount() * newVal
             binding.preOrderTotalPrice.text = "U$ ${String.format("%.2f",total)}"
         }
         //click listeners
@@ -232,17 +215,15 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
  *   preorder http request
  * */
     private fun placePreOrder(){
-        var dishesAry : MutableList<Int> = kotlin.collections.mutableListOf()
         var dishesQtty : MutableList<Int> = kotlin.collections.mutableListOf()
-        for(d in cookingDate!!.cookingDateAndDishes.cookingDateDishes){
-            dishesAry.add(d.dishId)
+        for(d in FormatObject.getDishesForOrders()){
             dishesQtty.add(selectedQtty)
         }
         val body = okhttp3.FormBody.Builder()
             .add("email",userPreOrder!!.user.email)
             .add("id",userPreOrder!!.user.userId.toString())
             .add("cookingDate_id", cookingDate!!.cookingDateAndDishes.cookingDate.cookingDateId.toString())
-            .add("dish_id", dishesAry.toString())
+            .add("dish_id", FormatObject.getDishesForOrders().toString())
             .add("dish_qtty", dishesQtty.toString())
             .add("extras_id", kotlin.collections.mutableListOf<kotlin.Int>().toString())
             .add("extras_qtty", kotlin.collections.mutableListOf<kotlin.Int>().toString())
@@ -253,9 +234,7 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
             override fun onFailure(call: Call, e: IOException) {
                 showSpinner(false)
                 e.printStackTrace()
-                Handler(Looper.getMainLooper()).post{
-                    Toast.makeText(requireActivity(),"The attempt to save your order to KungfuBBQ server failed with generalized message: ${e.localizedMessage}",Toast.LENGTH_LONG).show()
-                }
+                showAlert("The attempt to save your order to KungfuBBQ server failed with generalized message: ${e.localizedMessage}","Error!")
             }
             override fun onResponse(call: Call, response: Response) {
                 showSpinner(false)
@@ -263,39 +242,14 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
                     val json = JSONObject(response.body!!.string())
                     if(!json.getBoolean("hasErrors")){
-                        Handler(Looper.getMainLooper()).post{
-                            var dialogBuilder = AlertDialog.Builder(requireContext())
-                            dialogBuilder.setMessage("${json.getString("msg")}")
-                                .setCancelable(false)
-                                .setPositiveButton("Ok", DialogInterface.OnClickListener{
-                                        _, _ ->
-                                    Handler(Looper.getMainLooper()).post {
-                                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
-                                        findNavController().navigate(action)
-                                    }
-                                })
-                            val alert = dialogBuilder.create()
-                            alert.setTitle("Pre-order created on KungfuBBQ's server")
-                            alert.show()
-                        }
+                        showAlert("${json.getString("msg")}","Success!")
                     }else{
                         when {
                             json.getInt("errorCode")==-1 -> {
-                                notLoggedIntAlert()
-                            }
-                            json.getInt("errorCode")==-2 -> {
-                                showWarningMessage(json.getString("msg"))
-                            }
-                            json.getInt("errorCode")==-3 -> {
-                                showWarningMessage(json.getString("msg"))
+                                showAlert("${getString(R.string.not_logged_in)}","${getString(R.string.not_logged_in)}")
                             }
                             else -> {
-                                Handler(Looper.getMainLooper()).post{
-                                    Toast.makeText(requireActivity(),"The attempt to save your order to KungfuBBQ server failed with server message: ${json.getString("msg")}",
-                                        Toast.LENGTH_LONG).show()
-                                    var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
-                                    findNavController().navigate(action)
-                                }
+                                showAlert("The attempt to save your order to KungfuBBQ server failed with server message: ${json.getString("msg")}","Error!")
                             }
                         }
                     }
@@ -314,21 +268,30 @@ class PreOrderFragment : Fragment(R.layout.fragment_preorder),OnMapReadyCallback
             }
         }
     }
-    private fun showWarningMessage(text:String){
-        //showWarningMessage(json.getString("msg"))
+    private fun showAlert(message:String,title:String){
         Handler(Looper.getMainLooper()).post{
-            Toast.makeText(requireActivity(),"$text",
-                Toast.LENGTH_LONG).show()
-            val action = NavGraphDirections.callCalendarFragmentGlobal()
-            findNavController().navigate(action)
-        }
-    }
-    private fun notLoggedIntAlert(){
-        Handler(Looper.getMainLooper()).post{
-            Toast.makeText(requireActivity(),"You are not authenticated in Kungfu BBQ server anylonge. Please log in again.",
-                Toast.LENGTH_LONG).show()
-            val action = NavGraphDirections.callHome(false)
-            findNavController().navigate(action)
+            var dialogBuilder = AlertDialog.Builder(requireContext())
+            dialogBuilder.setMessage(message)
+                .setCancelable(title != "${getString(R.string.not_logged_in)}")
+                .setPositiveButton("Ok", DialogInterface.OnClickListener{
+                        _, _ ->
+                    if(title=="${getString(R.string.not_logged_in)}"){
+                        USER_LOGGED = false
+                        val action = NavGraphDirections.callHome(false)
+                        findNavController().navigate(action)
+                    }
+                    if (title == "${getString(R.string.database_error)}") {
+                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
+                        findNavController().navigate(action)
+                    }
+                    if (title == "${getString(R.string.success)}") {
+                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
+                        findNavController().navigate(action)
+                    }
+                })
+            val alert = dialogBuilder.create()
+            alert.setTitle(title)
+            alert.show()
         }
     }
 }

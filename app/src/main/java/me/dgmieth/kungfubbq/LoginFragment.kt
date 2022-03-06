@@ -1,6 +1,6 @@
 package me.dgmieth.kungfubbq
 
-import me.dgmieth.kungfubbq.supporFunctions.encryption.CryptLib
+import me.dgmieth.kungfubbq.support.encryption.CryptLib
 import androidx.appcompat.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
@@ -10,7 +10,6 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.EditText
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.Observer
@@ -61,25 +60,18 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                         }
                     }
                     else -> {
+                    Log.d(TAG,"viewModeReturn is $it")
+                        showAlert("Log in attempt failed. Please try again in some minutes","Log-in failed!")
                         Handler(Looper.getMainLooper()).post {
                             binding.loginSpinerLayout.visibility = View.INVISIBLE
-                            Toast.makeText(
-                                requireActivity(),
-                                "Log in attempt failed. Please try again in some minutes",
-                                Toast.LENGTH_LONG
-                            ).show()
                         }
                     }
                 }
             },
             {
+                showAlert("Log in attempt failed. Please try again in some minutes","Log-in failed!")
                 Handler(Looper.getMainLooper()).post {
                     binding.loginSpinerLayout.visibility = View.INVISIBLE
-                    Toast.makeText(
-                        requireActivity(),
-                        "Log in attempt failed. Please try again in some minutes",
-                        Toast.LENGTH_LONG
-                    ).show()
                 }
             }, {})?.let { bag.add(it) }
         //android mutable live data observer
@@ -138,6 +130,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 .add("email",binding.loginUserEmail.text.toString())
                 .add("password",binding.loginPassword.text.toString())
                 .add("mobileOS","android")
+                .add("version_code","${BuildConfig.VERSION_CODE}")
                 .build()
             Log.d(TAG,body.toString())
 
@@ -146,21 +139,17 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 override fun onFailure(call: Call, e: IOException) {
                     showSpinner(false)
                     e.printStackTrace()
-                    Handler(Looper.getMainLooper()).post{
-                        Toast.makeText(requireActivity(),"Log in attempt failed.",Toast.LENGTH_LONG).show()
-                    }
+                    showAlert("Log in attempt failed. Please try again in some minutes","Log-in failed!")
                 }
                 override fun onResponse(call: Call, response: Response) {
                     showSpinner(false)
                     response.use {
-                        if (!response.isSuccessful) {
-                            Handler(Looper.getMainLooper()).post {
-                                Toast.makeText(requireActivity(),"KungfuBBQ server is not online",Toast.LENGTH_LONG).show()
-                                val action = HomeFragmentDirections.callHome(false)
-                                findNavController().navigate(action)
-                            }
-                        }
+//                        if (!response.isSuccessful) {
+//                            showAlert("Log in attempt failed. Please try again in some minutes","Log-in failed!")
+//                        }
+                        Log.d(TAG,"jsonREsponse is ${response.body!!}")
                         val json = JSONObject(response.body!!.string())
+                        Log.d(TAG,"jsonREsponse is ${json}")
                         if(!json.getBoolean("hasErrors")){
                             val u = json.getJSONObject("data")
                             val user = UserDB(u.getInt("id"),u.getString("email"),u.getString("memberSince"),u.getString("name"),u.getString("phoneNumber"),u.getString("token"),1)
@@ -171,18 +160,16 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                 socialM.add(sMInfo)
                             }
                             userId = user.userId
+                            Log.d(TAG,"jsonREsponse is ${user}")
                             viewModel?.insertAllUserInfo(user,socialM)
                         }else{
-                            Handler(Looper.getMainLooper()).post{
-                                binding.loginSpinerLayout.visibility = View.INVISIBLE
-                                Toast.makeText(requireActivity(),"Log in attempt failed with server message: ${json.getString("msg").toString()}",Toast.LENGTH_LONG).show()
-                            }
+                            showAlert("Log in attempt failed with server message: ${json.getString("msg").toString()}","Log-in failed!")
                         }
                     }
                 }
             })
         }else{
-            Toast.makeText(requireActivity(),"You must inform your e-mail and your password",Toast.LENGTH_LONG).show()
+            showAlert("You must inform your e-mail and your password","Log-in failed!")
         }
     }
     private fun recoverPasswordEmail(email:String){
@@ -194,29 +181,20 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             override fun onFailure(call: Call, e: IOException) {
                 showSpinner(false)
                 e.printStackTrace()
-                Handler(Looper.getMainLooper()).post{
-                    Toast.makeText(requireActivity(),"The attempt to recover password failed.",Toast.LENGTH_LONG).show()
-                }
+                showAlert("The attempt to recover password failed.","Password recovery failed!")
             }
             override fun onResponse(call: Call, response: Response) {
                 response.use {
                     showSpinner(false)
                     if (!response.isSuccessful) {
-                        Handler(Looper.getMainLooper()).post {
-                            Toast.makeText(requireActivity(),"KungfuBBQ server is not online",Toast.LENGTH_LONG).show()
-                            val action = HomeFragmentDirections.callHome(false)
-                            findNavController().navigate(action)
-                        }
+                        showAlert("KungfuBBQ server is not online.","Password recovery failed!")
                     }
                     val json = JSONObject(response.body!!.string())
                     if(!json.getBoolean("hasErrors")){
-                        Handler(Looper.getMainLooper()).post {
-                            Toast.makeText(requireActivity(),"Success! ${json.getString("msg")}",Toast.LENGTH_LONG).show()
-                        }
+                        USER_LOGGED=true
+                        showAlert("Success! ${json.getString("msg")}","Success!")
                     }else{
-                        Handler(Looper.getMainLooper()).post{
-                            Toast.makeText(requireActivity(),"The attempt to recover your password failed",Toast.LENGTH_LONG).show()
-                        }
+                        showAlert("The attempt to recover your password failed","Password recovery failed!")
                     }
                 }
             }
@@ -252,7 +230,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     showSpinner(true)
                     recoverPasswordEmail(textField.text.toString())
                 }else{
-                    Toast.makeText(requireActivity(),"You must inform the e-mail",Toast.LENGTH_LONG).show()
+                    showAlert("You must inform the e-mail","Password recovery failed!")
                 }
             })
             .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, _ -> print(dialog) })
@@ -260,6 +238,24 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         val alert = dialogBuilder.create()
         alert.setTitle("Password recovery")
         alert.show()
+    }
+    private fun showAlert(message:String,title:String){
+        Handler(Looper.getMainLooper()).post{
+            var dialogBuilder = AlertDialog.Builder(requireContext())
+            dialogBuilder.setMessage(message)
+                .setCancelable(title != "${getString(R.string.not_logged_in)}")
+                .setPositiveButton("Ok", DialogInterface.OnClickListener{
+                        _, _ ->
+                    if(title=="${getString(R.string.not_logged_in)}"){
+                        USER_LOGGED = false
+                        val action = NavGraphDirections.callHome(false)
+                        findNavController().navigate(action)
+                    }
+                })
+            val alert = dialogBuilder.create()
+            alert.setTitle(title)
+            alert.show()
+        }
     }
     private fun showSpinner(value: Boolean){
         Handler(Looper.getMainLooper()).post {

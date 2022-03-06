@@ -9,6 +9,8 @@ data class CookingDateDB (
     var cookingDateId: Int,
     @ColumnInfo(name = COOKING_DATE)
     var cookingDate: String,
+    @ColumnInfo(name = COOKING_DATE_AM_PM)
+    var cookingDateAmPm: String,
     @ColumnInfo(name = MEALS_FOR_THIS)
     var mealsForThis: Int,
     @ColumnInfo(name = ADDRESS_ID)
@@ -40,6 +42,7 @@ data class CookingDateDB (
         const val TABLE_NAME="CookingDates"
         const val COOKING_DATE_ID = "cookingDateId"
         const val COOKING_DATE = "cookingDate"
+        const val COOKING_DATE_AM_PM = "cookingDateAmPm"
         const val MEALS_FOR_THIS = "mealsForThis"
         const val ADDRESS_ID = "addressId"
         const val STREET = "street"
@@ -65,6 +68,8 @@ data class CookingDateDishesDB(
     var dishName : String,
     @ColumnInfo(name = DISH_PRICE)
     var dishPrice : String,
+    @ColumnInfo(name = DISH_FIFO)
+    var dishFifo : Int,
     @ColumnInfo(name = DISH_INGREDIENTS)
     var dishIngredients : String,
     @ColumnInfo(name = DISH_DESCRIPTION)
@@ -77,6 +82,7 @@ data class CookingDateDishesDB(
         const val DISH_ID="dishId"
         const val DISH_NAME = "dishName"
         const val DISH_PRICE = "dishPrice"
+        const val DISH_FIFO = "dishFifo"
         const val DISH_INGREDIENTS = "dishIngredients"
         const val DISH_DESCRIPTION = "dishDescription"
         const val COOKING_DATE_ID_FK = "cookingDateIdFk"

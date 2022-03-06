@@ -21,7 +21,7 @@ android {
         applicationId "me.dgmieth.kungfubbq"
         minSdk 24
         targetSdk 30
-        versionCode 16
+        versionCode 17
         //version "1.0" -> using kotlin synthetics
         //versionName "1.1" -> using viewBiding
         //versionName "1.2" -> skipped
@@ -38,7 +38,8 @@ android {
         //versionName "2.3" // contact info
         //versionName "2.4" // facebook profile id correction
         //versionName "2.5" // correction to paid order view and change in mimSDK to 24
-        versionName "2.6" // changed to fragment_pay.xml
+        //versionName "2.6" // changed to fragment_pay.xml
+        versionName "2.7" // correct month in credit card and added box meal and FIFO meals
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

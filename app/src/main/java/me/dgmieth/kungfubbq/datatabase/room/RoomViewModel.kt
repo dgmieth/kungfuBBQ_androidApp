@@ -57,6 +57,7 @@ class RoomViewModel:ViewModel() {
                     subscribe({
                         returnMsg.onNext(Actions.UserComplete)
                     },{
+                        Log.d(TAG,"insertUserCalled - not inserted ${it} ")
                         returnMsg.onNext(Actions.UserError)
                     })?.let{
                         bag.add(it)

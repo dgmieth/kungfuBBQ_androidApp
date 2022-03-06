@@ -6,11 +6,12 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Html
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.*
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.Observer
@@ -29,6 +30,7 @@ import me.dgmieth.kungfubbq.datatabase.room.KungfuBBQRoomDatabase
 import me.dgmieth.kungfubbq.datatabase.room.RoomViewModel
 import me.dgmieth.kungfubbq.datatabase.roomEntities.*
 import me.dgmieth.kungfubbq.httpCtrl.HttpCtrl
+import me.dgmieth.kungfubbq.support.formatter.FormatObject
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
@@ -76,16 +78,12 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                     viewModel?.getCookingDates()
                 }
                 else -> {
-                    Handler(Looper.getMainLooper()).post{
-                        Toast.makeText(requireActivity(),"It was not possible to retrieve information from kungfuBBQ server. Please try again later.",Toast.LENGTH_LONG).show()
-                    }
+                    showAlert("It was not possible to retrieve information from kungfuBBQ server. Please try again later.","Error!")
                 }
             }
         },{
             showSpinner(false)
-            Handler(Looper.getMainLooper()).post{
-                Toast.makeText(requireActivity(),"It was not possible to retrieve information from kungfuBBQ server. Please try again later.",Toast.LENGTH_LONG).show()
-            }
+            showAlert("It was not possible to retrieve information from kungfuBBQ server. Please try again later.","Error!")
         },{})?.let {
             bag.add(it)
         }
@@ -96,7 +94,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                 var dArray : MutableList<Pair<LocalDate,Int>> = mutableListOf()
                 for(i in cd) {
                     var splitDate =
-                        (i.cookingDateAndDishes.cookingDate.cookingDate.split(" ")[0]).split("-")
+                        (i.cookingDateAndDishes.cookingDate.cookingDateAmPm.split(" ")[0]).split("-")
                     val localDate = LocalDate.of(splitDate[0].toInt(),splitDate[1].toInt(),splitDate[2].toInt())
                     events.add(localDate)
                     Handler(Looper.getMainLooper()).post {
@@ -124,7 +122,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
         }
         viewModel?.user?.observe(viewLifecycleOwner, Observer {
             if(!it.user.email.isNullOrEmpty()){
-                getActiveCookingDatesWithinSixtyDays(it)
+                getActiveCookingDatesNextTwelveMonths(it)
             }else{
                 returnUserFromDBNull()
             }
@@ -154,16 +152,16 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
 
             init {
                 view.setOnClickListener {
-                    if(day.owner == DayOwner.THIS_MONTH){
-                        if(day.date >= todayDate){
-                            if (selectedDate != day.date) {
-                                val oldDate = selectedDate
-                                selectedDate = day.date
-                                refreshCalendarView(day.date,oldDate)
-                                ifSelectedDateHasCookingDateMatch(selectedDate)
+                    if(day.owner >= DayOwner.THIS_MONTH){
+                            if (day.date >= todayDate) {
+                                if (selectedDate != day.date) {
+                                    val oldDate = selectedDate
+                                    selectedDate = day.date
+                                    refreshCalendarView(day.date, oldDate)
+                                    ifSelectedDateHasCookingDateMatch(selectedDate)
+                                }
                             }
                         }
-                    }
                 }
             }
             fun bind(day: CalendarDay) {
@@ -187,17 +185,21 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                 bind.todayCircle.visibility = View.INVISIBLE
                 bind.todayDay.setTextColor(Color.BLACK)
 
-                if (day.owner == DayOwner.THIS_MONTH) {
-                    if(day.date == todayDate){
-                        bind.todayCircle.visibility = View.VISIBLE
-                        bind.todayDay.setTextColor(Color.BLACK)
-                    }else if (day.date < todayDate) {
-                        bind.todayDay.setTextColor(Color.GRAY)
-                    }else {
-                        bind.todayDay.setTextColor(Color.WHITE)
+                if (day.owner == DayOwner.THIS_MONTH ) {
+                    when {
+                        day.date == todayDate -> {
+                            bind.todayCircle.visibility = View.VISIBLE
+                            bind.todayDay.setTextColor(Color.BLACK)
+                        }
+                        day.date < todayDate -> {
+                            bind.todayDay.setTextColor(context!!.getColor(R.color.lessDarkBlue))
+                        }
+                        else -> {
+                            bind.todayDay.setTextColor(Color.WHITE)
+                        }
                     }
-                } else {
-                    bind.todayDay.setTextColor(Color.BLACK)
+                } else if (day.owner == DayOwner.PREVIOUS_MONTH || day.owner == DayOwner.NEXT_MONTH)  {
+                    bind.todayDay.setTextColor(context!!.getColor(R.color.lessDarkBlue))
                     bind.kungfuBBQImg.visibility = View.INVISIBLE
                 }
             }
@@ -211,7 +213,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
         val currentMonth = YearMonth.now()
         // Value for firstDayOfWeek does not matter since inDates and outDates are not generated.
         val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
-        binding.calendarView.setup(currentMonth, currentMonth.plusMonths(1), firstDayOfWeek)
+        binding.calendarView.setup(currentMonth, currentMonth.plusMonths(12), firstDayOfWeek)
         binding.calendarView.scrollToDate(LocalDate.now())
         binding.calendarView.scrollToDate(selectedDate)
         //setting onClickListener
@@ -252,22 +254,21 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
     /*
      * HTTP request
      */
-    private fun getActiveCookingDatesWithinSixtyDays(it: UserAndSocialMedia) {
+    private fun getActiveCookingDatesNextTwelveMonths(it: UserAndSocialMedia) {
         var httpUrl = HttpUrl.Builder()
             .scheme("https")
             .host("${getString(R.string.kungfuServerUrlNoSchema)}")
             .addQueryParameter("email",it.user.email)
             .addQueryParameter("id",it.user.userId.toString())
-            .addPathSegments("api/cookingCalendar/activeCookingDatesWithinSixtyDays")
+            .addQueryParameter("version_code","${BuildConfig.VERSION_CODE}")
+            .addQueryParameter("mobileOS","android")
+            .addPathSegments("api/cookingCalendar/activeCookingDateWithinNextTwelveMonths")
             .build()
         HttpCtrl.shared.newCall(HttpCtrl.get("","",httpUrl,it.user.token)).enqueue(object :
             Callback {
             override fun onFailure(call: Call, e: IOException) {
                 e.printStackTrace()
-                Handler(Looper.getMainLooper()).post{
-                    Toast.makeText(requireActivity(),"The attempt to retrieve data from KungfuBBQ server failed with generalized error message: ${e.localizedMessage}",
-                        Toast.LENGTH_LONG).show()
-                }
+                showAlert("The attempt to retrieve data from KungfuBBQ server failed with generalized error message: ${e.localizedMessage}","Error!")
             }
             override fun onResponse(call: Call, response: Response) {
                 response.use {
@@ -285,6 +286,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                             listCDates.add(CookingDateDB(
                                 iJ.getInt("cookingDateId"),
                                 iJ.getString("cookingDate"),
+                                iJ.getString("cookingDateAmPm"),
                                 iJ.getInt("mealsForThis"),
                                 iJ.getInt("addressId"),
                                 iJ.getString("street"),
@@ -303,6 +305,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                                 listCDatesDishes.add(CookingDateDishesDB(ds.getInt("dishId"),
                                     ds.getString("dishName"),
                                     ds.getString("dishPrice"),
+                                    ds.getInt("dishFifo"),
                                     ds.getString("dishIngredients"),
                                     ds.getString("dishDescription"),
                                     iJ.getInt("cookingDateId")))
@@ -318,12 +321,14 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                                 iO.getInt("userId"),
                                 iO.getString("userName"),
                                 iO.getString("userEmail"),
+                                iO.getDouble("tipAmount"),
                                 iO.getString("userPhoneNumber")))
                             for(x in 0 until iO.getJSONArray("dishes").length()){
                                 val ds = iO.getJSONArray("dishes").getJSONObject(x)
                                 listOrderDishes.add(OrderDishesDB(ds.getInt("dishId"),
                                     ds.getString("dishName"),
                                     ds.getString("dishPrice"),
+                                    ds.getInt("dishFifo"),
                                     ds.getInt("dishQtty"),
                                     ds.getString("observation"),
                                     iO.getInt("orderId")))
@@ -332,17 +337,9 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                         viewModel?.insertAllCookingDates(listCDates,listCDatesDishes,listOrders,listOrderDishes)
                     }else{
                         if(json.getInt("errorCode")==-1){
-                            Handler(Looper.getMainLooper()).post{
-                                Toast.makeText(requireActivity(),"You are not authenticated in Kungfu BBQ server anylonger. Please log in again.",
-                                    Toast.LENGTH_LONG).show()
-                                val action = NavGraphDirections.callHome(false)
-                                findNavController().navigate(action)
-                            }
+                            showAlert("${getString(R.string.not_logged_in_message)}","${getString(R.string.not_logged_in)}")
                         }else{
-                            Handler(Looper.getMainLooper()).post{
-                                Toast.makeText(requireActivity(),"The attempt to retrieve data from KungfuBBQ server failed with server message: ${json.getString("msg")}",
-                                    Toast.LENGTH_LONG).show()
-                            }
+                            showAlert("The attempt to retrieve data from KungfuBBQ server failed with server message: ${json.getString("msg")}","Error!")
                         }
                     }
                 }
@@ -372,17 +369,36 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                         10 -> "Nov"
                         else -> "Dec"
                     }
-                    val complement = if (cd.cookingDateAndDishes.cookingDate.complement == "Not informed") "" else ", ${cd.cookingDateAndDishes.cookingDate.complement}"
-                    var dateAddress = "$month ${i.first.dayOfMonth} at ${cd.cookingDateAndDishes.cookingDate.street}${complement}"
-                    dateAddress.also { binding.calendarDate.text = it }
+//                    var dateAddress = "$month ${i.first.dayOfMonth} at ${cd.cookingDateAndDishes.cookingDate.cookingDate.split("-")[1]} \n ${FormatObject.formatEventAddress(cd.cookingDateAndDishes.cookingDate.street,cd.cookingDateAndDishes.cookingDate.complement,cd.cookingDateAndDishes.cookingDate.city,cd.cookingDateAndDishes.cookingDate.state,cd.cookingDateAndDishes.cookingDate.zipcode)}"
+                    binding.calendarDate.text = Html.fromHtml(FormatObject.formatEventAddress(i.first.month.value-1,i.first.dayOfMonth,cd.cookingDateAndDishes.cookingDate.cookingDateAmPm.split(" ")[1],cd.cookingDateAndDishes.cookingDate.street,cd.cookingDateAndDishes.cookingDate.complement,cd.cookingDateAndDishes.cookingDate.city,cd.cookingDateAndDishes.cookingDate.state,cd.cookingDateAndDishes.cookingDate.zipcode),Html.FROM_HTML_MODE_COMPACT)
                     binding.calendarStatus.text = cd.cookingDateAndDishes.cookingDate.cookingStatus
-                    var menu = ""
-                    var menuIndex = 1
-                    for(m in cd.cookingDateAndDishes.cookingDateDishes){
-                        menu = "${menu}${menuIndex}- ${m.dishName} \n"
-                        menuIndex += 1
+//                    var menu = "<p><strong>BOX MEAL:</strong></p>"
+//                    var menuIndex = 1
+//                    var fifoIndex = 1
+//                    val fifoIntro = "<p><strong>${getString(R.string.first_come_first_served)}:</strong></p>"
+//                    var fifo = "$fifoIntro"
+//                    for(m in cd.cookingDateAndDishes.cookingDateDishes){
+//                        if(m.dishFifo==0){
+//                            menu = "${menu}<p>${menuIndex}- ${m.dishName}${if(m.dishDescription != "") "( ${m.dishDescription})" else ""}</p>"
+//                            menuIndex += 1
+//                        }else{
+//                            fifo = "${fifo}<p>${fifoIndex}- ${m.dishName}${if(m.dishDescription != "") "( ${m.dishDescription})" else ""}</p>"
+//                            fifoIndex += 1
+//                        }
+//                    }
+//                    menu = "${menu}${if(fifo != fifoIntro) fifo else ""}"
+//                    Log.d(TAG,"html is $menu")
+//                    binding.calendarMenu.text = Html.fromHtml(menu,Html.FROM_HTML_MODE_COMPACT)
+                    binding.calendarMenu.text = Html.fromHtml(FormatObject.formatDishesListForMenuScrollViews(cd.cookingDateAndDishes.cookingDateDishes),Html.FROM_HTML_MODE_COMPACT)
+                    //Log.d(TAG,"${FormatObject.formatEventAddress(cd.cookingDateAndDishes.cookingDate.street,cd.cookingDateAndDishes.cookingDate.complement,cd.cookingDateAndDishes.cookingDate.city,cd.cookingDateAndDishes.cookingDate.state,cd.cookingDateAndDishes.cookingDate.zipcode)}")
+                    if(binding.calendarMenu.canScrollVertically(1) || binding.calendarMenu.canScrollVertically(-1)){
+                        binding.calendarMenu.scrollTo(0,0)
+                        binding.calendarScrollImg.visibility = View.VISIBLE
+                    }else {
+                        binding.calendarScrollImg.visibility = View.INVISIBLE
                     }
-                    binding.calendarMenu.text = menu
+                    Log.d(TAG, "height is ${binding.calendarMenu.height}")
+                    Log.d(TAG, "height is ${binding.calendarMenu.canScrollVertically(1)} ${binding.calendarMenu.canScrollVertically(-1)}")
                     updateUIBtns(i.second)
                     break
                 }else{
@@ -402,15 +418,15 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
         cookingDates?.let {
             val cdArray = it.filter {e -> e.cookingDateAndDishes.cookingDate.cookingDateId == cookingDateId}
             val cd = cdArray[0]
-            if(cd.cookingDateAndDishes.cookingDate.cookingStatusId == 4){
-                if(cd.order.isNotEmpty()){
+            if(cd.cookingDateAndDishes.cookingDate.cookingStatusId == 4) {
+                if (cd.order.isNotEmpty()) {
                     showOrderBtns(
-                        placeOrder= false,
+                        placeOrder = false,
                         updateOrder = true,
                         payOrder = false,
                         paidOrder = false
                     )
-                }else{
+                } else {
                     showOrderBtns(
                         placeOrder = true,
                         updateOrder = false,
@@ -418,6 +434,13 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                         paidOrder = false
                     )
                 }
+            }else if(cd.cookingDateAndDishes.cookingDate.cookingStatusId < 4){
+                showOrderBtns(
+                    placeOrder = false,
+                    updateOrder = false,
+                    payOrder = false,
+                    paidOrder = false
+                )
             }else {
                 if(cd.order.isNotEmpty()){
                     var order = cd.order[0].order
@@ -441,10 +464,10 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                     }
                     if (order.orderStatusId == 4 ){ /*Waiting selected users to drop out*/
                         /*create user alert*/
-                        showAlert("Your order did not make it to this list, but you are on the waiting list for drop out orders. You'll receive a notification if your order gets onto this list",
+                        showAlert("Your order did not make it to this list, but you are on the waiting list for drop out orders. You'll receive a notification if your order gets onto this list. You may also DM KungfuBBQ to find out if there will be first come first served meals.",
                                 "Order status")
                     }
-                    if (arrayListOf<Int>(5,8,9,10,11).contains(order.orderStatusId) ){ /*5-Confirmed/paid by user 8-Waiting order pickup alert 9- Waiting pickup 10- Delivered 11-Closed  */
+                    if (arrayListOf<Int>(5,8,9,10,11,14).contains(order.orderStatusId) ){ /*5-Confirmed/paid by user 8-Waiting order pickup alert 9- Waiting pickup 10- Delivered 11-Closed  14-payAtPickup*/
                         /*show checkout pair order btn*/
                         showOrderBtns(
                             placeOrder = false,
@@ -455,17 +478,17 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                     }
                     if (order.orderStatusId == 6 ){ /*Declined by user*/
                         /*create user alert*/
-                        showAlert("You cancelled this order if you wish to order food from us, please choose another available cooking date",
+                        showAlert("You cancelled this order if you wish to order food from us, please choose another available event. You may also DM KungfuBBQ to find out if there will be first come first served meals.",
                             "Order status")
                     }
                     if (order.orderStatusId == 7 ){ /*Not made to this cookingCalendar date list*/
                         /*create user alert*/
-                        showAlert("We are sorry! Unfortunately your order did not make to the final list on this cooking date. Please, order from us again on another available cooking date",
+                        showAlert("We are sorry! Unfortunately your order did not make to the final list on this event. Please, order from us again on another available event. You may also DM KungfuBBQ to find out if there will be first come first served meals.",
                             "Order status")
                     }
                     if (order.orderStatusId == 12 ){ /*The cooking calendar register was excluded by the database administrator, application user or routine*/
                         /*create user alert*/
-                        showAlert("You missed the time you had to confirm the order. Please order again from another available cooking date.",
+                        showAlert("You missed the time you had to confirm the order. Please order again from another available event. You may also DM KungfuBBQ to find out if there will be first come first served meals.",
                             "Order status")
                     }
                 }else{
@@ -488,9 +511,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
         binding.calendarPaidOrder.visibility = if(paidOrder) View.VISIBLE else View.INVISIBLE
     }
     private fun returnUserFromDBNull() {
-        Handler(Looper.getMainLooper()).post{
-            Toast.makeText(requireActivity(),"It was not possible to recover data from app`s database. Please restart the app.",Toast.LENGTH_LONG).show()
-        }
+        showAlert("It was not possible to recover data from app`s database. Please restart the app.","Database error!")
     }
     private fun refreshCalendarView(newDate:LocalDate?,oldDate:LocalDate?){
         newDate?.let { binding.calendarView.notifyDateChanged(it) }
@@ -502,9 +523,14 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
         Handler(Looper.getMainLooper()).post{
             var dialogBuilder = AlertDialog.Builder(requireContext())
             dialogBuilder.setMessage(message)
-                .setCancelable(true)
+                .setCancelable(title != "${getString(R.string.not_logged_in)}")
                 .setPositiveButton("Ok", DialogInterface.OnClickListener{
                         _, _ ->
+                    if(title=="${getString(R.string.not_logged_in)}"){
+                        USER_LOGGED = false
+                        val action = NavGraphDirections.callHome(false)
+                        findNavController().navigate(action)
+                    }
                 })
             val alert = dialogBuilder.create()
             alert.setTitle(title)

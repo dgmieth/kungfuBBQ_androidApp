@@ -32,4 +32,7 @@
         <item name="colorControlNormal">@color/white</item>
 
     </style>
+    <style name="tip_btn_text_size" parent="AppTheme.Picker">
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

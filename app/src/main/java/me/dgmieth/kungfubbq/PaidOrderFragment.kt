@@ -5,9 +5,9 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Html
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -22,6 +22,7 @@ import me.dgmieth.kungfubbq.datatabase.room.KungfuBBQRoomDatabase
 import me.dgmieth.kungfubbq.datatabase.room.RoomViewModel
 import me.dgmieth.kungfubbq.datatabase.roomEntities.CookingDateAndCookingDateDishesWithOrder
 import me.dgmieth.kungfubbq.datatabase.roomEntities.UserAndSocialMedia
+import me.dgmieth.kungfubbq.support.formatter.FormatObject
 import java.util.*
 
 class PaidOrderFragment : Fragment(R.layout.fragment_paidorder),OnMapReadyCallback {
@@ -57,12 +58,7 @@ class PaidOrderFragment : Fragment(R.layout.fragment_paidorder),OnMapReadyCallba
             if(!it.user.email.isNullOrEmpty()){
                 userPaidOrder = it
             }else{
-                Handler(Looper.getMainLooper()).post{
-                    Toast.makeText(requireActivity(),"It was not possible to retrieve information from this app's database. Please restart the app.",
-                        Toast.LENGTH_LONG).show()
-                    var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
-                    findNavController().navigate(action)
-                }
+                showAlert("It was not possible to retrieve information from this app's database. Please restart the app.",getString(R.string.database_error))
             }
         })
         //Subscribing to cookingD
@@ -72,33 +68,35 @@ class PaidOrderFragment : Fragment(R.layout.fragment_paidorder),OnMapReadyCallba
             cookingDate?.let { cd ->
                 Log.d(TAG,"cookingDates called -> value $cd")
                 //updating date
-                val splitDate = (cd.cookingDateAndDishes.cookingDate.cookingDate.split(" ")[0]).split("-")
-                val cal = Calendar.getInstance()
-                cal.set(splitDate[0].toInt(), splitDate[1].toInt()-1, splitDate[2].toInt())
-                val dateStrParts = cal.time.toString().split(" ")
-                binding.paidOrderDate.text = "${dateStrParts[1]} ${dateStrParts[2]}"
+//                val splitDate = (cd.cookingDateAndDishes.cookingDate.cookingDate.split(" ")[0]).split("-")
+//                val cal = Calendar.getInstance()
+//                cal.set(splitDate[0].toInt(), splitDate[1].toInt()-1, splitDate[2].toInt())
+//                val dateStrParts = cal.time.toString().split(" ")
+                binding.paidOrderDate.text = FormatObject.returnEventTime()
                 binding.orderNr.text = cd.order[0].order.orderId.toString()
                 //updating status
                 binding.paidOrderStatus.text = cd.cookingDateAndDishes.cookingDate.cookingStatus
                 //updating menu
-                var menuT = ""
-                var menuIndex = 1
-                var mealsSum = 0.0
-                for(m in cd.cookingDateAndDishes.cookingDateDishes){
-                    menuT = "${menuT}${menuIndex}- ${m.dishName} - U$${m.dishPrice}\n"
-                    menuIndex += 1
-                    mealsSum += m.dishPrice.toDouble()
-                }
-                binding.paidOrderMenu.text = menuT
+//                var menuT = ""
+//                var menuIndex = 1
+//                var mealsSum = 0.0
+//                for(m in cd.cookingDateAndDishes.cookingDateDishes){
+//                    menuT = "${menuT}${menuIndex}- ${m.dishName} - U$${m.dishPrice}\n"
+//                    menuIndex += 1
+//                    mealsSum += m.dishPrice.toDouble()
+//                }
+//                binding.paidOrderMenu.text = menuT
+                binding.paidOrderMenu.text = Html.fromHtml(FormatObject.formatDishesListForMenuScrollViews(cd.cookingDateAndDishes.cookingDateDishes), Html.FROM_HTML_MODE_COMPACT)
                 //updating maps
-                binding.paidOrderLocationText.text = "${cd.cookingDateAndDishes.cookingDate.street}, ${cd.cookingDateAndDishes.cookingDate.city}"
+                binding.paidOrderLocationText.text = FormatObject.returnAddress()
                 binding.paidOrderLocationMap.getMapAsync(this)
-                var priceString = "U$ ${String.format("%.2f",mealsSum)}"
+                var priceString = "U$ ${String.format("%.2f",FormatObject.returnMealBoxTotalAmount())}"
                 //updating meal price
                 binding.paidOrderMealPrice.text = priceString
                 //updating total meal price
                 binding.paidOrderNumberOfMeals.text = cd.order[0].dishes[0].dishQuantity.toString()
-                binding.paidOrderTotalPrice.text = "U$ ${String.format("%.2f",mealsSum*cd.order[0].dishes[0].dishQuantity)}"
+                binding.paidOrderTip.text = "U$ ${String.format("%.2f",cd.order[0].order.tipAmount)}"
+                binding.paidOrderTotalPrice.text = "U$ ${String.format("%.2f",(FormatObject.returnMealBoxTotalAmount()*cd.order[0].dishes[0].dishQuantity)+cd.order[0].order.tipAmount)}"
             }
         },{
             Log.d("CookingDateObservable","error is $it")
@@ -185,5 +183,30 @@ class PaidOrderFragment : Fragment(R.layout.fragment_paidorder),OnMapReadyCallba
     override fun onLowMemory() {
         super.onLowMemory()
         binding.paidOrderLocationMap.onLowMemory()
+    }
+    private fun showAlert(message:String,title:String) {
+        Handler(Looper.getMainLooper()).post {
+            var dialogBuilder = AlertDialog.Builder(requireContext())
+            dialogBuilder.setMessage(message)
+                .setCancelable(title != "${getString(R.string.not_logged_in)}")
+                .setPositiveButton("Ok", DialogInterface.OnClickListener { _, _ ->
+                    if (title == "${getString(R.string.not_logged_in)}") {
+                        USER_LOGGED = false
+                        val action = NavGraphDirections.callHome(false)
+                        findNavController().navigate(action)
+                    }
+                    if (title == "${getString(R.string.database_error)}") {
+                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
+                        findNavController().navigate(action)
+                    }
+                    if (title == "${getString(R.string.success)}") {
+                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
+                        findNavController().navigate(action)
+                    }
+                })
+            val alert = dialogBuilder.create()
+            alert.setTitle(title)
+            alert.show()
+        }
     }
 }

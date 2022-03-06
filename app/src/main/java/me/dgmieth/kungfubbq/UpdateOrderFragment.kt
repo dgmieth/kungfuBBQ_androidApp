@@ -5,10 +5,10 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Html
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -25,6 +25,7 @@ import me.dgmieth.kungfubbq.datatabase.room.RoomViewModel
 import me.dgmieth.kungfubbq.datatabase.roomEntities.CookingDateAndCookingDateDishesWithOrder
 import me.dgmieth.kungfubbq.datatabase.roomEntities.UserAndSocialMedia
 import me.dgmieth.kungfubbq.httpCtrl.HttpCtrl
+import me.dgmieth.kungfubbq.support.formatter.FormatObject
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
@@ -70,12 +71,7 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
             if(!it.user.email.isNullOrEmpty()){
                 userUpdateOrder = it
             }else{
-                Handler(Looper.getMainLooper()).post{
-                    Toast.makeText(requireActivity(),"It was not possible to retrieve information from this app's database. Please restart the app.",
-                        Toast.LENGTH_LONG).show()
-                    var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
-                    findNavController().navigate(action)
-                }
+                showAlert("It was not possible to retrieve information from this app's database. Please restart the app.","${getString(R.string.database_error)}")
             }
         })
         //Subscribing to cookingD
@@ -84,33 +80,34 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
             cookingDate = cdArray[0]
             cookingDate?.let { cd ->
                 //updating date
-                val splitDate = (cd.cookingDateAndDishes.cookingDate.cookingDate.split(" ")[0]).split("-")
-                val cal = Calendar.getInstance()
-                cal.set(splitDate[0].toInt(), splitDate[1].toInt()-1, splitDate[2].toInt())
-                val dateStrParts = cal.time.toString().split(" ")
-                binding.updateOrderDate.text = "${dateStrParts[1]} ${dateStrParts[2]}"
+//                val splitDate = (cd.cookingDateAndDishes.cookingDate.cookingDate.split(" ")[0]).split("-")
+//                val cal = Calendar.getInstance()
+//                cal.set(splitDate[0].toInt(), splitDate[1].toInt()-1, splitDate[2].toInt())
+//                val dateStrParts = cal.time.toString().split(" ")
+                binding.updateOrderDate.text = FormatObject.returnEventTime()
                 //updating status
                 binding.updateOrderStatus.text = cd.cookingDateAndDishes.cookingDate.cookingStatus
                 //updating menu
-                var menuT = ""
-                var menuIndex = 1
-                var mealsSum = 0.0
-                for(m in cd.cookingDateAndDishes.cookingDateDishes){
-                    menuT = "${menuT}${menuIndex}- ${m.dishName} - U$${m.dishPrice}\n"
-                    menuIndex += 1
-                    mealsSum += m.dishPrice.toDouble()
-                }
-                binding.updateOrderMenu.text = menuT
+//                var menuT = ""
+//                var menuIndex = 1
+//                var mealsSum = 0.0
+//                for(m in cd.cookingDateAndDishes.cookingDateDishes){
+//                    menuT = "${menuT}${menuIndex}- ${m.dishName} - U$${m.dishPrice}\n"
+//                    menuIndex += 1
+//                    mealsSum += m.dishPrice.toDouble()
+//                }
+//                binding.updateOrderMenu.text = menuT
+                binding.updateOrderMenu.text = Html.fromHtml(FormatObject.formatDishesListForMenuScrollViews(cd.cookingDateAndDishes.cookingDateDishes), Html.FROM_HTML_MODE_COMPACT)
                 //updating maps
-                binding.updateOrderLocationText.text = "${cd.cookingDateAndDishes.cookingDate.street}, ${cd.cookingDateAndDishes.cookingDate.city}"
+                binding.updateOrderLocationText.text = FormatObject.returnAddress()
                 binding.updateOrderLocationMap.getMapAsync(this)
-                var priceString = "U$ ${String.format("%.2f",mealsSum)}"
+                var priceString = "U$ ${String.format("%.2f",FormatObject.returnMealBoxTotalAmount())}"
                 //updating meal price
                 binding.updateOrderMealPrice.text = priceString
                 //updating total meal price
                 binding.updateOrderNumberOfMeals.value = cd.order[0].dishes[0].dishQuantity
                 selectedQtty = cd.order[0].dishes[0].dishQuantity
-                binding.updateOrderTotalPrice.text = "U$ ${String.format("%.2f",mealsSum*cd.order[0].dishes[0].dishQuantity)}"
+                binding.updateOrderTotalPrice.text = "U$ ${String.format("%.2f",FormatObject.returnMealBoxTotalAmount()*cd.order[0].dishes[0].dishQuantity)}"
             }
         },{
             Log.d("CookingDateObservable","error is $it")
@@ -121,19 +118,7 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
         if(args.cookingDateId != 0) {
             viewModel?.getUser()
         }else{
-            var dialogBuilder = AlertDialog.Builder(requireContext())
-            dialogBuilder.setMessage("Communication with this apps's database failed. Please restart the app.")
-                .setCancelable(false)
-                .setPositiveButton("Ok", DialogInterface.OnClickListener{
-                        _, _ ->
-                    Handler(Looper.getMainLooper()).post {
-                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
-                        findNavController().navigate(action)
-                    }
-                })
-            val alert = dialogBuilder.create()
-            alert.setTitle("Database communication failure")
-            alert.show()
+            showAlert("It was not possible to retrieve information from this app's database. Please restart the app.","${getString(R.string.database_error)}")
         }
         _binding = FragmentUpdateorderBinding.inflate(inflater, container, false)
         return binding.root
@@ -272,9 +257,7 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
             override fun onFailure(call: Call, e: IOException) {
                 showSpinner(false)
                 e.printStackTrace()
-                Handler(Looper.getMainLooper()).post{
-                    Toast.makeText(requireActivity(),"The attempt to delete your order from KungfuBBQ server failed with generalized message: ${e.localizedMessage}",Toast.LENGTH_LONG).show()
-                }
+                showAlert("The attempt to delete your order from KungfuBBQ server failed with generalized message: ${e.localizedMessage}","Error!")
             }
             override fun onResponse(call: Call, response: Response) {
                 showSpinner(false)
@@ -282,34 +265,14 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
                     val json = JSONObject(response.body!!.string())
                     if(!json.getBoolean("hasErrors")){
-                        Handler(Looper.getMainLooper()).post{
-                            var dialogBuilder = AlertDialog.Builder(requireContext())
-                            dialogBuilder.setMessage("${json.getString("msg")}")
-                                .setCancelable(false)
-                                .setPositiveButton("Ok", DialogInterface.OnClickListener{
-                                        _, _ ->
-                                    Handler(Looper.getMainLooper()).post {
-                                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
-                                        findNavController().navigate(action)
-                                    }
-                                })
-                            val alert = dialogBuilder.create()
-                            alert.setTitle("Pre-order successfully deleted from KungfuBBQ's server")
-                            alert.show()
-                        }
+                        showAlert("Pre-order successfully deleted from KungfuBBQ's server","${getString(R.string.success)}")
                     }else{
                         when {
                             json.getInt("errorCode")==-1 -> {
-                                notLoggedIntAlert()
-                            }
-                            json.getInt("errorCode") <= -2 -> {
-                                showWarningMessage(json.getString("msg"))
+                                showAlert("${getString(R.string.not_logged_in_message)}","${getString(R.string.not_logged_in)}")
                             }
                             else -> {
-                                Handler(Looper.getMainLooper()).post{
-                                    Toast.makeText(requireActivity(),"The attempt to delete your order from KungfuBBQ's server failed with server message: ${json.getString("msg")}",
-                                        Toast.LENGTH_LONG).show()
-                                }
+                                showAlert("The attempt to delete your order from KungfuBBQ's server failed with server message: ${json.getString("msg")}","Error!")
                             }
                         }
                     }
@@ -317,21 +280,9 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
             }
         })
     }
-    private fun showWarningMessage(text:String){
-        //showWarningMessage(json.getString("msg"))
-        Handler(Looper.getMainLooper()).post{
-            Toast.makeText(requireActivity(),"$text",
-                Toast.LENGTH_LONG).show()
-            val action = NavGraphDirections.callCalendarFragmentGlobal()
-            findNavController().navigate(action)
-        }
-    }
     private fun updateOrder(){
         if(cookingDate!!.order[0].dishes[0].dishQuantity == selectedQtty){
-            Handler(Looper.getMainLooper()).post{
-                showUpdateOrderBtns(false)
-                Toast.makeText(requireActivity(),"Nothing was changed",Toast.LENGTH_LONG).show()
-            }
+            showAlert("Nothing was changed.","Update cancelled!")
             return
         }
         val body = okhttp3.FormBody.Builder()
@@ -346,9 +297,7 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
             override fun onFailure(call: Call, e: IOException) {
                 showSpinner(false)
                 e.printStackTrace()
-                Handler(Looper.getMainLooper()).post{
-                    Toast.makeText(requireActivity(),"The attempt to update your order on KungfuBBQ's server failed with generalized message: ${e.localizedMessage}",Toast.LENGTH_LONG).show()
-                }
+                showAlert("The attempt to update your order on KungfuBBQ's server failed with generalized message: ${e.localizedMessage}","Error!")
             }
             override fun onResponse(call: Call, response: Response) {
                 showSpinner(false)
@@ -356,34 +305,14 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
                     val json = JSONObject(response.body!!.string())
                     if(!json.getBoolean("hasErrors")){
-                        Handler(Looper.getMainLooper()).post{
-                            var dialogBuilder = AlertDialog.Builder(requireContext())
-                            dialogBuilder.setMessage("${json.getString("msg")}")
-                                .setCancelable(false)
-                                .setPositiveButton("Ok", DialogInterface.OnClickListener{
-                                        _, _ ->
-                                    Handler(Looper.getMainLooper()).post {
-                                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
-                                        findNavController().navigate(action)
-                                    }
-                                })
-                            val alert = dialogBuilder.create()
-                            alert.setTitle("Pre-order successfully updated on KungfuBBQ's server")
-                            alert.show()
-                        }
+                        showAlert("Pre-order successfully updated on KungfuBBQ's server","${getString(R.string.success)}")
                     }else{
                         when {
                             json.getInt("errorCode")==-1 -> {
-                                notLoggedIntAlert()
-                            }
-                            json.getInt("errorCode") <=-2 -> {
-                                showWarningMessage(json.getString("msg"))
+                                showAlert("${getString(R.string.not_logged_in)}","${getString(R.string.not_logged_in)}")
                             }
                             else -> {
-                                Handler(Looper.getMainLooper()).post{
-                                    Toast.makeText(requireActivity(),"The attempt to update your order on KungfuBBQ's server failed with server message: ${json.getString("msg")}",
-                                        Toast.LENGTH_LONG).show()
-                                }
+                                showAlert("The attempt to update your order on KungfuBBQ's server failed with server message: ${json.getString("msg")}","Error!")
                             }
                         }
                     }
@@ -401,8 +330,8 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
         editItemBtn!!.isVisible = !value
     }
     private fun returnTotalAmount(qttyChosen:Int):String{
-        val mealsPrice = (binding.updateOrderMealPrice.text.toString().split(" ")[1].toDouble())
-        val total = mealsPrice * qttyChosen
+//        val mealsPrice = (binding.updateOrderMealPrice.text.toString().split(" ")[1].toDouble())
+        val total = FormatObject.returnMealBoxTotalAmount() * qttyChosen
         return "U$ ${String.format("%.2f",total)}"
     }
     private fun showSpinner(value: Boolean){
@@ -413,12 +342,29 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
             }
         }
     }
-    private fun notLoggedIntAlert(){
-        Handler(Looper.getMainLooper()).post{
-            Toast.makeText(requireActivity(),"You are not authenticated in Kungfu BBQ server anylonge. Please log in again.",
-                Toast.LENGTH_LONG).show()
-            val action = NavGraphDirections.callHome(false)
-            findNavController().navigate(action)
+    private fun showAlert(message:String,title:String) {
+        Handler(Looper.getMainLooper()).post {
+            var dialogBuilder = AlertDialog.Builder(requireContext())
+            dialogBuilder.setMessage(message)
+                .setCancelable(title != "${getString(R.string.not_logged_in)}")
+                .setPositiveButton("Ok", DialogInterface.OnClickListener { _, _ ->
+                    if (title == "${getString(R.string.not_logged_in)}") {
+                        USER_LOGGED = false
+                        val action = NavGraphDirections.callHome(false)
+                        findNavController().navigate(action)
+                    }
+                    if (title == "${getString(R.string.database_error)}") {
+                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
+                        findNavController().navigate(action)
+                    }
+                    if (title == "${getString(R.string.success)}") {
+                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
+                        findNavController().navigate(action)
+                    }
+                })
+            val alert = dialogBuilder.create()
+            alert.setTitle(title)
+            alert.show()
         }
     }
 }

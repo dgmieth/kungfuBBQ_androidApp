@@ -4,4 +4,8 @@
     <dimen name="btn_height">52dp</dimen>
     <dimen name="home_view_height">90dp</dimen>
     <dimen name="global_textsize">20sp</dimen>
+    <dimen name="calendar_menu_height">58dp</dimen>
+    <dimen name="number_pkr_height">75dp</dimen>
+    <dimen name="edit_text_height">40dp</dimen>
+    <dimen name="button_short_height">38dp</dimen>
 </resources>

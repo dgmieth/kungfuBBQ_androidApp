@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lessDarkBlue"
+    android:foregroundTint="@color/secondary"
     android:gravity="center"
     tools:context=".PayFragment">
 
@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/palatino"
         android:text="@string/pay_cardnumber_lbl"
         android:textColor="@color/white"
@@ -53,7 +53,7 @@
     <EditText
         android:id="@+id/payCardNumber"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/edit_text_height"
         android:layout_marginStart="32dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="32dp"
@@ -75,7 +75,7 @@
     <EditText
         android:id="@+id/payCardCode"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/edit_text_height"
         android:layout_marginStart="96dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="96dp"
@@ -99,7 +99,7 @@
     <NumberPicker
         android:id="@+id/payCardYear"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="@dimen/number_pkr_height"
         android:layout_marginStart="48dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="75dp"
@@ -111,13 +111,172 @@
     <NumberPicker
         android:id="@+id/payCardMonth"
         android:layout_width="85dp"
-        android:layout_height="100dp"
+        android:layout_height="@dimen/number_pkr_height"
         android:layout_marginStart="75dp"
         android:layout_marginTop="4dp"
         android:descendantFocusability="blocksDescendants"
         android:theme="@style/picker"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/payValidLbl" />
+
+    <TextView
+        android:id="@+id/payTipLbl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/pay_tip_lbl"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_textsize"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/payCardMonth" />
+
+    <LinearLayout
+        android:id="@+id/payTipLayout"
+        android:layout_width="308dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/payTipLbl">
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25" />
+
+        <Button
+            android:id="@+id/payTip15"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_short_height"
+            android:layout_weight="1"
+            android:background="@drawable/tip_buttons_layout"
+            android:backgroundTintMode="screen"
+            android:text="15%"
+            android:textColor="@color/tip_btn_text_color"
+            android:textStyle="bold"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25" />
+
+        <Button
+            android:id="@+id/payTip20"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_short_height"
+            android:layout_weight="1"
+            android:background="@drawable/tip_buttons_layout"
+            android:text="20%"
+            android:textColor="@color/tip_btn_text_color"
+            android:textStyle="bold" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25" />
+
+        <Button
+            android:id="@+id/payTipCustom"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_short_height"
+            android:layout_weight="1"
+            android:background="@drawable/tip_buttons_layout"
+            android:text="Custom"
+            android:textColor="@color/tip_btn_text_color"
+            android:textStyle="bold" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/payMealsAmountLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/meal_box_amout"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_textsize"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/payTipLayout" />
+
+    <TextView
+        android:id="@+id/payMealsAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="38dp"
+        android:fontFamily="@font/palatino"
+        android:text="U$ 0.00"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_textsize"
+        app:layout_constraintBottom_toBottomOf="@+id/payMealsAmountLbl"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/payTipAmountLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/tip_amount_label"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_textsize"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/payMealsAmountLbl" />
+
+    <TextView
+        android:id="@+id/payTipAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="38dp"
+        android:fontFamily="@font/palatino"
+        android:text="U$ 0.00"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_textsize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/payMealsAmount" />
+
+    <TextView
+        android:id="@+id/payTotalAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="38dp"
+        android:fontFamily="@font/palatino"
+        android:text="U$ 0.00"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_textsize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/payTipAmount" />
+
+    <TextView
+        android:id="@+id/payTotalAmountLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/pay_amount"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_textsize"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/payTipAmountLbl" />
 
     <LinearLayout
         android:id="@+id/updateOrderUpdateOrderBtns"
@@ -182,14 +341,17 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <ProgressBar
             android:id="@+id/loginProgressBar"
-            android:background="@drawable/spiner_ic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical" />
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:background="@drawable/spiner_ic" />
+
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

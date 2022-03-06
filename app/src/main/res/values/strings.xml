@@ -8,7 +8,7 @@
     <string name="menu_btn_userInfo">User info</string>
     <string name="btn_calendar">Calendar</string>
     <string name="edittext_login_username">johndoe@mail.com</string>
-    <string name="edittext_login_password">8 characters only</string>
+    <string name="edittext_login_password">3-20 characters</string>
     <string name="btn_cancel">Cancel</string>
     <string name="menu_btn_logout">Log out</string>
     <string name="textview_login_email">Fill in with your e-mail:</string>
@@ -52,17 +52,17 @@
     <string name="material_calendar_friday">F</string>
     <string name="material_calendar_saturday">S</string>
     <string name="material_calendar_sunday">S</string>
-    <string name="calendar_date_lbl">Date:</string>
-    <string name="calendar_status_lbl">Status:</string>
+    <string name="calendar_date_lbl">Event:</string>
+    <string name="calendar_status_lbl">Event status:</string>
     <string name="calendar_menu_lbl">Menu:</string>
     <string name="calendar_location_lbl">Location:</string>
     <string name="btn_preorder">Place pre-order</string>
-    <string name="preorder_date_lbl">Date:</string>
-    <string name="preorder_status_lbl">Status:</string>
+    <string name="preorder_date_lbl">Event:</string>
+    <string name="preorder_status_lbl">Event status:</string>
     <string name="preorder_menu_lbl">Menu:</string>
     <string name="preorder_location_lbl">Location:</string>
     <string name="preorder_numberofmeals_lbl">Number of meals:</string>
-    <string name="preorder_mealprice_lbl">Meal price:</string>
+    <string name="preorder_mealprice_lbl">Box price:</string>
     <string name="preorder_totalprice_lbl">Total price:</string>
     <string name="btn_preorder_saveorder">Pre-order</string>
     <string name="btn_deleteorder">Delete</string>
@@ -84,5 +84,16 @@
     <string name="register_phone">* Fill in with your phone number:</string>
     <string name="register_facebook">** Facebook name:</string>
     <string name="register_instagram">** Instagram name:</string>
-
+    <string name="not_logged_in">Not logged in!</string>
+    <string name="not_logged_in_message">You are not authenticated in KungfuBBQ server any longer. Please log in again.</string>
+    <string name="first_come_first_served">FIRST COME FIRST SERVED</string>
+    <string name="password_requirements">* At least one UPPER case and one lower case letter and one number required</string>
+    <string name="database_error">Database error!</string>
+    <string name="success">Success!</string>
+    <string name="pay_tip_lbl">Like our food? Give us a tip...</string>
+    <string name="pay_amount">Total amount:</string>
+    <string name="meal_box_amout">Meals amount:</string>
+    <string name="tip_amount_label">Tip amount:</string>
+    <string name="payment_options">Payment options!</string>
+    <string name="payment_options_text">How would you like to pay your order?</string>
 </resources>

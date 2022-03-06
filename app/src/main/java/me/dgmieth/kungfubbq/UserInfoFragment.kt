@@ -1,16 +1,16 @@
 package me.dgmieth.kungfubbq
 
+import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.telephony.PhoneNumberUtils
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -68,18 +68,12 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
                         viewModel?.getUser()
                     }
                     else -> {
-                        Handler(Looper.getMainLooper()).post{
-                            showSpinner(false)
-                            Toast.makeText(requireActivity(),"The attempt to retrieve user information from the database failed",Toast.LENGTH_LONG).show()
-                        }
+                        showAlert("The attempt to retrieve user information from the database failed","Update failed!")
                     }
                 }
             },
             {
-                Handler(Looper.getMainLooper()).post{
-                    showSpinner(false)
-                    Toast.makeText(requireActivity(),"Log in attempt failed. Please try again in some minutes",Toast.LENGTH_LONG).show()
-                }
+                showAlert("The attempt to retrieve user information from the database failed","Update failed!")
             },{})?.let{ bag.add(it)}
         //Subscribing to user
         viewModel?.user?.observe(viewLifecycleOwner, Observer {
@@ -94,12 +88,7 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
                 }
             }else{
                 showSpinner(false)
-                Handler(Looper.getMainLooper()).post{
-                    Toast.makeText(requireActivity(),"It was not possible to retrieve information from this app's database. Please restart the app.",
-                        Toast.LENGTH_LONG).show()
-                    var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
-                    findNavController().navigate(action)
-                }
+                showAlert("It was not possible to retrieve information from this app's database. Please restart the app.","Error!")
             }
         })
         viewModel?.getUser()
@@ -118,8 +107,7 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
             findNavController().navigate(action)
         }
         binding.userInfoCancelBtn.setOnClickListener {
-            showSaveBtn(false)
-            userInfo?.let { it1 -> setUIElements(it1) }
+            resetUINoChangesMade()
         }
         binding.userInfoSaveBtn.setOnClickListener {
             if(validateInfo()){
@@ -139,6 +127,7 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.logOutMenuBtn -> {
+                USER_LOGGED = false
                 val action = HomeFragmentDirections.callHome(false)
                 findNavController().navigate(action)
                 true
@@ -156,27 +145,19 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
     // validation
     private fun validateInfo():Boolean{
         if(binding.userInfoPhone.text.toString().isEmpty()){
-            Handler(Looper.getMainLooper()).post{
-                Toast.makeText(requireActivity(),"You must inform a valid phone number.",Toast.LENGTH_LONG).show()
-            }
+            showAlert("You must inform a valid phone number.","Update failed!")
             return false
         }else if(binding.userInfoName.text.toString().isEmpty()){
-            Handler(Looper.getMainLooper()).post{
-                Toast.makeText(requireActivity(),"You must inform your name.",Toast.LENGTH_LONG).show()
-            }
+            showAlert("You must inform your name.","Update failed!")
             return false
         }else if(noFormatPhoneNbm==null){
-            Handler(Looper.getMainLooper()).post{
-                Toast.makeText(requireActivity(),"Incorrect phone number",Toast.LENGTH_LONG).show()
-            }
+            showAlert("You must inform a valid phone number.","Update failed!")
             return false
         }else if(binding.userInfoName.text.toString()==userInfo!!.user.name.toString() &&
             noFormatPhoneNbm==userInfo!!.user.phoneNumber.toString() &&
             binding.userInfoFacebookName.text.toString()==userInfo!!.socialMedias[0].socialMediaName.toString() &&
             binding.userInfoInstagramName.text.toString()==userInfo!!.socialMedias[1].socialMediaName.toString() ){
-            Handler(Looper.getMainLooper()).post{
-                Toast.makeText(requireActivity(),"No user information was changed",Toast.LENGTH_LONG).show()
-            }
+            showAlert("No user information was changed.","Update cancelled!")
             return false
         }
         return true
@@ -197,10 +178,7 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
             override fun onFailure(call: Call, e: IOException) {
                 e.printStackTrace()
                 showSpinner(false)
-                Handler(Looper.getMainLooper()).post{
-                    Toast.makeText(requireActivity(),"The attempt to update your user information failed with server message: ${e.localizedMessage}",
-                        Toast.LENGTH_LONG).show()
-                }
+                showAlert("The attempt to update your user information failed with server message: ${e.localizedMessage}.","Update failed!")
             }
             override fun onResponse(call: Call, response: Response) {
                 response.use {
@@ -220,17 +198,9 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
                         viewModel?.insertAllUserInfo(user,socialM)
                     }else{
                         if(json.getInt("errorCode")==-1){
-                            Handler(Looper.getMainLooper()).post{
-                                Toast.makeText(requireActivity(),"You are not authenticated in Kungfu BBQ server anylonger. Please log in again.",
-                                    Toast.LENGTH_LONG).show()
-                                val action = NavGraphDirections.callHome(false)
-                                findNavController().navigate(action)
-                            }
+                            showAlert("${getString(R.string.not_logged_in_message)}","${getString(R.string.not_logged_in)}")
                         }else{
-                            Handler(Looper.getMainLooper()).post{
-                                Toast.makeText(requireActivity(),"The attempt to update your user information failed with server message: ${json.getString("msg")}",
-                                    Toast.LENGTH_LONG).show()
-                            }
+                            showAlert("The attempt to update your user information failed with server message: ${json.getString("msg")}","Update failed!")
                         }
                     }
                 }
@@ -243,8 +213,6 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
         if(binding.userInfoPhone.text.toString().length==10){
             binding.userInfoPhone.removeTextChangedListener(phoneTextWatcher)
             noFormatPhoneNbm = binding.userInfoPhone.text.toString()
-//            var number = PhoneNumberUtils.formatNumber(binding.userInfoPhone.text.toString(),"US")
-//            binding.userInfoPhone.setText(number)
             var number = binding.userInfoPhone.text.toString()
             var formattedNumber = "(${number.subSequence(0,3)}) ${number.subSequence(3,6)}-${number.subSequence(6,number.length)}"
             binding.userInfoPhone.setText(formattedNumber)
@@ -306,8 +274,6 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
             binding.userInfoMemberSince.text = user.user.memberSince
             binding.userInfoName.setText(user.user.name)
             if(user.user.phoneNumber.toString().length==10){
-//                var number = PhoneNumberUtils.formatNumber(user.user.phoneNumber.toString(),"US")
-//                binding.userInfoPhone.setText(number)
                 var number = user.user.phoneNumber.toString()
                 var formattedNumber = "(${number.subSequence(0,3)}) ${number.subSequence(3,6)}-${number.subSequence(6,number.length)}"
                 binding.userInfoPhone.setText(formattedNumber)
@@ -318,6 +284,35 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
             binding.userInfoFacebookName.setText(user.socialMedias[0].socialMediaName)
             binding.userInfoInstagramName.setText(user.socialMedias[1].socialMediaName)
             binding.userInfoPhone.addTextChangedListener(phoneTextWatcher)
+        }
+    }
+    private fun resetUINoChangesMade(){
+        showSaveBtn(false)
+        userInfo?.let { it1 -> setUIElements(it1) }
+    }
+    private fun showAlert(message:String,title:String){
+        Handler(Looper.getMainLooper()).post{
+            var dialogBuilder = AlertDialog.Builder(requireContext())
+            dialogBuilder.setMessage(message)
+                .setCancelable(title != "${getString(R.string.not_logged_in)}")
+                .setPositiveButton("Ok", DialogInterface.OnClickListener{
+                        _, _ ->
+                    if(title=="${getString(R.string.not_logged_in)}"){
+                        USER_LOGGED = false
+                        val action = NavGraphDirections.callHome(false)
+                        findNavController().navigate(action)
+                    }
+                    if(title=="Error!"){
+                        val action = NavGraphDirections.callHome(false)
+                        findNavController().navigate(action)
+                    }
+                    if(title=="Update cancelled!"){
+                        resetUINoChangesMade()
+                    }
+                })
+            val alert = dialogBuilder.create()
+            alert.setTitle(title)
+            alert.show()
         }
     }
     private fun showSpinner(value: Boolean){

@@ -22,6 +22,8 @@ data class OrderDB (
     var userName: String,
     @ColumnInfo(name = USER_EMAIL)
     var userEmail: String,
+    @ColumnInfo(name = TIP_AMOUNT)
+    var tipAmount: Double,
     @ColumnInfo(name = USER_PHONE_NUMBER)
     var userPhoneNumber: String,
         ){
@@ -36,6 +38,7 @@ data class OrderDB (
         const val USER_NAME = "userName"
         const val USER_EMAIL = "userEmail"
         const val USER_PHONE_NUMBER = "userPhoneNumber"
+        const val TIP_AMOUNT = "tipAmount"
     }
 }
 
@@ -49,6 +52,8 @@ data class OrderDishesDB(
     var dishName : String,
     @ColumnInfo(name = DISH_PRICE)
     var dishPrice : String,
+    @ColumnInfo(name = DISH_FIFO)
+    var dishFifo : Int,
     @ColumnInfo(name = DISH_QTTY)
     var dishQuantity : Int,
     @ColumnInfo(name = OBSERVATION)
@@ -61,6 +66,7 @@ data class OrderDishesDB(
         const val DISH_ID="dishId"
         const val DISH_NAME = "dishName"
         const val DISH_PRICE = "dishPrice"
+        const val DISH_FIFO = "dishFifo"
         const val DISH_QTTY = "dishQuantity"
         const val OBSERVATION = "observation"
         const val ORDER_ID_FK = "orderIdFk"

@@ -8,15 +8,19 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
+import android.text.InputFilter
+import android.text.InputType
 import android.text.TextWatcher
 import android.util.Log
 import android.view.*
-import android.widget.Toast
+import android.widget.EditText
+import androidx.core.view.marginLeft
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import me.dgmieth.kungfubbq.databinding.FragmentPayBinding
 import me.dgmieth.kungfubbq.httpCtrl.HttpCtrl
+import me.dgmieth.kungfubbq.support.formatter.FormatObject
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
@@ -25,6 +29,22 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
+enum class TipState {
+    NONE (0.0),
+    FIFTEEN (0.15) ,
+    TWENTY (0.20),
+    CUSTOM (0.0);
+
+    private var tipPercent: Double? = null
+
+    constructor(tipPercent:Double){
+        this.tipPercent = tipPercent
+    }
+    fun getTipPercentage():Double{
+        return tipPercent!!
+    }
+}
+@SuppressLint("SetTextI18n")
 class PayFragment : Fragment(R.layout.fragment_pay) {
 
     private val TAG = "PayFragment"
@@ -32,6 +52,8 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
     private var cardNumber : String? = null
     private var cardCode : String? = null
     private var btnClick = true
+    private var tipState : TipState = TipState.NONE
+    private var tipAmoutGiven = 0.0
     var yearsFirst = arrayListOf<String>()
     private val cardNumberWatcher = object: TextWatcher {
         override fun afterTextChanged(s: Editable?) { }
@@ -65,19 +87,7 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
         savedInstanceState: Bundle?
     ): View? {
         if(args.coookingDateId == 0 && args.orderId ==0 && args.userEmail == "noValue" && args.userId == 0 && args.userToken == "noValue") {
-            var dialogBuilder = AlertDialog.Builder(requireContext())
-            dialogBuilder.setMessage("Communication with this apps's database failed. Please restart the app.")
-                .setCancelable(false)
-                .setPositiveButton("Ok", DialogInterface.OnClickListener{
-                        _, _ ->
-                    Handler(Looper.getMainLooper()).post {
-                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
-                        findNavController().navigate(action)
-                    }
-                })
-            val alert = dialogBuilder.create()
-            alert.setTitle("Database communication failure")
-            alert.show()
+            showAlert("Communication with this apps's database failed. Please restart the app.", getString(R.string.database_error))
         }
         _binding = FragmentPayBinding.inflate(inflater, container, false)
         return binding.root
@@ -94,7 +104,7 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
             yearsFirst.add("${year+i}")
         }
         val years = yearsFirst.toTypedArray()
-        val months = arrayOf("Month","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Set","Oct","Nov","Dec")
+        val months = arrayOf("Month","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec")
         binding.payCardYear.minValue = 0
         binding.payCardYear.maxValue = 20
         binding.payCardYear.displayedValues = years
@@ -112,8 +122,152 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
         binding.payPayBtn.setOnClickListener {
             payOrder()
         }
+        binding.payMealsAmount.text = "U$ ${String.format("%.2f",FormatObject.returnTotalAmountDue(args.qttyOfMeals))}"
         binding.payCardNumber.addTextChangedListener(cardNumberWatcher)
         binding.payCardCode.addTextChangedListener(codeNumberWatcher)
+        //tip states
+        binding.payTip15.setOnTouchListener { v, event ->
+            onTouchListenerFunction(event,v,TipState.FIFTEEN)
+        }
+        binding.payTip20.setOnTouchListener { v, event ->1
+            onTouchListenerFunction(event,v,TipState.TWENTY)
+        }
+        binding.payTipCustom.setOnTouchListener { v, event ->
+            onTouchListenerFunction(event,v,TipState.CUSTOM)
+        }
+    }
+    private fun onTouchListenerFunction(event:MotionEvent,v:View,tipNewState:TipState):Boolean{
+        Log.d(TAG,"${event?.action}" )
+        Log.d(TAG,"${MotionEvent.ACTION_DOWN}" )
+        when (event?.action) {
+            MotionEvent.ACTION_DOWN -> {
+                v.isPressed = !v.isPressed
+                updateTipState(tipNewState)
+            }
+        }
+        return true
+    }
+    private fun updateTipState(newState:TipState){
+        tipState = if(newState==tipState){
+            TipState.NONE
+        }else{
+            newState
+        }
+        updatePressedActionTipButtons()
+        updateMealTipTotalAmount()
+    }
+    private fun updateMealTipTotalAmount(){
+        when (tipState){
+            TipState.NONE -> {
+                binding.payTipAmount.text = "U$ 0.00"
+                binding.payTotalAmount.text = "U$ ${String.format("%.2f", FormatObject.returnTotalAmountDue(args.qttyOfMeals))}"
+                tipAmoutGiven = 0.0
+            }
+            TipState.FIFTEEN -> {
+                var amount = FormatObject.returnTotalAmountDue(args.qttyOfMeals)
+                tipAmoutGiven = amount*TipState.FIFTEEN.getTipPercentage()
+                var totalAmount = amount+tipAmoutGiven
+                binding.payTipAmount.text =  "U$ ${String.format("%.2f", tipAmoutGiven)}"
+                binding.payTotalAmount.text = "U$ ${String.format("%.2f", totalAmount)}"
+            }
+            TipState.TWENTY -> {
+                var amount = FormatObject.returnTotalAmountDue(args.qttyOfMeals)
+                tipAmoutGiven = amount*TipState.TWENTY.getTipPercentage()
+                var totalAmount = amount+tipAmoutGiven
+                binding.payTipAmount.text =  "U$ ${String.format("%.2f", tipAmoutGiven)}"
+                binding.payTotalAmount.text = "U$ ${String.format("%.2f", totalAmount)}"
+            }
+            else -> {
+                binding.payTipCustom.isPressed = true
+
+                var textField = EditText(activity)
+                textField.hint = "0.00"
+                textField.setBackgroundResource(android.R.color.transparent)
+                textField.setHintTextColor(resources.getColor(R.color.textEditHint))
+                textField.height = 135
+                textField.setPadding(0,0,475,0)
+                textField.textSize  = 22.0F
+                textField.gravity = Gravity.RIGHT
+                textField.inputType =
+                    InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+                textField.filters = arrayOf(InputFilter.LengthFilter(6))
+                textField.addTextChangedListener(object : TextWatcher{
+                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+                    override fun afterTextChanged(s: Editable?) {}
+                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                        textField.removeTextChangedListener(this)
+                        Log.d(TAG, "justNumbers is ${s.toString()}")
+                        var justNumbers = s.toString().replace("""[^0-9]""".toRegex(),"")
+                        Log.d(TAG, "justNumbers is $justNumbers replaceOne")
+                        justNumbers = justNumbers.toInt().toString()
+                        Log.d(TAG, "justNumbers is $justNumbers replaceTwo")
+                        when {
+                            justNumbers.length > 2 -> {
+                                Log.d(TAG, "justNumbers is $justNumbers ${justNumbers.substring(0,justNumbers.length-2)}  ${justNumbers.substring(justNumbers.length-2)} 33333333")
+                                textField.text = Editable.Factory.getInstance().newEditable("${justNumbers.substring(0,justNumbers.length-2)}.${justNumbers.substring(justNumbers.length-2)}")
+                            }
+                            justNumbers.length==1 -> {
+                                Log.d(TAG, "justNumbers is $justNumbers 11111")
+                                textField.text = Editable.Factory.getInstance().newEditable("0.0${justNumbers}")
+                            }
+                            justNumbers.length==2 -> {
+                                Log.d(TAG, "justNumbers is $justNumbers 22222")
+                                textField.text = Editable.Factory.getInstance().newEditable("0.${justNumbers}")
+                            }
+                        }
+                        textField.addTextChangedListener(this)
+                        textField.setSelection(textField.text.toString().length)
+                    }
+
+                })
+                Log.d(TAG,"textEdit value is ${textField.text.toString()}")
+
+                var dialogBuilder = AlertDialog.Builder(requireContext())
+                dialogBuilder.setMessage("How much do you want to tip?")
+                    .setView(textField)
+                    .setCancelable(true)
+                    .setNegativeButton("Cancel", DialogInterface.OnClickListener{_,_ ->
+
+                    })
+                    .setPositiveButton("Ok", DialogInterface.OnClickListener { _, _ ->
+                        if(!textField.text.toString().isNullOrEmpty()){
+                            var amount = FormatObject.returnTotalAmountDue(args.qttyOfMeals)
+                            tipAmoutGiven = textField.text.toString().toDouble()
+                            var totalAmount = amount+tipAmoutGiven
+                            binding.payTipAmount.text = "U$ ${String.format("%.2f", tipAmoutGiven)}"
+                            binding.payTotalAmount.text = "U$ ${String.format("%.2f", totalAmount)}"
+                            binding.payTipCustom.isPressed = true
+                            Log.d(TAG,"tipAmountGive ist $tipAmoutGiven")
+                        }
+                    })
+                val alert = dialogBuilder.create()
+                alert.setTitle("Custom tip amount")
+                alert.show()
+            }
+        }
+        Log.d(TAG,"tipAmountGive ist $tipAmoutGiven")
+    }
+    private fun updatePressedActionTipButtons() {
+        Log.d(TAG,"tipState is ${tipState}")
+        when (tipState){
+            TipState.FIFTEEN -> {
+                binding.payTip20.isPressed = false
+                binding.payTipCustom.isPressed = false
+            }
+            TipState.TWENTY -> {
+                binding.payTip15.isPressed = false
+                binding.payTipCustom.isPressed = false
+            }
+            TipState.CUSTOM -> {
+                binding.payTip15.isPressed = false
+                binding.payTip20.isPressed = false
+            }
+            else -> {
+                binding.payTip15.isPressed = false
+                binding.payTip20.isPressed = false
+                binding.payTipCustom.isPressed = false
+            }
+        }
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -174,16 +328,14 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
             .add("cardNumber",cardNumber.toString().trim())
             .add("cardCode",cardCode.toString().trim())
             .add("expirationDate",eDate)
+            .add("tip",tipAmoutGiven.toString())
             .build()
         HttpCtrl.shared.newCall(HttpCtrl.post(getString(R.string.kungfuServerUrl),"/api/order/payOrder",body,args.userToken)).enqueue(object :
             Callback {
             override fun onFailure(call: Call, e: IOException) {
                 showSpinner(false)
                 e.printStackTrace()
-                Handler(Looper.getMainLooper()).post{
-                    Toast.makeText(requireActivity(),"The attempt to pay your pre-order failed with generalized message: ${e.localizedMessage}",
-                        Toast.LENGTH_LONG).show()
-                }
+                showAlert("The attempt to pay your pre-order failed with generalized message: ${e.localizedMessage}","Error!")
             }
             override fun onResponse(call: Call, response: Response) {
                 showSpinner(false)
@@ -191,34 +343,14 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
                     val json = JSONObject(response.body!!.string())
                     if(!json.getBoolean("hasErrors")){
-                        Handler(Looper.getMainLooper()).post{
-                            var dialogBuilder = AlertDialog.Builder(requireContext())
-                            dialogBuilder.setMessage("${json.getString("msg")}")
-                                .setCancelable(false)
-                                .setPositiveButton("Ok", DialogInterface.OnClickListener{
-                                        _, _ ->
-                                    Handler(Looper.getMainLooper()).post {
-                                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
-                                        findNavController().navigate(action)
-                                    }
-                                })
-                            val alert = dialogBuilder.create()
-                            alert.setTitle("Payment successful")
-                            alert.show()
-                        }
+                        showAlert("${json.getString("msg")}","${getString(R.string.success)}")
                     }else{
                         when {
                             json.getInt("errorCode")==-1 -> {
-                                notLoggedIntAlert()
-                            }
-                            json.getInt("errorCode")<=-2 -> {
-                                showWarningMessage(json.getString("msg"))
+                                showAlert("${getString(R.string.not_logged_in_message)}","${getString(R.string.not_logged_in)}")
                             }
                             else -> {
-                                Handler(Looper.getMainLooper()).post{
-                                    Toast.makeText(requireActivity(),"The attempt to pay your pre-order failed with server message: ${json.getString("msg")}",
-                                        Toast.LENGTH_LONG).show()
-                                }
+                                showAlert("The attempt to pay your pre-order failed with server message: ${json.getString("msg")}","Error!")
                             }
                         }
                     }
@@ -236,22 +368,6 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
             }
         }
     }
-    private fun showWarningMessage(text:String){
-        //showWarningMessage(json.getString("msg"))
-        Handler(Looper.getMainLooper()).post{
-            Toast.makeText(requireActivity(),"$text", Toast.LENGTH_LONG).show()
-            val action = NavGraphDirections.callCalendarFragmentGlobal()
-            findNavController().navigate(action)
-        }
-    }
-    private fun notLoggedIntAlert(){
-        Handler(Looper.getMainLooper()).post{
-            Toast.makeText(requireActivity(),"You are not authenticated in Kungfu BBQ server anylonge. Please log in again.",
-                Toast.LENGTH_LONG).show()
-            val action = NavGraphDirections.callHome(false)
-            findNavController().navigate(action)
-        }
-    }
     @SuppressLint("ObjectAnimatorBinding")
     private fun animateViews(viewObject:Any){
         ObjectAnimator
@@ -260,5 +376,34 @@ class PayFragment : Fragment(R.layout.fragment_pay) {
                 duration = 1000
             }
             .start()
+    }
+    private fun showAlert(message:String,title:String) {
+        Handler(Looper.getMainLooper()).post {
+            var dialogBuilder = AlertDialog.Builder(requireContext())
+            dialogBuilder.setMessage(message)
+                .setCancelable(title != "${getString(R.string.not_logged_in)}")
+                .setPositiveButton("Ok", DialogInterface.OnClickListener { _, _ ->
+                    if (title == "${getString(R.string.not_logged_in)}") {
+                        USER_LOGGED = false
+                        val action = NavGraphDirections.callHome(false)
+                        findNavController().navigate(action)
+                    }
+                    if (title == "${getString(R.string.database_error)}") {
+                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
+                        findNavController().navigate(action)
+                    }
+                    if (title == "${getString(R.string.success)}") {
+                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
+                        findNavController().navigate(action)
+                    }
+                    if(title!=getString(R.string.success)){
+                        tipState = TipState.NONE
+                        updateMealTipTotalAmount()
+                    }
+                })
+            val alert = dialogBuilder.create()
+            alert.setTitle(title)
+            alert.show()
+        }
     }
 }

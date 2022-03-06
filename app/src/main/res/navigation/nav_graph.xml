@@ -161,6 +161,9 @@
             android:name="userToken"
             app:argType="string"
             android:defaultValue="noValue" />
+        <argument
+            android:name="qttyOfMeals"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/paidOrderFragment"

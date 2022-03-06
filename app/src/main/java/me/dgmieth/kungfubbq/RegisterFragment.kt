@@ -14,7 +14,6 @@ import android.view.animation.AlphaAnimation
 import android.view.animation.AnimationSet
 import android.view.animation.DecelerateInterpolator
 import androidx.fragment.app.Fragment
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.onesignal.OneSignal
@@ -75,34 +74,28 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                         }
                     }
                     else -> {
-                        Handler(Looper.getMainLooper()).post{
-                            showSpinner(false)
-                            Toast.makeText(requireActivity(),"Register attempt failed. Please try again in some minutes",Toast.LENGTH_LONG).show()
-                        }
+                        showAlert("Please try again in some minutes.","Register attempt failed!")
                     }
                 }
             },
             {
-                Handler(Looper.getMainLooper()).post{
-                    showSpinner(false)
-                    Toast.makeText(requireActivity(),"Register attempt failed. Please try again in some minutes",Toast.LENGTH_LONG).show()
-                }
+                showAlert("Please try again in some minutes.","Register attempt failed!")
             },{})?.let{ bag.add(it)}
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var dialogBuilder = AlertDialog.Builder(requireContext())
-        setHasOptionsMenu(true)
-        dialogBuilder.setMessage("In order to register with Kungfu BBQ you need to have an INVITATION CODE. If you don't have one, please message Kungfu BBQ requesting one. IMPORTANT: on the message, you MUST send the e-mail you want to create the account with.")
-            .setCancelable(false)
-            .setPositiveButton("ok", DialogInterface.OnClickListener{
-                    _, _ ->    })
-        enableHideSecondViewButtons(false)
-        val alert = dialogBuilder.create()
-        alert.setTitle("Invitation code needed")
-        alert.show()
+//        var dialogBuilder = AlertDialog.Builder(requireContext())
+//        setHasOptionsMenu(true)
+//        dialogBuilder.setMessage("In order to register with Kungfu BBQ you need to have an INVITATION CODE. If you don't have one, please message Kungfu BBQ requesting one. IMPORTANT: on the message, you MUST send the e-mail you want to create the account with.")
+//            .setCancelable(false)
+//            .setPositiveButton("ok", DialogInterface.OnClickListener{
+//                    _, _ ->    })
+//        enableHideSecondViewButtons(false)
+//        val alert = dialogBuilder.create()
+//        alert.setTitle("Invitation code needed")
+//        alert.show()
         //setting click listeners
         binding.registerPhone.addTextChangedListener(phoneTextWatcher)
         binding.registerCancelBtn.setOnClickListener {
@@ -122,7 +115,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         }
         binding.registerNextBtn.setOnClickListener{
             Log.d(TAG, "nextClick")
-            if(!binding.registerInvitationCodeEditText.text.toString().isNullOrEmpty() &&
+            if(/*!binding.registerInvitationCodeEditText.text.toString().isNullOrEmpty() &&*/
                 !binding.registerConfirmPasswordEditText.text.toString().isNullOrEmpty() &&
                 !binding.registerPasswordEditText.text.toString().isNullOrEmpty() &&
                 !binding.registerEmailEditText.text.toString().isNullOrEmpty()){
@@ -131,7 +124,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 enableHideSecondViewButtons(true)
             }else{
                 showSpinner(false)
-                Toast.makeText(requireActivity(),"You must inform your invitation code, your email, your password and confirm your password.", Toast.LENGTH_LONG).show()
+                showAlert("You must inform your email, your password and confirm your password.","Register attempt failed!")
             }
 
         }
@@ -155,7 +148,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         if(!binding.registerName.text.toString().isNullOrEmpty() &&
                 !binding.registerPhone.text.toString().isNullOrEmpty() && noFormatPhoneNbm != null){
             val body = FormBody.Builder()
-                .add("code",binding.registerInvitationCodeEditText.text.toString())
+                .add("code",/*binding.registerInvitationCodeEditText.text.toString()*/"none")
                 .add("email",binding.registerEmailEditText.text.toString())
                 .add("password",binding.registerPasswordEditText.text.toString())
                 .add("confirmPassword",binding.registerConfirmPasswordEditText.text.toString())
@@ -164,15 +157,14 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 .add("facebookName",face)
                 .add("instagramName",inst)
                 .add("mobileOS","android")
+                .add("version_code","${BuildConfig.VERSION_CODE}")
                 .build()
             HttpCtrl.shared.newCall(HttpCtrl.post(getString(R.string.kungfuServerUrl),"/login/register",body)).enqueue(object :
                 Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     showSpinner(false)
                     e.printStackTrace()
-                    Handler(Looper.getMainLooper()).post{
-                        Toast.makeText(requireActivity(),"The attempt to register this user failed with error message ${e.localizedMessage}",Toast.LENGTH_LONG).show()
-                    }
+                    showAlert("The attempt to register this user failed with error message ${e.localizedMessage}","Register attempt failed!")
                 }
                 override fun onResponse(call: Call, response: Response) {
                     response.use {
@@ -191,24 +183,25 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                             userId = user.userId
                             viewModel?.insertAllUserInfo(user,socialM)
                         }else{
-                            if(json.getInt("errorCode")==-3){
-                                Handler(Looper.getMainLooper()).post{
-                                    Toast.makeText(requireActivity(),"The attempt to register this user failed with server message: ${json.getString("msg")}",Toast.LENGTH_LONG).show()
-                                    val action = RegisterFragmentDirections.returnToLoginFragment()
-                                    findNavController().navigate(action)
-                                }
-                            }else{
-                                Handler(Looper.getMainLooper()).post{
-                                    Toast.makeText(requireActivity(),"The attempt to register this user failed with server message: ${json.getString("msg")}",Toast.LENGTH_LONG).show()
-                                }
-                            }
+                            showAlert("The attempt to register this user failed with server message: ${json.getString("msg")}","Register attempt failed!")
+//                            if(json.getInt("errorCode")==-3){
+//                                Handler(Looper.getMainLooper()).post{
+//                                    Toast.makeText(requireActivity(),"The attempt to register this user failed with server message: ${json.getString("msg")}",Toast.LENGTH_LONG).show()
+//                                    val action = RegisterFragmentDirections.returnToLoginFragment()
+//                                    findNavController().navigate(action)
+//                                }
+//                            }else{
+//                                Handler(Looper.getMainLooper()).post{
+//                                    Toast.makeText(requireActivity(),"The attempt to register this user failed with server message: ${json.getString("msg")}",Toast.LENGTH_LONG).show()
+//                                }
+//                            }
                         }
                     }
                 }
             })
         }else{
             showSpinner(false)
-            Toast.makeText(requireActivity(),"You must inform your name and a valid phone number.", Toast.LENGTH_LONG).show()
+            showAlert("You must inform your name and a valid phone number","Register attempt failed!")
         }
     }
     //===============================================
@@ -242,24 +235,36 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private fun validateInfo():Boolean{
         when {
             binding.registerName.text.toString().isEmpty() -> {
-                Handler(Looper.getMainLooper()).post{
-                    Toast.makeText(requireActivity(),"You must inform your name.",Toast.LENGTH_LONG).show()
-                }
+                showAlert("You must inform your name.","Register attempt failed!")
                 return false
             }
             binding.registerPhone.text.toString().isEmpty() -> {
-                Handler(Looper.getMainLooper()).post{
-                    Toast.makeText(requireActivity(),"You must inform a valid phone number.",Toast.LENGTH_LONG).show()
-                }
+                showAlert("You must inform a valid phone number.","Register attempt failed!")
                 return false
             }
             noFormatPhoneNbm==null -> {
-                Handler(Looper.getMainLooper()).post{
-                    Toast.makeText(requireActivity(),"Incorrect phone number",Toast.LENGTH_LONG).show()
-                }
+                showAlert("You must inform a valid phone number.","Register attempt failed!")
                 return false
             }
             else -> return true
+        }
+    }
+    private fun showAlert(message:String,title:String){
+        Handler(Looper.getMainLooper()).post{
+            var dialogBuilder = AlertDialog.Builder(requireContext())
+            dialogBuilder.setMessage(message)
+                .setCancelable(title != "${getString(R.string.not_logged_in)}")
+                .setPositiveButton("Ok", DialogInterface.OnClickListener{
+                        _, _ ->
+                    if(title=="${getString(R.string.not_logged_in)}"){
+                        USER_LOGGED = false
+                        val action = NavGraphDirections.callHome(false)
+                        findNavController().navigate(action)
+                    }
+                })
+            val alert = dialogBuilder.create()
+            alert.setTitle(title)
+            alert.show()
         }
     }
     private fun enableHideSecondViewButtons(enable:Boolean){

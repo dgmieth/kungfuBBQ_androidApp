@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../../../layout/custom_preview.xml" value="0.24739583333333334" />
+        <entry key="app/src/main/res/drawable-hdpi/button_tip_not_selected.xml" value="0.46625" />
+        <entry key="app/src/main/res/drawable-hdpi/button_tip_selected.xml" value="0.46625" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.30625" />
         <entry key="app/src/main/res/drawable/app_icon_background.xml" value="0.23072916666666668" />
         <entry key="app/src/main/res/drawable/button_affimative_action.xml" value="0.52" />
@@ -25,23 +27,25 @@
         <entry key="app/src/main/res/drawable/sad_face_icon_background.xml" value="0.52" />
         <entry key="app/src/main/res/drawable/spiner_ic.xml" value="0.50125" />
         <entry key="app/src/main/res/drawable/spinner_ic.xml" value="0.50125" />
+        <entry key="app/src/main/res/drawable/tip_buttons_layout.xml" value="0.46625" />
         <entry key="app/src/main/res/font-v26/fonts.xml" value="0.21979166666666666" />
         <entry key="app/src/main/res/font/fonts.xml" value="0.24479166666666666" />
+        <entry key="app/src/main/res/font/tip_btn_font_size.xml" value="0.5925" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1831306990881459" />
         <entry key="app/src/main/res/layout/activity_startup.xml" value="0.6140873015873016" />
         <entry key="app/src/main/res/layout/activity_startup2.xml" value="0.21666666666666667" />
         <entry key="app/src/main/res/layout/calendar_day_layout.xml" value="0.45" />
         <entry key="app/src/main/res/layout/calendar_month_header_layout.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_about.xml" value="0.75" />
-        <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.63" />
         <entry key="app/src/main/res/layout/fragment_catering.xml" value="0.48125" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.6459731543624161" />
-        <entry key="app/src/main/res/layout/fragment_paidorder.xml" value="0.8020833333333334" />
-        <entry key="app/src/main/res/layout/fragment_pay.xml" value="0.6416666666666667" />
-        <entry key="app/src/main/res/layout/fragment_payorder.xml" value="0.67" />
-        <entry key="app/src/main/res/layout/fragment_preorder.xml" value="0.625" />
-        <entry key="app/src/main/res/layout/fragment_register.xml" value="0.6514382402707276" />
+        <entry key="app/src/main/res/layout/fragment_paidorder.xml" value="0.67" />
+        <entry key="app/src/main/res/layout/fragment_pay.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/fragment_payorder.xml" value="0.6933333333333334" />
+        <entry key="app/src/main/res/layout/fragment_preorder.xml" value="0.6010362694300518" />
+        <entry key="app/src/main/res/layout/fragment_register.xml" value="0.3706070287539936" />
         <entry key="app/src/main/res/layout/fragment_updateOrder.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/fragment_updateorder.xml" value="0.6427378964941569" />
         <entry key="app/src/main/res/layout/fragment_updatepassword.xml" value="0.6506696428571429" />

@@ -2,13 +2,14 @@ package me.dgmieth.kungfubbq
 
 import androidx.appcompat.app.AlertDialog
 import android.content.DialogInterface
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Html
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -24,6 +25,7 @@ import me.dgmieth.kungfubbq.datatabase.room.KungfuBBQRoomDatabase
 import me.dgmieth.kungfubbq.datatabase.room.RoomViewModel
 import me.dgmieth.kungfubbq.datatabase.roomEntities.*
 import me.dgmieth.kungfubbq.httpCtrl.HttpCtrl
+import me.dgmieth.kungfubbq.support.formatter.FormatObject
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.HttpUrl
@@ -40,6 +42,8 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
     private var cookingDate : CookingDateAndCookingDateDishesWithOrder? = null
     private var userPayOrder : UserAndSocialMedia? = null
     private var btnClick = true
+    private var mealsQtty = 0
+    private var orderNr = 0
 
     private var bag = CompositeDisposable()
 
@@ -66,19 +70,13 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
                 showSpinner(false)
                 when(it){
                     Actions.UserError ->{
-                        Handler(Looper.getMainLooper()).post{
-                            showSpinner(false)
-                            Toast.makeText(requireActivity(),"It was not possible to authenticate this user in KungfuBBQ's server. Please try again in some minutes",Toast.LENGTH_LONG).show()
-                        }
+                        showAlert("It was not possible to authenticate this user in KungfuBBQ's server. Please try again in some minutes","${getString(R.string.database_error)}")
                     }
                     else -> { }
                 }
             },
             {
-                Handler(Looper.getMainLooper()).post{
-                    showSpinner(false)
-                    Toast.makeText(requireActivity(),"Log in attempt failed. Please try again in some minutes",Toast.LENGTH_LONG).show()
-                }
+                showAlert("It was not possible to authenticate this user in KungfuBBQ's server. Please try again in some minutes","${getString(R.string.database_error)}")
             },{})?.let{ bag.add(it)}
         //Subscribing to user
         viewModel?.user?.observe(viewLifecycleOwner, Observer {
@@ -87,12 +85,7 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
             if(!it.user.email.isNullOrEmpty()){
                 userPayOrder = it
             }else{
-                Handler(Looper.getMainLooper()).post{
-                    Toast.makeText(requireActivity(),"It was not possible to retrieve information from this app's database. Please restart the app.",
-                        Toast.LENGTH_LONG).show()
-                    var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
-                    findNavController().navigate(action)
-                }
+                showAlert("It was not possible to authenticate this user in KungfuBBQ's server. Please try again in some minutes","${getString(R.string.database_error)}")
             }
         })
         //Subscribing to cookingD
@@ -102,32 +95,36 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
             renewToken()
             cookingDate?.let { cd ->
                 //updating date
-                val splitDate = (cd.cookingDateAndDishes.cookingDate.cookingDate.split(" ")[0]).split("-")
-                val cal = Calendar.getInstance()
-                cal.set(splitDate[0].toInt(), splitDate[1].toInt()-1, splitDate[2].toInt())
-                val dateStrParts = cal.time.toString().split(" ")
-                binding.payOrderDate.text = "${dateStrParts[1]} ${dateStrParts[2]}"
+//                val splitDate = (cd.cookingDateAndDishes.cookingDate.cookingDate.split(" ")[0]).split("-")
+//                val cal = Calendar.getInstance()
+//                cal.set(splitDate[0].toInt(), splitDate[1].toInt()-1, splitDate[2].toInt())
+//                val dateStrParts = cal.time.toString().split(" ")
+                binding.payOrderDate.text = FormatObject.returnEventTime()
                 //updating status
                 binding.payOrderStatus.text = cd.cookingDateAndDishes.cookingDate.cookingStatus
                 //updating menu
-                var menuT = ""
-                var menuIndex = 1
-                var mealsSum = 0.0
-                for(m in cd.cookingDateAndDishes.cookingDateDishes){
-                    menuT = "${menuT}${menuIndex}- ${m.dishName} - U$${m.dishPrice}\n"
-                    menuIndex += 1
-                    mealsSum += m.dishPrice.toDouble()
-                }
-                binding.payOrderMenu.text = menuT
+//                var menuT = ""
+//                var menuIndex = 1
+//                var mealsSum = 0.0
+//                for(m in cd.cookingDateAndDishes.cookingDateDishes){
+//                    menuT = "${menuT}${menuIndex}- ${m.dishName} - U$${m.dishPrice}\n"
+//                    menuIndex += 1
+//                    mealsSum += m.dishPrice.toDouble()
+//                }
+//                binding.payOrderMenu.text = menuT
+                binding.payOrderMenu.text = Html.fromHtml(FormatObject.formatDishesListForMenuScrollViews(cd.cookingDateAndDishes.cookingDateDishes),
+                    Html.FROM_HTML_MODE_COMPACT)
                 //updating maps
-                binding.payOrderLocationText.text = "${cd.cookingDateAndDishes.cookingDate.street}, ${cd.cookingDateAndDishes.cookingDate.city}"
+                binding.payOrderLocationText.text = FormatObject.returnAddress()
                 binding.payOrderLocationMap.getMapAsync(this)
-                var priceString = "U$ ${String.format("%.2f",mealsSum)}"
+                var priceString = "U$ ${String.format("%.2f",FormatObject.returnMealBoxTotalAmount())}"
                 //updating meal price
                 binding.payOrderMealPrice.text = priceString
                 //updating total meal price
                 binding.payOrderNumberOfMeals.text = cd.order[0].dishes[0].dishQuantity.toString()
-                binding.payOrderTotalPrice.text = "U$ ${String.format("%.2f",mealsSum*cd.order[0].dishes[0].dishQuantity)}"
+                orderNr = cd.order[0].order.orderId
+                binding.payOrderTotalPrice.text = "U$ ${String.format("%.2f",FormatObject.returnTotalAmountDue(cd.order[0].dishes[0].dishQuantity))}"
+                mealsQtty = cd.order[0].dishes[0].dishQuantity
             }
         },{
             Log.d("CookingDateObservable","error is $it")
@@ -138,19 +135,20 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
         if(args.cookingDateId != 0) {
             viewModel?.getUser()
         }else{
-            var dialogBuilder = AlertDialog.Builder(requireContext())
-            dialogBuilder.setMessage("Communication with this apps's database failed. Please restart the app.")
-                .setCancelable(false)
-                .setPositiveButton("Ok", DialogInterface.OnClickListener{
-                        _, _ ->
-                    Handler(Looper.getMainLooper()).post {
-                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
-                        findNavController().navigate(action)
-                    }
-                })
-            val alert = dialogBuilder.create()
-            alert.setTitle("Database communication failure")
-            alert.show()
+            showAlert("It was not possible to authenticate this user in KungfuBBQ's server. Please try again in some minutes","${getString(R.string.database_error)}")
+//            var dialogBuilder = AlertDialog.Builder(requireContext())
+//            dialogBuilder.setMessage("Communication with this apps's database failed. Please restart the app.")
+//                .setCancelable(false)
+//                .setPositiveButton("Ok", DialogInterface.OnClickListener{
+//                        _, _ ->
+//                    Handler(Looper.getMainLooper()).post {
+//                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
+//                        findNavController().navigate(action)
+//                    }
+//                })
+//            val alert = dialogBuilder.create()
+//            alert.setTitle("Database communication failure")
+//            alert.show()
         }
         _binding = FragmentPayorderBinding.inflate(inflater, container, false)
         return binding.root
@@ -164,15 +162,7 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
             deleteOrderAlert()
         }
         binding.payOrderPayBtn.setOnClickListener {
-            btnClick = true
-            val action = PayOrderFragmentDirections.callPay(
-                userPayOrder!!.user.email,
-                userPayOrder!!.user.userId,
-                args.cookingDateId,
-                cookingDate!!.order[0].order.orderId,
-                userPayOrder!!.user.token!!
-            )
-            findNavController().navigate(action)
+            showAlert(getString(R.string.payment_options_text), getString(R.string.payment_options))
         }
         super.onViewCreated(view, savedInstanceState)
     }
@@ -269,10 +259,7 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
             override fun onFailure(call: Call, e: IOException) {
                 showSpinner(false)
                 e.printStackTrace()
-                Handler(Looper.getMainLooper()).post{
-                    Toast.makeText(requireActivity(),"The attempt to delete your order from KungfuBBQ's server failed with generalized message: ${e.localizedMessage}",
-                        Toast.LENGTH_LONG).show()
-                }
+                showAlert("The attempt to delete your order from KungfuBBQ's server failed with generalized message: ${e.localizedMessage}","Error!")
             }
             override fun onResponse(call: Call, response: Response) {
                 showSpinner(false)
@@ -280,34 +267,14 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
                     val json = JSONObject(response.body!!.string())
                     if(!json.getBoolean("hasErrors")){
-                        Handler(Looper.getMainLooper()).post{
-                            var dialogBuilder = AlertDialog.Builder(requireContext())
-                            dialogBuilder.setMessage("${json.getString("msg")}")
-                                .setCancelable(false)
-                                .setPositiveButton("Ok", DialogInterface.OnClickListener{
-                                        _, _ ->
-                                    Handler(Looper.getMainLooper()).post {
-                                        var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
-                                        findNavController().navigate(action)
-                                    }
-                                })
-                            val alert = dialogBuilder.create()
-                            alert.setTitle("Pre-order successfully deleted from KungfuBBQ's server")
-                            alert.show()
-                        }
+                        showAlert("Pre-order successfully deleted from KungfuBBQ's server","${getString(R.string.success)}")
                     }else{
                         when {
                             json.getInt("errorCode")==-1 -> {
-                                notLoggedIntAlert()
-                            }
-                            json.getInt("errorCode") <= -2 -> {
-                                showWarningMessage(json.getString("msg"))
+                                showAlert("${getString(R.string.not_logged_in_message)}","${getString(R.string.not_logged_in)}")
                             }
                             else -> {
-                                Handler(Looper.getMainLooper()).post{
-                                    Toast.makeText(requireActivity(),"The attempt to delete your order from KungfuBBQ's server failed with server message: ${json.getString("msg")}",
-                                        Toast.LENGTH_LONG).show()
-                                }
+                                showAlert("The attempt to delete your order from KungfuBBQ's server failed with server message: ${json.getString("msg")}","Error!")
                             }
                         }
                     }
@@ -329,10 +296,7 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
                 override fun onFailure(call: Call, e: IOException) {
                     showSpinner(false)
                     e.printStackTrace()
-                    Handler(Looper.getMainLooper()).post{
-                        Toast.makeText(requireActivity(),"The attempt to connect to KungfuBBQ's server failed with generalized error message: ${e.localizedMessage}",
-                            Toast.LENGTH_LONG).show()
-                    }
+                    showAlert("The attempt to connect to KungfuBBQ's server failed with generalized error message: ${e.localizedMessage}","Error!")
                 }
                 override fun onResponse(call: Call, response: Response) {
                     response.use {
@@ -342,12 +306,9 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
                             viewModel?.updateUserToken(u.user.userId, json.getString("msg"))
                         }else{
                             if(json.getInt("errorCode")==-1){
-                                notLoggedIntAlert()
+                                showAlert("${getString(R.string.not_logged_in_message)}","${getString(R.string.not_logged_in)}")
                             }else{
-                                Handler(Looper.getMainLooper()).post{
-                                    Toast.makeText(requireActivity(),"The attempt to connect to KungfuBBQ server failed with server message: ${json.getString("msg")}",
-                                        Toast.LENGTH_LONG).show()
-                                }
+                                showAlert("The attempt to connect  to KungfuBBQ's server failed with server message: ${json.getString("msg")}","Error!")
                             }
                         }
                     }
@@ -366,20 +327,90 @@ class PayOrderFragment : Fragment(R.layout.fragment_payorder), OnMapReadyCallbac
             }
         }
     }
-    private fun showWarningMessage(text:String){
-        //showWarningMessage(json.getString("msg"))
-        Handler(Looper.getMainLooper()).post{
-            Toast.makeText(requireActivity(),"$text", Toast.LENGTH_LONG).show()
-            val action = NavGraphDirections.callCalendarFragmentGlobal()
-            findNavController().navigate(action)
-        }
+    private fun payAtPickUp(){
+        val body = okhttp3.FormBody.Builder()
+            .add("email",userPayOrder!!.user.email)
+            .add("id",userPayOrder!!.user.userId.toString())
+            .add("cookingDate_id",args.cookingDateId.toString())
+            .add("order_id", cookingDate!!.order[0].order.orderId.toString())
+            .build()
+        Log.d(TAG,"Body is ${body.toString()}")
+        HttpCtrl.shared.newCall(HttpCtrl.post(getString(R.string.kungfuServerUrl),"/api/order/payAtPickup",body,userPayOrder!!.user.token)).enqueue(object :
+            Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                showSpinner(false)
+                e.printStackTrace()
+                showAlert("The attempt to confirm order nr. $orderNr in KungfuBBQ's server failed with generalized message: ${e.localizedMessage}","Error!")
+            }
+            override fun onResponse(call: Call, response: Response) {
+                showSpinner(false)
+                response.use {
+                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
+                    val json = JSONObject(response.body!!.string())
+                    if(!json.getBoolean("hasErrors")){
+                        showAlert("Order nr. $orderNr was confirmed successfully. It must be paid at pick up on the day of the event","${getString(R.string.success)}")
+                    }else{
+                        when {
+                            json.getInt("errorCode")==-1 -> {
+                                showAlert("${getString(R.string.not_logged_in_message)}","${getString(R.string.not_logged_in)}")
+                            }
+                            else -> {
+                                showAlert("The attempt to confirm order nr. $orderNr in KungfuBBQ's server failed with server message: ${json.getString("msg")}","Error!")
+                            }
+                        }
+                    }
+                }
+            }
+        })
     }
-    private fun notLoggedIntAlert(){
-        Handler(Looper.getMainLooper()).post{
-            Toast.makeText(requireActivity(),"You are not authenticated in Kungfu BBQ server anylonge. Please log in again.",
-                Toast.LENGTH_LONG).show()
-            val action = NavGraphDirections.callHome(false)
-            findNavController().navigate(action)
+    private fun showAlert(message:String,title:String) {
+        Handler(Looper.getMainLooper()).post {
+            var dialogBuilder = AlertDialog.Builder(requireContext())
+            if(title==getString(R.string.payment_options)){
+                dialogBuilder.setMessage(message)
+                    .setCancelable(true)
+                    .setNeutralButton("Pay at pick up",DialogInterface.OnClickListener{_,_->
+                        showSpinner(true)
+                        payAtPickUp()
+                    })
+                    .setPositiveButton("Pay now", DialogInterface.OnClickListener{_,_->
+                        btnClick = true
+                        val action = PayOrderFragmentDirections.callPay(
+                            userPayOrder!!.user.email,
+                            userPayOrder!!.user.userId,
+                            args.cookingDateId,
+                            cookingDate!!.order[0].order.orderId,
+                            userPayOrder!!.user.token!!,
+                            qttyOfMeals = mealsQtty
+                        )
+                        findNavController().navigate(action)
+                    })
+            }else{
+                dialogBuilder.setMessage(message)
+                    .setCancelable(title != "${getString(R.string.not_logged_in)}")
+                    .setPositiveButton("Ok", DialogInterface.OnClickListener { _, _ ->
+                        if (title == "${getString(R.string.not_logged_in)}") {
+                            USER_LOGGED = false
+                            val action = NavGraphDirections.callHome(false)
+                            findNavController().navigate(action)
+                        }
+                        if (title == "${getString(R.string.database_error)}") {
+                            var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
+                            findNavController().navigate(action)
+                        }
+                        if (title == "${getString(R.string.success)}") {
+                            var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
+                            findNavController().navigate(action)
+                        }
+                    })
+            }
+            val alert = dialogBuilder.create()
+            alert.setTitle(title)
+            alert.show()
+            if(title==getString(R.string.payment_options)){
+//                alert.getButton(0).setTextColor(Color.DKGRAY)
+                alert.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.BLACK);
+            }
         }
     }
 }

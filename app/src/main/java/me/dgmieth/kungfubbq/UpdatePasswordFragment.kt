@@ -1,12 +1,13 @@
 package me.dgmieth.kungfubbq
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import me.dgmieth.kungfubbq.databinding.FragmentUpdatepasswordBinding
@@ -43,6 +44,7 @@ class UpdatePasswordFragment : Fragment(R.layout.fragment_updatepassword) {
             requireActivity().onBackPressed()
         }
         binding.updatePasswordSaveBtn.setOnClickListener {
+            Log.d(TAG,"saveCliked")
             if(validateInfo()){
                 showSpinner(true)
                 updatePassword()
@@ -56,15 +58,13 @@ class UpdatePasswordFragment : Fragment(R.layout.fragment_updatepassword) {
     //==================================
     // validation of editTexts
     private fun validateInfo():Boolean{
-        val currentP = !binding.updatePasswordCurrentPassword.text.toString().isNullOrEmpty() && binding.updatePasswordCurrentPassword.text.toString().length==8
-        val newP = !binding.updatePasswordNewPassword.text.toString().isNullOrBlank() && binding.updatePasswordNewPassword.text.toString().length==8
-        val confirmP = !binding.updatePasswordNewPasswordConfirmation.text.toString().isNullOrEmpty() && binding.updatePasswordNewPasswordConfirmation.text.toString().length==8
+        val currentP = !binding.updatePasswordCurrentPassword.text.toString().isNullOrEmpty() && checkLength(binding.updatePasswordCurrentPassword.text.toString())
+        val newP = !binding.updatePasswordNewPassword.text.toString().isNullOrBlank() && checkLength(binding.updatePasswordNewPassword.text.toString())
+        val confirmP = !binding.updatePasswordNewPasswordConfirmation.text.toString().isNullOrEmpty() && checkLength(binding.updatePasswordNewPasswordConfirmation.text.toString())
         if(currentP&&newP&&confirmP){
             return true
         }
-        Handler(Looper.getMainLooper()).post{
-            Toast.makeText(requireActivity(),"You must inform your current password, choose a new password and confirm your new password. All passwords must be 8 alphanumerical characters with at least one uppercase letter.", Toast.LENGTH_LONG).show()
-        }
+        showAlert("You must inform your current password, choose a new password and confirm your new password. All passwords must be 3-20 characters long and must include at least one UPPER case, one lower case and one number.","Update failed!")
         return false
     }
     private fun updatePassword(){
@@ -80,10 +80,7 @@ class UpdatePasswordFragment : Fragment(R.layout.fragment_updatepassword) {
             override fun onFailure(call: Call, e: IOException) {
                 e.printStackTrace()
                 showSpinner(false)
-                Handler(Looper.getMainLooper()).post{
-                    Toast.makeText(requireActivity(),"The attempt to update your passowrd failed failed with server message: ${e.localizedMessage}",
-                        Toast.LENGTH_LONG).show()
-                }
+                showAlert("The attempt to update your password failed failed with server message: ${e.localizedMessage}","Update failed!")
             }
             override fun onResponse(call: Call, response: Response) {
                 response.use {
@@ -91,25 +88,12 @@ class UpdatePasswordFragment : Fragment(R.layout.fragment_updatepassword) {
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
                     val json = JSONObject(response.body!!.string())
                     if(!json.getBoolean("hasErrors")){
-                        Handler(Looper.getMainLooper()).post{
-                            Toast.makeText(requireActivity(),"${json.getString("msg")}",
-                                Toast.LENGTH_LONG).show()
-                            val action = UpdatePasswordFragmentDirections.callBackUserInfoFragment()
-                            findNavController().navigate(action)
-                        }
+                        showAlert("${json.getString("msg")}","Update successful!")
                     }else{
                         if(json.getInt("errorCode")==-1){
-                            Handler(Looper.getMainLooper()).post{
-                                Toast.makeText(requireActivity(),"You are not authenticated in Kungfu BBQ server anylonger. Please log in again.",
-                                    Toast.LENGTH_LONG).show()
-                                val action = NavGraphDirections.callHome(false)
-                                findNavController().navigate(action)
-                            }
+                            showAlert("${getString(R.string.not_logged_in_message)}","${getString(R.string.not_logged_in)}")
                         }else{
-                            Handler(Looper.getMainLooper()).post{
-                                Toast.makeText(requireActivity(),"The attempt to update your password failed with server message: ${json.getString("msg")}",
-                                    Toast.LENGTH_LONG).show()
-                            }
+                            showAlert("The attempt to update your password failed with server message: ${json.getString("msg")}","Update failed!")
                         }
                     }
                 }
@@ -117,7 +101,37 @@ class UpdatePasswordFragment : Fragment(R.layout.fragment_updatepassword) {
         })
     }
     //==================================
+    //support funcionts
+    private fun checkLength(text:String):Boolean{
+        if(text.length in 3..20){
+            return true
+        }
+        return false
+    }
+    //==================================
     // ui elements
+    private fun showAlert(message:String,title:String){
+        Handler(Looper.getMainLooper()).post{
+            var dialogBuilder = AlertDialog.Builder(requireContext())
+            dialogBuilder.setMessage(message)
+                .setCancelable(title != "${getString(R.string.not_logged_in)}")
+                .setPositiveButton("Ok", DialogInterface.OnClickListener{
+                        _, _ ->
+                    if(title=="${getString(R.string.not_logged_in)}"){
+                        USER_LOGGED = false
+                        val action = NavGraphDirections.callHome(false)
+                        findNavController().navigate(action)
+                    }
+                    if(title=="Update successful!"){
+                        val action = UpdatePasswordFragmentDirections.callBackUserInfoFragment()
+                        findNavController().navigate(action)
+                    }
+                })
+            val alert = dialogBuilder.create()
+            alert.setTitle(title)
+            alert.show()
+        }
+    }
     private fun showSpinner(value: Boolean){
         Handler(Looper.getMainLooper()).post {
             binding.updatePasswordSpinnerLayout.visibility =  when(value){
