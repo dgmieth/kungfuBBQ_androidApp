@@ -8,7 +8,17 @@
     android:background="@color/lessDarkBlue"
     android:gravity="center"
     tools:context=".CateringFragment">
-
+    <ImageView
+        android:id="@+id/cateringLogoBAndW"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.06"
+        android:scaleType="centerCrop"
+        android:src="@drawable/b_and_w_logo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/cateringExplanatoryText"
@@ -32,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:fontFamily="@font/palatino"
         android:text="@string/userinfo_name_label"
         android:textColor="@color/white"
@@ -46,7 +56,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="18dp"
         android:fontFamily="@font/palatino"
         android:text="@string/userinfo_email"
         android:textColor="@color/white"
@@ -60,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/palatino"
         android:text="@string/userinfo_phonenumber_label"
         android:textColor="@color/white"
@@ -86,7 +96,7 @@
     <EditText
         android:id="@+id/cateringName"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/edit_text_height"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
@@ -97,21 +107,22 @@
         android:importantForAutofill="no"
         android:inputType="textPersonName"
         android:minHeight="48dp"
+        android:nextFocusDown="@id/cateringEmail"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:textColor="@color/i_black"
         android:textColorHint="@color/textEditHint"
         android:textSize="@dimen/global_textsize"
-        android:nextFocusDown="@id/cateringEmail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/cateringNameLbl"
-        app:layout_constraintTop_toBottomOf="@+id/cateringExplanatoryText" />
+        app:layout_constraintTop_toBottomOf="@+id/cateringExplanatoryText"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <EditText
         android:id="@+id/cateringEmail"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/edit_text_height"
         android:layout_marginStart="8dp"
         android:layout_marginTop="6dp"
         android:layout_marginEnd="16dp"
@@ -121,19 +132,20 @@
         android:importantForAutofill="no"
         android:inputType="textWebEmailAddress"
         android:minHeight="48dp"
+        android:nextFocusDown="@id/cateringPhone"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:textColorHint="@color/textEditHint"
         android:textSize="@dimen/global_textsize"
-        android:nextFocusDown="@id/cateringPhone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cateringEmailLbl"
-        app:layout_constraintTop_toBottomOf="@+id/cateringName" />
+        app:layout_constraintTop_toBottomOf="@+id/cateringName"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <EditText
         android:id="@+id/cateringPhone"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/edit_text_height"
         android:layout_marginStart="8dp"
         android:layout_marginTop="6dp"
         android:layout_marginEnd="16dp"
@@ -144,36 +156,35 @@
         android:inputType="phone"
         android:maxLength="14"
         android:minHeight="48dp"
+        android:nextFocusDown="@id/cateringDescription"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:textColorHint="@color/textEditHint"
         android:textSize="@dimen/global_textsize"
-        android:nextFocusDown="@id/cateringDescription"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cateringPhoneLbl"
-        app:layout_constraintTop_toBottomOf="@+id/cateringEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/cateringEmail"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <EditText
         android:id="@+id/cateringDescription"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="6dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
         android:background="@color/white"
         android:ems="10"
         android:fontFamily="@font/palatino"
         android:gravity="top|start"
+        android:imeOptions="actionDone"
         android:importantForAutofill="no"
         android:inputType="textMultiLine"
         android:maxLines="100"
-        android:minLines="1"
+        android:minLines="4"
         android:scrollbars="vertical"
         android:textColor="@color/i_black"
         android:textSize="@dimen/global_textsize"
-        android:imeOptions="actionDone"
-        app:layout_constraintBottom_toTopOf="@+id/cateringButtons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -185,12 +196,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="4dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cateringDescription">
 
         <Space
             android:layout_width="wrap_content"
@@ -247,9 +258,9 @@
 
         <ProgressBar
             android:id="@+id/cateringProgressBar"
-            android:background="@drawable/spiner_ic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical" />
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:background="@drawable/spiner_ic" />
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

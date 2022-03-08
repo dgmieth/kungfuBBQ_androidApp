@@ -43,6 +43,7 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
     private var userUpdateOrder : UserAndSocialMedia? = null
     private var selectedQtty = 1
     private var editItemBtn : MenuItem? = null
+//    private var mOptionsMenu : Menu? = null
     private var btnClick = true
 
     private var bag = CompositeDisposable()
@@ -148,6 +149,7 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
             deleteOrderAlert()
         }
         super.onViewCreated(view, savedInstanceState)
+
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -327,7 +329,9 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
         binding.updateOrderNumberOfMeals.isEnabled = value
         binding.updateOrderUpdateOrderBtns.isVisible = value
         binding.updateOrderDeleteOrder.isVisible = !value
-        editItemBtn!!.isVisible = !value
+        editItemBtn?.let{it ->
+            it.isVisible = !value
+        }
     }
     private fun returnTotalAmount(qttyChosen:Int):String{
 //        val mealsPrice = (binding.updateOrderMealPrice.text.toString().split(" ")[1].toDouble())
@@ -360,6 +364,12 @@ class UpdateOrderFragment : Fragment(R.layout.fragment_updateorder), OnMapReadyC
                     if (title == "${getString(R.string.success)}") {
                         var action = CalendarFragmentDirections.callCalendarFragmentGlobal()
                         findNavController().navigate(action)
+                    }
+                    if(title=="Error!"){
+                        showUpdateOrderBtns(false)
+                        binding.updateOrderNumberOfMeals.value = cookingDate!!.order[0].dishes[0].dishQuantity
+                        selectedQtty = cookingDate!!.order[0].dishes[0].dishQuantity
+                        binding.updateOrderTotalPrice.text = returnTotalAmount(selectedQtty)
                     }
                 })
             val alert = dialogBuilder.create()

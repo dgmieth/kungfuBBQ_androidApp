@@ -14,7 +14,7 @@
     <string name="textview_login_email">Fill in with your e-mail:</string>
     <string name="textview_login_password">Fill in with your password:</string>
     <string name="textview_login_forgot_password">Forgot password?</string>
-    <string name="btn_register">Register here</string>
+    <string name="btn_register">Register</string>
     <string name="textview_login_register">Don\'t have an account with us?</string>
     <string name="edittext_register_inivitationcodelbl">Fill in with your invitation code:</string>
     <string name="edittext_register_invitatinocode_hint">KgfBBQ@.......</string>
@@ -94,6 +94,6 @@
     <string name="pay_amount">Total amount:</string>
     <string name="meal_box_amout">Meals amount:</string>
     <string name="tip_amount_label">Tip amount:</string>
-    <string name="payment_options">Payment options!</string>
+    <string name="payment_options">Payment options</string>
     <string name="payment_options_text">How would you like to pay your order?</string>
 </resources>

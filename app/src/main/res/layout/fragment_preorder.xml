@@ -8,7 +8,17 @@
     android:background="@color/lessDarkBlue"
     android:gravity="center"
     tools:context=".PreOrderFragment">
-
+    <ImageView
+        android:id="@+id/preOrderLogoBAndW"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.06"
+        android:scaleType="centerCrop"
+        android:src="@drawable/b_and_w_logo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
     <TextView
         android:id="@+id/preOrderDateLbl"
         android:layout_width="wrap_content"

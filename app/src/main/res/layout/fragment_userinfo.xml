@@ -9,6 +9,17 @@
     android:gravity="center"
     tools:context=".UserInfoFragment">
     <!--user email-->
+    <ImageView
+        android:id="@+id/updateUserLogoBAndW"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.06"
+        android:scaleType="centerCrop"
+        android:src="@drawable/b_and_w_logo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
     <TextView
         android:id="@+id/userInfoUserNameLbl"
         android:layout_width="wrap_content"
@@ -87,9 +98,9 @@
     <EditText
         android:id="@+id/userInfoName"
         android:layout_width="0dp"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/edit_text_height"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="14dp"
         android:layout_marginEnd="16dp"
         android:background="@android:color/transparent"
         android:enabled="false"
@@ -108,7 +119,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/userInfoNameLbl"
         app:layout_constraintTop_toBottomOf="@+id/userInfoMemberSince"
-        tools:ignore="DuplicateSpeakableTextCheck"
+        tools:ignore="DuplicateSpeakableTextCheck,TouchTargetSizeCheck"
         tools:text="John Doe" />
     <!--user phoneNumber-->
     <TextView
@@ -128,7 +139,7 @@
     <EditText
         android:id="@+id/userInfoPhone"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="@dimen/edit_text_height"
         android:layout_marginStart="8dp"
         android:layout_marginTop="6dp"
         android:layout_marginEnd="16dp"
@@ -152,6 +163,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/userInfoPhoneLbl"
         app:layout_constraintTop_toBottomOf="@+id/userInfoName"
+        tools:ignore="TouchTargetSizeCheck"
         tools:text="(000) 000-0000" />
     <!--user facebook name-->
     <TextView
@@ -171,7 +183,7 @@
     <EditText
         android:id="@+id/userInfoFacebookName"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="@dimen/edit_text_height"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
@@ -192,6 +204,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userInfoFacebookNameLbl"
+        tools:ignore="TouchTargetSizeCheck"
         tools:text="@string/john_doe" />
 
     <!--user facebook name-->
@@ -213,7 +226,7 @@
     <EditText
         android:id="@+id/userInfoInstagramName"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/edit_text_height"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
@@ -235,6 +248,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userInfoInstagramNameLbl"
+        tools:ignore="TouchTargetSizeCheck"
         tools:text="@string/john_doe" />
 
     <Button

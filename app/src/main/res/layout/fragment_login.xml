@@ -8,7 +8,17 @@
     android:background="@color/lessDarkBlue"
     android:gravity="center"
     tools:context=".LoginFragment">
-
+    <ImageView
+        android:id="@+id/loginLogoBAndW"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.06"
+        android:scaleType="centerCrop"
+        android:src="@drawable/b_and_w_logo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
     <TextView
         android:id="@+id/loginUserEmailLbl"
         android:layout_width="wrap_content"
@@ -116,22 +126,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginPassword" />
 
-    <TextView
-        android:id="@+id/loginRegisterLbl"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:fontFamily="@font/palatino"
-        android:text="@string/textview_login_register"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="@dimen/global_textsize"
-        android:textStyle="italic"
-        app:layout_constraintBottom_toTopOf="@+id/registerBtnView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <LinearLayout
         android:id="@+id/registerBtnView"
         android:layout_width="0dp"
@@ -146,23 +140,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight=".5" />
-
-        <Button
-            android:id="@+id/loginRegisterBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/btn_height"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="0dp"
-            android:layout_weight="1"
-            android:background="@drawable/button_affimative_action"
-            android:elevation="0.0dp"
-            android:fontFamily="@font/palatino"
-            android:text="@string/btn_register"
-            android:textAllCaps="false"
-            android:textColor="@color/i_black"
-            android:textSize="@dimen/btn_text_size"
-            android:textStyle="bold" />
 
         <Space
             android:layout_width="wrap_content"
@@ -189,13 +166,17 @@
             android:layout_weight=".33" />
 
         <Button
-            android:id="@+id/loginCancelBtn"
+            android:id="@+id/loginRegisterBtn"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/btn_height"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
             android:layout_weight="1"
             android:background="@drawable/button_negative_action"
+            android:elevation="0.0dp"
             android:fontFamily="@font/palatino"
-            android:text="@string/btn_cancel"
+            android:text="@string/btn_register"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="@dimen/btn_text_size"

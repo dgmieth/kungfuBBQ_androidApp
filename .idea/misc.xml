@@ -36,7 +36,7 @@
         <entry key="app/src/main/res/layout/activity_startup2.xml" value="0.21666666666666667" />
         <entry key="app/src/main/res/layout/calendar_day_layout.xml" value="0.45" />
         <entry key="app/src/main/res/layout/calendar_month_header_layout.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/fragment_about.xml" value="0.75" />
+        <entry key="app/src/main/res/layout/fragment_about.xml" value="0.47333333333333333" />
         <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.63" />
         <entry key="app/src/main/res/layout/fragment_catering.xml" value="0.48125" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.335" />
@@ -45,7 +45,7 @@
         <entry key="app/src/main/res/layout/fragment_pay.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_payorder.xml" value="0.6933333333333334" />
         <entry key="app/src/main/res/layout/fragment_preorder.xml" value="0.6010362694300518" />
-        <entry key="app/src/main/res/layout/fragment_register.xml" value="0.3706070287539936" />
+        <entry key="app/src/main/res/layout/fragment_register.xml" value="0.6111111111111112" />
         <entry key="app/src/main/res/layout/fragment_updateOrder.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/fragment_updateorder.xml" value="0.6427378964941569" />
         <entry key="app/src/main/res/layout/fragment_updatepassword.xml" value="0.6506696428571429" />

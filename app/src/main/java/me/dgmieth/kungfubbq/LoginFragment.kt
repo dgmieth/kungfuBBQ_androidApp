@@ -98,9 +98,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             val action = LoginFragmentDirections.callRegisterFragment()
             findNavController().navigate(action)
         }
-        binding.loginCancelBtn.setOnClickListener {
-            requireActivity().onBackPressed()
-        }
+//        binding.loginCancelBtn.setOnClickListener {
+//            requireActivity().onBackPressed()
+//        }
         binding.loginLoginBtn.setOnClickListener {
             logUserIn()
         }
@@ -194,7 +194,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                         USER_LOGGED=true
                         showAlert("Success! ${json.getString("msg")}","Success!")
                     }else{
-                        showAlert("The attempt to recover your password failed","Password recovery failed!")
+                        showAlert("The attempt to recover your password failed with server message: ${json.getString("msg")}","Password recovery failed!")
                     }
                 }
             }

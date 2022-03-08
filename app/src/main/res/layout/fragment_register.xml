@@ -13,7 +13,17 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+        <ImageView
+            android:id="@+id/registerOneLogoBAndW"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.06"
+            android:scaleType="centerCrop"
+            android:src="@drawable/b_and_w_logo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
         <TextView
             android:id="@+id/registerEmailLbl"
             android:layout_width="0dp"
@@ -22,7 +32,7 @@
             android:layout_marginTop="45dp"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/palatino"
-            android:text="@string/edittext_register_emaillbl"
+            android:text="@string/textview_login_email"
             android:textColor="@color/white"
             android:textSize="@dimen/global_textsize"
             android:textStyle="bold"
@@ -150,13 +160,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="4dp"
             android:orientation="horizontal"
             android:weightSum="3"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registerHintPassword">
 
             <Space
                 android:layout_width="wrap_content"
@@ -208,7 +218,17 @@
         android:alpha="0"
         android:background="@color/lessDarkBlue"
         android:visibility="invisible">
-
+        <ImageView
+            android:id="@+id/registerTwoLogoBAndW"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.06"
+            android:scaleType="centerCrop"
+            android:src="@drawable/b_and_w_logo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
         <TextView
             android:id="@+id/obs1"
             android:layout_width="0dp"
@@ -411,13 +431,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="4dp"
             android:orientation="horizontal"
             android:weightSum="3"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/obs2">
 
             <Space
                 android:layout_width="wrap_content"

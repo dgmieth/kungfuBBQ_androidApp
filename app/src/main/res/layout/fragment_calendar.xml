@@ -54,6 +54,7 @@
         android:id="@+id/swipeInformationLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@color/lessDarkBlue"
         android:orientation="horizontal"
         android:weightSum="7"
         app:layout_constraintEnd_toEndOf="parent"
@@ -70,16 +71,20 @@
             android:paddingStart="60dp"
             android:text="Check our future events. Swipe rigth to left"
             android:textAlignment="textEnd"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
 
         <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="175dp"
+            android:id="@+id/imageView3"
+            android:layout_width="145dp"
             android:layout_height="match_parent"
             android:layout_weight="5"
-            android:src="@drawable/arrrow_future" />
+            android:rotationX="180"
+            android:rotationY="180"
+            android:src="?attr/homeAsUpIndicator"
+            app:tint="@color/white" />
+
     </LinearLayout>
 
     <TextView

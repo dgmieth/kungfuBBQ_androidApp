@@ -13,7 +13,7 @@
         android:fontFamily="@font/palatino"
         android:padding="5dp"
         android:textAlignment="center"
-        android:textColor="@color/logoYellow"
+        android:textColor="@color/logoRed"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,7 +38,7 @@
             android:layout_weight="1"
             android:text="Sun"
             android:textAlignment="center"
-            android:textColor="@color/logoRed"
+            android:textColor="@color/logoYellow"
             android:textSize="16sp" />
 
         <TextView
@@ -48,7 +48,7 @@
             android:layout_weight="1"
             android:text="Mon"
             android:textAlignment="center"
-            android:textColor="@color/logoRed"
+            android:textColor="@color/logoYellow"
             android:textSize="16sp" />
 
         <TextView
@@ -58,7 +58,7 @@
             android:layout_weight="1"
             android:text="Tue"
             android:textAlignment="center"
-            android:textColor="@color/logoRed"
+            android:textColor="@color/logoYellow"
             android:textSize="16sp" />
 
         <TextView
@@ -68,7 +68,7 @@
             android:layout_weight="1"
             android:text="Wed"
             android:textAlignment="center"
-            android:textColor="@color/logoRed"
+            android:textColor="@color/logoYellow"
             android:textSize="16sp" />
 
         <TextView
@@ -78,7 +78,7 @@
             android:layout_weight="1"
             android:text="Thu"
             android:textAlignment="center"
-            android:textColor="@color/logoRed"
+            android:textColor="@color/logoYellow"
             android:textSize="16sp" />
 
         <TextView
@@ -88,7 +88,7 @@
             android:layout_weight="1"
             android:text="Fri"
             android:textAlignment="center"
-            android:textColor="@color/logoRed"
+            android:textColor="@color/logoYellow"
             android:textSize="16sp" />
 
         <TextView
@@ -98,7 +98,7 @@
             android:layout_weight="1"
             android:text="Sat"
             android:textAlignment="center"
-            android:textColor="@color/logoRed"
+            android:textColor="@color/logoYellow"
             android:textSize="16sp" />
 
     </LinearLayout>
