@@ -23,6 +23,7 @@ import okhttp3.Response
 import org.json.JSONObject
 import java.io.IOException
 import java.lang.Exception
+import java.time.LocalDate
 
 var USER_LOGGED = false
 
@@ -49,6 +50,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         checkVersionCode()
+        selectedDate = LocalDate.now()
+        Log.d(TAG,"checkVersionCode called, ${getString(R.string.kungfuServerUrlNoSchema)}")
         binding.homeLoginBtn.isVisible = !args.loggedIn
         binding.homeCalendarBtn.isVisible = args.loggedIn
         binding.homeLoginBtn.setOnClickListener { goToLoginFragment() }
@@ -130,12 +133,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         HttpCtrl.shared.newCall(HttpCtrl.get("","",httpUrl,"")).enqueue(object :
             Callback {
             override fun onFailure(call: Call, e: IOException) {
-                Log.d(TAG,"failure on trying to detect os version")
+                showAlert("KungfuBBQ server cannot be reached. Try again in some minutes. If the problem persists, please contact KungfuBBQ.","Error!")
             }
             override fun onResponse(call: Call, response: Response) {
                 response.use {
-                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
+                    if (!response.isSuccessful) {
+                        showAlert("KungfuBBQ server cannot be reached. Try again in some minutes. If the problem persists, please contact KungfuBBQ.","Error!")
+                        throw IOException("Unexpected code $response")
+                    }
                     val json = JSONObject(response.body!!.string())
+                    Log.d(TAG,"values are $json")
                     if(json.getBoolean("hasErrors")){
                        showAlert("${json.getString("msg")}","App update required!")
                     }
@@ -153,6 +160,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         _, _ ->
                     if(title=="App update required!"){
                         binding.homeLoginBtn.isVisible = false
+                    }else{
+                        binding.homeLoginBtn.isVisible = false
+                        binding.homeCateringBtn.isVisible = false
                     }
                 })
             val alert = dialogBuilder.create()

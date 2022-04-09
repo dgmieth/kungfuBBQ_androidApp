@@ -8,7 +8,8 @@ import me.dgmieth.kungfubbq.datatabase.roomEntities.*
 
 //const val DB_VERSION = 2 //added fifo to OrderDB abd cookingDateDB
 //const val DB_VERSION = 3 //added tipAmount to OrderDB
-const val DB_VERSION = 4 //added cookingDateAmPm to OrderDB
+//const val DB_VERSION = 4 //added cookingDateAmPm to OrderDB
+const val DB_VERSION = 5 //added venue, endTime, cookingDateEndAmPm
 const val DB_NAME = "kungfuBBQapp.db"
 
 @Database(entities = [UserDB::class,SocialMediaInfo::class,

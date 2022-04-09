@@ -1,7 +1,7 @@
 package me.dgmieth.kungfubbq.support.formatter
 
 import android.text.Html
-import com.onesignal.HTML
+//import com.onesignal.HTML
 import me.dgmieth.kungfubbq.datatabase.roomEntities.CookingDateDishesDB
 
 const val TAG = "FORMATTER"
@@ -37,19 +37,19 @@ class FormatObject {
             var fifo = "$fifoIntro"
             for(m in ary){
                 if(m.dishFifo==0){
-                    menu = "${menu}<p>${menuIndex}- ${m.dishName}${if(m.dishDescription != "") " (${m.dishDescription})" else ""}</p>"
+                    menu = "${menu}<p>${menuIndex}- $${m.dishPrice} ${m.dishName}${if(m.dishDescription != "") " (${m.dishDescription})" else ""}</p>"
                     menuIndex += 1
                     mealBoxTotalAmount += m.dishPrice.toDouble()
                     dishesArray.add(m.dishId)
                 }else{
-                    fifo = "${fifo}<p>${fifoIndex}- ${m.dishName}${if(m.dishDescription != "") " (${m.dishDescription})" else ""}</p>"
+                    fifo = "${fifo}<p>${fifoIndex}- $${m.dishPrice} ${m.dishName}${if(m.dishDescription != "") " (${m.dishDescription})" else ""}</p>"
                     fifoIndex += 1
                 }
             }
             menu = "${menu}${if(fifo != fifoIntro) fifo else ""}"
             return menu
         }
-        fun formatEventAddress(monthValue:Int,dayMonth:Int,time:String,street:String?,complement:String?,city:String?,state:String?,zipCode:String?): String {
+        fun formatEventAddress(monthValue:Int,dayMonth:Int,time:String,street:String?,city:String?,state:String?,endTime:String,venue:String?): String {
             val month = when(monthValue) {
                 0 -> "Jan"
                 1 -> "Feb"
@@ -65,13 +65,13 @@ class FormatObject {
                 else -> "Dec"
             }
             address = ""
-            timeVal = "$month $dayMonth at $time"
+            var inV = ""
+            timeVal = "$month $dayMonth, $time - $endTime"
+            venue?.let{it -> inV = if(it=="Not informed") "" else "<p><strong>*** $it ***</strong></p>"}
             street?.let { it -> address = "$address${if(it==""||it=="Not informed") "" else "$it,"}" }
-            complement?.let { it -> address = "$address${if(it==""||it=="Not informed") "" else " $it,"}" }
             city?.let { it -> address = "$address${if(it==""||it=="Not informed") "" else " $it"}" }
             state?.let { it -> address = "$address${if(it==""||it=="Not informed") "" else " - $it"}" }
-            zipCode?.let { it -> address = "$address${if(it==""||it=="Not informed") "" else " - $it"}" }
-            return "<strong>$month $dayMonth</strong> at <strong>$time</strong> at <strong>$address</strong>"
+            return "<p><strong>$month $dayMonth</strong> from <strong>$time</strong> to <strong>$endTime</strong></p>$inV<p><strong>$address</strong></p>"
         }
         fun returnAddress():String{
             return address

@@ -40,6 +40,8 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.WeekFields
 import java.util.*
 
+var selectedDate = LocalDate.now()
+
 class CalendarFragment : Fragment(R.layout.fragment_calendar){
 
     private val TAG = "CalendarFragment"
@@ -55,9 +57,11 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
     private var viewModel: RoomViewModel? = null
     private var bag = CompositeDisposable()
 
-    private var selectedDate = LocalDate.now()
+
     private var todayDate = LocalDate.now()
     private val dateFormatterCV = DateTimeFormatter.ofPattern("dd")
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,13 +108,14 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                 }
                 datesArray = dArray
                 Handler(Looper.getMainLooper()).post{
+                    Log.d(TAG,"refreshCAlendar $selectedDate")
                     val oldDate = selectedDate
                     refreshCalendarView(todayDate,oldDate)
                     ifSelectedDateHasCookingDateMatch(selectedDate)
                     showSpinner(false)
                     binding.calendarView.monthScrollListener = {month ->
                         var oldDate: LocalDate
-                        selectedDate = null
+                        //selectedDate = null
                         binding.calendarView.notifyCalendarChanged()
                     }
                 }
@@ -149,14 +154,15 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
         class DayViewContainer(view: View) : ViewContainer(view) {
             val bind = CalendarDayLayoutBinding.bind(view)
             lateinit var day: CalendarDay
-
             init {
                 view.setOnClickListener {
                     if(day.owner >= DayOwner.THIS_MONTH){
                             if (day.date >= todayDate) {
                                 if (selectedDate != day.date) {
+                                    Log.d(TAG,"DayViewContainer $selectedDate")
                                     val oldDate = selectedDate
                                     selectedDate = day.date
+                                    Log.d(TAG,"DayViewContainer $selectedDate")
                                     refreshCalendarView(day.date, oldDate)
                                     ifSelectedDateHasCookingDateMatch(selectedDate)
                                 }
@@ -167,16 +173,22 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
             fun bind(day: CalendarDay) {
                 this.day = day
                 bind.todayDay.text = dateFormatterCV.format(day.date)
+                bind.kungfuBBQImg.visibility = View.INVISIBLE
                 datesArray?.let{
-                    if(it.size>0){
-                        for(i in it){
-                            if(i.first==day.date){
-                                bind.kungfuBBQImg.visibility = View.VISIBLE
-                            }
-                        }
+//                    if(it.size>0){
+//                        for(i in it){
+//                            Log.d(TAG,"unfo ${i.first} ${day.date}")
+//                            if(i.first==day.date){
+//                                Log.d(TAG,"foundMatch ${i.first} ${day.date}")
+//                                bind.kungfuBBQImg.visibility = View.VISIBLE
+//                            }
+//                        }
+//                    }
+                    if((it.filter { i -> i.first == day.date }).isNotEmpty()){
+                        bind.kungfuBBQImg.visibility = View.VISIBLE
                     }
                 }
-                if(selectedDate==day.date){
+                if(selectedDate == day.date){
                     bind.selectionCircle.visibility = View.VISIBLE
                     bind.todayDay.setTextColor(Color.BLACK)
                     return
@@ -192,14 +204,14 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                             bind.todayDay.setTextColor(Color.BLACK)
                         }
                         day.date < todayDate -> {
-                            bind.todayDay.setTextColor(context!!.getColor(R.color.lessDarkBlue))
+                            bind.todayDay.setTextColor(Color.TRANSPARENT)
                         }
                         else -> {
                             bind.todayDay.setTextColor(Color.WHITE)
                         }
                     }
                 } else if (day.owner == DayOwner.PREVIOUS_MONTH || day.owner == DayOwner.NEXT_MONTH)  {
-                    bind.todayDay.setTextColor(context!!.getColor(R.color.lessDarkBlue))
+                    bind.todayDay.setTextColor(Color.TRANSPARENT)
                     bind.kungfuBBQImg.visibility = View.INVISIBLE
                 }
             }
@@ -299,7 +311,11 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                                 iJ.getDouble("lng"),
                                 iJ.getInt("cookingStatusId"),
                                 iJ.getString("cookingStatus"),
-                                iJ.getInt("menuID")))
+                                iJ.getInt("menuID"),
+                                iJ.getString("endTime"),
+                                iJ.getString("cookingDateEndAmPm"),
+                                iJ.getString("venue"),
+                            ))
                             for(x in 0 until iJ.getJSONArray("dishes").length()){
                                 val ds = iJ.getJSONArray("dishes").getJSONObject(x)
                                 listCDatesDishes.add(CookingDateDishesDB(ds.getInt("dishId"),
@@ -337,9 +353,12 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                         viewModel?.insertAllCookingDates(listCDates,listCDatesDishes,listOrders,listOrderDishes)
                     }else{
                         if(json.getInt("errorCode")==-1){
+                            showSpinner(false)
                             showAlert("${getString(R.string.not_logged_in_message)}","${getString(R.string.not_logged_in)}")
                         }else{
+                            showSpinner(false)
                             showAlert("The attempt to retrieve data from KungfuBBQ server failed with server message: ${json.getString("msg")}","Error!")
+                            noCookingDateMessage(true)
                         }
                     }
                 }
@@ -349,10 +368,12 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
     // ==============================================
     // UI update
     private fun ifSelectedDateHasCookingDateMatch(eventDay:LocalDate){
+        selectedDate = eventDay
         datesArray?.let { it ->
             for(i in it){
                 if(i.first==eventDay){
-                    binding.calendarNoCookingDate.visibility = View.INVISIBLE
+//                    binding.calendarNoCookingDate.visibility = View.INVISIBLE
+                    noCookingDateMessage(false)
                     val cdAr = cookingDates!!.filter {cd ->  cd.cookingDateAndDishes.cookingDate.cookingDateId == i.second }
                     val cd = cdAr[0]
                     val month = when(i.first.month.value-1) {
@@ -370,7 +391,13 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                         else -> "Dec"
                     }
 //                    var dateAddress = "$month ${i.first.dayOfMonth} at ${cd.cookingDateAndDishes.cookingDate.cookingDate.split("-")[1]} \n ${FormatObject.formatEventAddress(cd.cookingDateAndDishes.cookingDate.street,cd.cookingDateAndDishes.cookingDate.complement,cd.cookingDateAndDishes.cookingDate.city,cd.cookingDateAndDishes.cookingDate.state,cd.cookingDateAndDishes.cookingDate.zipcode)}"
-                    binding.calendarDate.text = Html.fromHtml(FormatObject.formatEventAddress(i.first.month.value-1,i.first.dayOfMonth,cd.cookingDateAndDishes.cookingDate.cookingDateAmPm.split(" ")[1],cd.cookingDateAndDishes.cookingDate.street,cd.cookingDateAndDishes.cookingDate.complement,cd.cookingDateAndDishes.cookingDate.city,cd.cookingDateAndDishes.cookingDate.state,cd.cookingDateAndDishes.cookingDate.zipcode),Html.FROM_HTML_MODE_COMPACT)
+                    binding.calendarDate.text = Html.fromHtml(FormatObject.formatEventAddress(i.first.month.value-1,i.first.dayOfMonth,cd.cookingDateAndDishes.cookingDate.cookingDateAmPm.split(" ")[1],cd.cookingDateAndDishes.cookingDate.street,cd.cookingDateAndDishes.cookingDate.city,cd.cookingDateAndDishes.cookingDate.state,cd.cookingDateAndDishes.cookingDate.cookingDateEndAmPm.split(" ")[1],cd.cookingDateAndDishes.cookingDate.venue),Html.FROM_HTML_MODE_COMPACT)
+                    Log.d(TAG, "lines of text ${binding.calendarDate.text.lines()[binding.calendarDate.text.lines().size-1]}")
+                    if(binding.calendarDate.text.lines()[binding.calendarDate.text.lines().size-1].isNullOrEmpty()){
+                        if(binding.calendarDate.text.lines().size-1<=4){
+                            binding.calendarDate.maxLines = binding.calendarDate.text.lines().size-1
+                        }
+                    }
                     binding.calendarStatus.text = cd.cookingDateAndDishes.cookingDate.cookingStatus
 //                    var menu = "<p><strong>BOX MEAL:</strong></p>"
 //                    var menuIndex = 1
@@ -402,7 +429,8 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                     updateUIBtns(i.second)
                     break
                 }else{
-                    binding.calendarNoCookingDate.visibility = View.VISIBLE
+//                    binding.calendarNoCookingDate.visibility = View.VISIBLE
+                    noCookingDateMessage(true)
                     showOrderBtns(
                         placeOrder= false,
                         updateOrder = false,
@@ -410,6 +438,17 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                         paidOrder = false
                     )
                 }
+            }
+        }
+    }
+    private fun noCookingDateMessage(show:Boolean){
+        Handler(Looper.getMainLooper()).post {
+            if(show){
+                binding.calendarNoCookingDate.visibility = View.VISIBLE
+                binding.calendarCookingDate.visibility = View.INVISIBLE
+            }else{
+                binding.calendarNoCookingDate.visibility = View.INVISIBLE
+                binding.calendarCookingDate.visibility = View.VISIBLE
             }
         }
     }

@@ -37,14 +37,23 @@ data class CookingDateDB (
     var cookingStatus: String,
     @ColumnInfo(name = MENU_ID)
     var menuID: Int,
+    @ColumnInfo(name = END_TIME)
+    var endTime: String,
+    @ColumnInfo(name = COOKING_DATE_END_AM_PM)
+    var cookingDateEndAmPm: String,
+    @ColumnInfo(name = VENUE)
+    var venue: String,
         ){
     companion object{
         const val TABLE_NAME="CookingDates"
         const val COOKING_DATE_ID = "cookingDateId"
         const val COOKING_DATE = "cookingDate"
+        const val END_TIME = "endTime"
+        const val COOKING_DATE_END_AM_PM = "cookingDateEndAmPm"
         const val COOKING_DATE_AM_PM = "cookingDateAmPm"
         const val MEALS_FOR_THIS = "mealsForThis"
         const val ADDRESS_ID = "addressId"
+        const val VENUE = "venue"
         const val STREET = "street"
         const val COMPLEMENT = "complement"
         const val CITY = "city"

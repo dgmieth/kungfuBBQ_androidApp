@@ -26,6 +26,7 @@ import org.json.JSONObject
 import java.io.IOException
 import com.onesignal.OneSignal
 import me.dgmieth.kungfubbq.databinding.FragmentLoginBinding
+import me.dgmieth.kungfubbq.support.extensions.onRightDrawableClicked
 
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
@@ -103,6 +104,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 //        }
         binding.loginLoginBtn.setOnClickListener {
             logUserIn()
+        }
+        binding.loginUserEmail.onRightDrawableClicked {
+            it.text.clear()
+        }
+        binding.loginPassword.setOnClickListener{
+            binding.loginPassword.text.clear()
         }
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

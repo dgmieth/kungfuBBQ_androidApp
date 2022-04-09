@@ -4,14 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    tools:background="@color/lessDarkBlue">
+    android:background="?attr/selectableItemBackground">
 
     <ImageView
         android:id="@+id/todayCircle"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="3dp"
+        android:layout_height="25dp"
         android:visibility="invisible"
         app:srcCompat="@drawable/circle"
         app:tint="@color/i_yellow" />
@@ -19,8 +17,7 @@
     <ImageView
         android:id="@+id/selectionCircle"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="3dp"
+        android:layout_height="25dp"
         android:visibility="invisible"
         app:srcCompat="@drawable/circle" />
 
@@ -34,8 +31,7 @@
         <TextView
             android:id="@+id/todayDay"
             android:layout_width="match_parent"
-            android:layout_height="28dp"
-            android:layout_marginTop="4dp"
+            android:layout_height="22dp"
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
             android:textColor="@color/i_black"
@@ -47,8 +43,8 @@
     <ImageView
         android:id="@+id/kungfuBBQImg"
         android:layout_width="match_parent"
-        android:layout_height="13dp"
-        android:layout_marginTop="28dp"
+        android:layout_height="12dp"
+        android:layout_marginTop="20dp"
         android:visibility="invisible"
         app:srcCompat="@drawable/icon_calendar" />
 
