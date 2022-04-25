@@ -96,4 +96,6 @@
     <string name="tip_amount_label">Tip amount:</string>
     <string name="payment_options">Payment options</string>
     <string name="payment_options_text">How would you like to pay your order?</string>
+    <string name="remember_password">Remember my password</string>
+    <string name="switch_off"></string>
 </resources>

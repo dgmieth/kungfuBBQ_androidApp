@@ -1,5 +1,6 @@
 package me.dgmieth.kungfubbq
 
+import android.annotation.SuppressLint
 import me.dgmieth.kungfubbq.support.encryption.CryptLib
 import androidx.appcompat.app.AlertDialog
 import android.content.DialogInterface
@@ -26,6 +27,7 @@ import org.json.JSONObject
 import java.io.IOException
 import com.onesignal.OneSignal
 import me.dgmieth.kungfubbq.databinding.FragmentLoginBinding
+import me.dgmieth.kungfubbq.datatabase.roomEntities.RememberMeInfo
 import me.dgmieth.kungfubbq.support.extensions.onRightDrawableClicked
 
 
@@ -60,6 +62,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                             findNavController().navigate(action)
                         }
                     }
+                    Actions.RememberComplete -> {
+                        Log.d(TAG,"rememberComplete")
+                    }
                     else -> {
                     Log.d(TAG,"viewModeReturn is $it")
                         showAlert("Log in attempt failed. Please try again in some minutes","Log-in failed!")
@@ -75,6 +80,14 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     binding.loginSpinerLayout.visibility = View.INVISIBLE
                 }
             }, {})?.let { bag.add(it) }
+        viewModel?.rememberMe?.subscribe {
+            if (it.remember == 1) {
+                Log.d(TAG,"rememberMeInfo is $it")
+                binding.loginPassword.setText(it.password)
+                binding.rememberMe.isChecked = true
+            }
+        }
+        viewModel?.getRememberMe()
         //android mutable live data observer
         viewModel?.user?.observe(viewLifecycleOwner, Observer {
             if (!it.user.email.isNullOrEmpty()) {
@@ -111,6 +124,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         binding.loginPassword.setOnClickListener{
             binding.loginPassword.text.clear()
         }
+        binding.rememberMe.setOnClickListener {
+            Log.d(TAG, "switch is ${binding.rememberMe.isChecked}")
+            viewModel?.deleteRememberMe()
+        }
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -133,6 +150,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         Log.d(TAG,"cipherText $cipherText")
         if(!binding.loginUserEmail.text.toString().isNullOrEmpty()&&!binding.loginPassword.text.toString().isNullOrEmpty()){
             showSpinner(true)
+            if(binding.rememberMe.isChecked){
+                var dtObj = RememberMeInfo(if(binding.rememberMe.isChecked) 1 else 0,binding.loginPassword.text.toString())
+                viewModel?.insertRememberMe(dtObj)
+            }
             val body = FormBody.Builder()
                 .add("email",binding.loginUserEmail.text.toString())
                 .add("password",binding.loginPassword.text.toString())

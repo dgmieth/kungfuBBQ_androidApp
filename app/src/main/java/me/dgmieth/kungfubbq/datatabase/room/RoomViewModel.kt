@@ -18,6 +18,8 @@ enum class Actions {
     UserError,
     CookingDatesComplete,
     CookingDatesSelectError,
+    RememberComplete,
+    RememberError,
     CookingDatesError;
 }
 
@@ -30,7 +32,7 @@ class RoomViewModel:ViewModel() {
     var user = MutableLiveData<UserAndSocialMedia>()
     var cookingDates : PublishSubject<List<CookingDateAndCookingDateDishesWithOrder>> = PublishSubject.create()
     var returnMsg : PublishSubject<Actions> = PublishSubject.create()
-
+    var rememberMe : PublishSubject<RememberMeInfo> = PublishSubject.create()
 
     init {
         Log.d(TAG,"viewModelStarted")
@@ -38,6 +40,53 @@ class RoomViewModel:ViewModel() {
 
     fun getDbInstance(dbInstance:KungfuBBQRoomDatabase){
         this.db = dbInstance
+    }
+    //REMEMBER ME INFORMATION
+    fun insertRememberMe(data:RememberMeInfo){
+        db?.kungfuBBQRoomDao()?.deleteRememberMe()?.
+        subscribeOn(Schedulers.io())?.
+        observeOn(AndroidSchedulers.mainThread())?.
+        subscribe({
+            db?.kungfuBBQRoomDao()?.insertRememberMe(data)?.
+            subscribeOn(Schedulers.io())?.
+            observeOn(AndroidSchedulers.mainThread())?.
+            subscribe({
+                returnMsg.onNext(Actions.RememberComplete)
+            },{
+                Log.d(TAG,"insertRememberMe - not inserted ${it} ")
+                returnMsg.onNext(Actions.RememberError)
+            })?.let{
+                bag.add(it)
+            }
+        },{
+            Log.d(TAG,"deleteRememberMe - not inserted ${it} ")
+            returnMsg.onNext(Actions.RememberError)
+        })?.let{
+            bag.add(it)
+        }
+    }
+    fun getRememberMe(){
+        db?.kungfuBBQRoomDao()?.getRememberMe()
+            ?.subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe({
+                rememberMe.onNext(it)
+            },{})?.let{
+                bag.add(it)
+            }
+    }
+    fun deleteRememberMe() {
+        db?.kungfuBBQRoomDao()?.deleteRememberMe()?.
+        subscribeOn(Schedulers.io())?.
+        observeOn(AndroidSchedulers.mainThread())?.
+        subscribe({
+            returnMsg.onNext(Actions.RememberComplete)
+        },{
+            Log.d(TAG,"deleteRememberMe - not inserted ${it} ")
+            returnMsg.onNext(Actions.RememberError)
+        })?.let{
+            bag.add(it)
+        }
     }
     //USER AND SOCIAL MEDIA INFO ENTITIES
     fun insertAllUserInfo(user:UserDB,socialMediaList:MutableList<SocialMediaInfo>){

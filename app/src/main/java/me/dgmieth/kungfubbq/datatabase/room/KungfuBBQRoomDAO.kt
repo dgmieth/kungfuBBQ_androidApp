@@ -25,7 +25,15 @@ interface KungfuBBQRoomDAO {
             "           SET ${UserDB.TOKEN} = :newToken" +
             "       WHERE ${UserDB.USER_ID} = :userId")
     fun updateUserToken(userId:Int,newToken:String):Completable
-
+    //REMEBER ME INFORMATION
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertRememberMe(data:RememberMeInfo):Completable
+    @Transaction
+    @Query("DELETE FROM ${RememberMeInfo.TABLE_NAME}")
+    fun deleteRememberMe():Completable
+    @Transaction
+    @Query("Select * FROM ${RememberMeInfo.TABLE_NAME}")
+    fun getRememberMe():Single<RememberMeInfo>
     //COOKING DATE, DISHES and ORDERS
     @Transaction
     @Query("DELETE FROM ${CookingDateDB.TABLE_NAME}")

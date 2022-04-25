@@ -93,24 +93,6 @@
         app:layout_constraintTop_toBottomOf="@+id/loginPasswordLbl" />
 
     <TextView
-        android:id="@+id/loginResetPassword"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="8dp"
-        android:fontFamily="@font/palatino"
-        android:text="@string/textview_login_forgot_password"
-        android:textAlignment="viewEnd"
-        android:textColor="@color/white"
-        android:textSize="@dimen/global_textsize"
-        android:textStyle="bold"
-        android:typeface="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginPassword" />
-
-    <TextView
         android:id="@+id/loginHintPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -125,6 +107,48 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginPassword" />
+
+    <Switch
+        android:id="@+id/rememberMe"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/btn_text_size"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/palatino"
+        android:showText="true"
+        android:splitTrack="true"
+        android:text="@string/remember_password"
+        android:textAlignment="viewEnd"
+        android:textColor="@color/fontColor"
+        android:textOff="@string/switch_off"
+        android:textOn="on"
+        android:textSize="@dimen/global_textsize"
+        android:thumbTint="@color/i_yellow"
+        android:thumbTintMode="src_in"
+        android:trackTint="@color/i_reda"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginHintPassword"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <TextView
+        android:id="@+id/loginResetPassword"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/textview_login_forgot_password"
+        android:textAlignment="viewEnd"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_textsize"
+        android:textStyle="bold"
+        android:typeface="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rememberMe" />
 
     <LinearLayout
         android:id="@+id/registerBtnView"
