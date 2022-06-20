@@ -11,6 +11,7 @@ import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.core.view.isVisible
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import me.dgmieth.kungfubbq.databinding.FragmentHomeBinding
@@ -50,6 +51,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         checkVersionCode()
+//        checkSauseFundingCampaignStatus()
         selectedDate = LocalDate.now()
         Log.d(TAG,"checkVersionCode called, ${getString(R.string.kungfuServerUrlNoSchema)}")
         binding.homeLoginBtn.isVisible = !args.loggedIn
@@ -57,6 +59,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.homeLoginBtn.setOnClickListener { goToLoginFragment() }
         binding.homeCateringBtn.setOnClickListener { goToCateringFragment() }
         binding.homeCalendarBtn.setOnClickListener { goToCalendarFragment() }
+        binding.homeSauseFunding.setOnClickListener { goToSauseFunding() }
         binding.homeCallButton.setOnClickListener{
             Log.d(TAG,"callBtn called")
             val intent = Intent(Intent.ACTION_DIAL).apply {
@@ -109,15 +112,22 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     //button click listeners
     private fun goToLoginFragment(){
         val action = NavGraphDirections.actionGlobalLoginFragment()
-        findNavController().navigate(action)
+        userNavController(action)
     }
     private fun goToCateringFragment(){
         val action = HomeFragmentDirections.callCatering(args.loggedIn)
-        findNavController().navigate(action)
+        userNavController(action)
     }
     private fun goToCalendarFragment(){
         binding.homeCalendarBtn.isEnabled = false
         val action = HomeFragmentDirections.callCalendar()
+        userNavController(action)
+    }
+    private fun goToSauseFunding(){
+        val action = HomeFragmentDirections.callSauseFunding()
+        userNavController(action)
+    }
+    private fun userNavController(action : NavDirections){
         findNavController().navigate(action)
     }
     //=====================================================================
@@ -149,6 +159,46 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 }
             }
         })
+    }
+    //=====================================================================
+//checking version code
+    private fun checkSauseFundingCampaignStatus() {
+        if(!args.loggedIn){
+            showHideSauseFundingBtn("off")
+            return
+        }
+        var httpUrl = HttpUrl.Builder()
+            .scheme("https")
+            .host("${getString(R.string.kungfuServerUrlNoSchema)}")
+            .addPathSegments("api/sause/checkstatus")
+            .build()
+        HttpCtrl.shared.newCall(HttpCtrl.get("","",httpUrl,"")).enqueue(object :
+            Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                showAlert("KungfuBBQ server cannot be reached. Try again in some minutes. If the problem persists, please contact KungfuBBQ.","Error!")
+            }
+            override fun onResponse(call: Call, response: Response) {
+                response.use {
+                    if (!response.isSuccessful) {
+                        showHideSauseFundingBtn("off")
+                        throw IOException("Unexpected code $response")
+                    }
+                    val json = JSONObject(response.body!!.string())
+                    Log.d(TAG,"checkSauseFundingCampaignStatus -> values are $json ${json.getJSONObject("msg").getString("status")}")
+                    showHideSauseFundingBtn(json.getJSONObject("msg").getString("status"))
+                    if(json.getBoolean("hasErrors")){
+                        showHideSauseFundingBtn(json.getJSONObject("msg").getString("status"))
+                    }
+                }
+            }
+        })
+    }
+    private fun showHideSauseFundingBtn(status : String){
+        if(status=="off"){
+            Handler(Looper.getMainLooper()).post {
+                binding.homeSauseFunding.isVisible = false
+            }
+        }
     }
     //=====================================================================
     private fun showAlert(message:String,title:String){

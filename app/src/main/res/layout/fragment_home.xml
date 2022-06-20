@@ -23,6 +23,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="150dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/homeLoginBtn"
         android:layout_width="0dp"
@@ -42,6 +51,37 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="DuplicateClickableBoundsCheck" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="62dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="212dp"
+        app:layout_constraintTop_toTopOf="@id/guideline2" />
+
+    <Button
+        android:id="@+id/homeSauseFunding"
+        android:layout_width="0dp"
+        android:layout_height="62dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/button_home"
+        android:fontFamily="@font/palatino"
+        android:text="@string/sause_funding_home_btn"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:textStyle="bold|italic"
+        android:theme="@style/Theme.KungfuBBQ"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline3"
         tools:ignore="DuplicateClickableBoundsCheck" />
 
     <Button
@@ -71,7 +111,7 @@
         android:layout_width="0dp"
         android:layout_height="62dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="285dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/button_home"
         android:fontFamily="@font/font_palatino"
@@ -84,7 +124,7 @@
         android:theme="@style/Theme.KungfuBBQ"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/homeSauseFunding" />
 
     <View
         android:id="@+id/view"

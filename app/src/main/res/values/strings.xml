@@ -68,6 +68,8 @@
     <string name="btn_deleteorder">Delete</string>
     <string name="btn_updateorder">Update</string>
     <string name="btn_payorder">Pay</string>
+    <string name="btn_confirm">Maybe I\'ll swing by!</string>
+    <string name="msg_confirm_presence">We already know you may swing by &#128521;</string>
     <string name="pay_cardnumber_lbl">Credit Card Number</string>
     <string name="pay_cardcode_lbl">Credit Card Code</string>
     <string name="pay_validthrough_lbl">Valid through</string>
@@ -98,4 +100,6 @@
     <string name="payment_options_text">How would you like to pay your order?</string>
     <string name="remember_password">Remember my password</string>
     <string name="switch_off"></string>
+    <!-- SAUSE FUNDING STRINGS -->
+    <string name="sause_funding_home_btn">Be a founder member</string>
 </resources>

@@ -19,6 +19,9 @@
         <action
             android:id="@+id/callCalendar"
             app:destination="@id/calendarFragment" />
+        <action
+            android:id="@+id/callSauseFunding"
+            app:destination="@id/sauseFundingFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -190,4 +193,9 @@
         android:id="@+id/callPayOrderFragmentGlobal"
         app:destination="@id/payOrderFragment"
         app:popUpTo="@id/payOrderFragment" />
+    <fragment
+        android:id="@+id/sauseFundingFragment"
+        android:name="me.dgmieth.kungfubbq.SauseFundingFragment"
+        android:label="Founder member"
+        tools:layout="@layout/fragment_sause_funding" />
 </navigation>

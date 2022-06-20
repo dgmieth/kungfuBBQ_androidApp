@@ -49,6 +49,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
     private var cookingDates : List<CookingDateAndCookingDateDishesWithOrder>? = null
     private var datesArray : MutableList<Pair<LocalDate,Int>>? = null
     private var selectedCookingDate = 0
+    private var user: UserAndSocialMedia? = null
 
     private var _binding: FragmentCalendarBinding? = null
     private val binding get() = _binding!!
@@ -56,7 +57,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
 
     private var viewModel: RoomViewModel? = null
     private var bag = CompositeDisposable()
-
 
     private var todayDate = LocalDate.now()
     private val dateFormatterCV = DateTimeFormatter.ofPattern("dd")
@@ -108,7 +108,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                 }
                 datesArray = dArray
                 Handler(Looper.getMainLooper()).post{
-                    Log.d(TAG,"refreshCAlendar $selectedDate")
                     val oldDate = selectedDate
                     refreshCalendarView(todayDate,oldDate)
                     ifSelectedDateHasCookingDateMatch(selectedDate)
@@ -127,6 +126,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
         }
         viewModel?.user?.observe(viewLifecycleOwner, Observer {
             if(!it.user.email.isNullOrEmpty()){
+                user = it
                 getActiveCookingDatesNextTwelveMonths(it)
             }else{
                 returnUserFromDBNull()
@@ -159,10 +159,8 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                     if(day.owner >= DayOwner.THIS_MONTH){
                             if (day.date >= todayDate) {
                                 if (selectedDate != day.date) {
-                                    Log.d(TAG,"DayViewContainer $selectedDate")
                                     val oldDate = selectedDate
                                     selectedDate = day.date
-                                    Log.d(TAG,"DayViewContainer $selectedDate")
                                     refreshCalendarView(day.date, oldDate)
                                     ifSelectedDateHasCookingDateMatch(selectedDate)
                                 }
@@ -188,11 +186,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                         bind.kungfuBBQImg.visibility = View.VISIBLE
                     }
                 }
-                if(selectedDate == day.date){
-                    bind.selectionCircle.visibility = View.VISIBLE
-                    bind.todayDay.setTextColor(Color.BLACK)
-                    return
-                }
+
                 bind.selectionCircle.visibility = View.INVISIBLE
                 bind.todayCircle.visibility = View.INVISIBLE
                 bind.todayDay.setTextColor(Color.BLACK)
@@ -213,6 +207,15 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                 } else if (day.owner == DayOwner.PREVIOUS_MONTH || day.owner == DayOwner.NEXT_MONTH)  {
                     bind.todayDay.setTextColor(Color.TRANSPARENT)
                     bind.kungfuBBQImg.visibility = View.INVISIBLE
+                    bind.selectionCircle.visibility = View.INVISIBLE
+                }
+                if(selectedDate == day.date){
+                    if(day.owner == DayOwner.THIS_MONTH){
+                        bind.selectionCircle.visibility = View.VISIBLE
+                        bind.todayDay.setTextColor(Color.BLACK)
+                    }
+                }else{
+                    bind.selectionCircle.visibility = View.INVISIBLE
                 }
             }
         }
@@ -248,6 +251,9 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
             btnClick = true
             val action = CalendarFragmentDirections.callPaidOrder(selectedCookingDate)
             findNavController().navigate(action)
+        }
+        binding.calendarConfirm.setOnClickListener {
+            confirmPresence()
         }
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -295,6 +301,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                         var listOrderDishes : MutableList<OrderDishesDB> = arrayListOf()
                         for(i in 0 until cDates.length()){
                             val iJ = cDates.getJSONObject(i)
+                            Log.d(TAG, "maybe go ${iJ.isNull("maybeGo")}")
                             listCDates.add(CookingDateDB(
                                 iJ.getInt("cookingDateId"),
                                 iJ.getString("cookingDate"),
@@ -315,6 +322,8 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                                 iJ.getString("endTime"),
                                 iJ.getString("cookingDateEndAmPm"),
                                 iJ.getString("venue"),
+                                if (iJ.isNull("maybeGo")) 0 else iJ.getInt("maybeGo") ,
+                                if (iJ.isNull("eventOnly")) 0 else iJ.getInt("eventOnly")
                             ))
                             for(x in 0 until iJ.getJSONArray("dishes").length()){
                                 val ds = iJ.getJSONArray("dishes").getJSONObject(x)
@@ -364,6 +373,40 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                 }
             }
         })
+    }
+    private fun confirmPresence(){
+        user?.let {
+            val body = FormBody.Builder()
+                .add("email",it.user.email)
+                .add("id",it.user.userId.toString())
+                .add("cookingDate_id",selectedCookingDate.toString())
+                .build()
+            HttpCtrl.shared.newCall(HttpCtrl.post(getString(R.string.kungfuServerUrl),"/api/cookingCalendar/confirmPresence",body,it.user.token.toString())).enqueue(object :
+                Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    e.printStackTrace()
+                    showSpinner(false)
+                    showAlert("The attempt to confirm your presence failed with server message: ${e.localizedMessage}.","Confirmation failed!")
+                }
+                override fun onResponse(call: Call, response: Response) {
+                    response.use {
+                        showSpinner(false)
+                        if (!response.isSuccessful) throw IOException("Unexpected code $response")
+                        val json = JSONObject(response.body!!.string())
+                        if(!json.getBoolean("hasErrors")){
+                            val msg = json.getString("msg")
+                            showAlert(msg,"Presence confirmed!")
+                        }else{
+                            if(json.getInt("errorCode")==-1){
+                                showAlert("${getString(R.string.not_logged_in_message)}","${getString(R.string.not_logged_in)}")
+                            }else{
+                                showAlert("The attempt to confirm your presence failed with server message: ${json.getString("msg")}","Confirmation failed!")
+                            }
+                        }
+                    }
+                }
+            })
+        }
     }
     // ==============================================
     // UI update
@@ -473,13 +516,33 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                         paidOrder = false
                     )
                 }
-            }else if(cd.cookingDateAndDishes.cookingDate.cookingStatusId < 4){
+            }else if(cd.cookingDateAndDishes.cookingDate.cookingStatusId < 4) {
                 showOrderBtns(
                     placeOrder = false,
                     updateOrder = false,
                     payOrder = false,
                     paidOrder = false
                 )
+            }else if(cd.cookingDateAndDishes.cookingDate.cookingStatusId == 20){
+                if(cd.cookingDateAndDishes.cookingDate.maybeGo == 1){
+                    showOrderBtns(
+                        placeOrder = false,
+                        updateOrder = false,
+                        payOrder = false,
+                        paidOrder = false,
+                        confirmBtn = false,
+                        confirmMsg = true
+                    )
+                }else {
+                    showOrderBtns(
+                        placeOrder = false,
+                        updateOrder = false,
+                        payOrder = false,
+                        paidOrder = false,
+                        confirmBtn = true,
+                        confirmMsg = false
+                    )
+                }
             }else {
                 if(cd.order.isNotEmpty()){
                     var order = cd.order[0].order
@@ -531,7 +594,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                             "Order status")
                     }
                 }else{
-                    Log.d(TAG,"order is emtpy")
                     showOrderBtns(
                         placeOrder= false,
                         updateOrder = false,
@@ -543,11 +605,13 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
             }
         }
     }
-    private fun showOrderBtns(placeOrder:Boolean, updateOrder:Boolean, payOrder:Boolean, paidOrder:Boolean){
+    private fun showOrderBtns(placeOrder:Boolean, updateOrder:Boolean, payOrder:Boolean, paidOrder:Boolean, confirmBtn:Boolean = false, confirmMsg: Boolean = false){
         binding.calendarPreOrder.visibility = if(placeOrder) View.VISIBLE else View.INVISIBLE
         binding.calendarUpdateOrder.visibility = if(updateOrder) View.VISIBLE else View.INVISIBLE
         binding.calendarPayOrder.visibility = if(payOrder) View.VISIBLE else View.INVISIBLE
         binding.calendarPaidOrder.visibility = if(paidOrder) View.VISIBLE else View.INVISIBLE
+        binding.calendarConfirm.visibility = if(confirmBtn) View.VISIBLE else View.INVISIBLE
+        binding.calendarConfirmMsg.visibility = if(confirmMsg) View.VISIBLE else View.INVISIBLE
     }
     private fun returnUserFromDBNull() {
         showAlert("It was not possible to recover data from app`s database. Please restart the app.","Database error!")
@@ -569,6 +633,16 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar){
                         USER_LOGGED = false
                         val action = NavGraphDirections.callHome(false)
                         findNavController().navigate(action)
+                    }
+                    if(title=="Presence confirmed!"){
+                        showOrderBtns(
+                            placeOrder = false,
+                            updateOrder = false,
+                            payOrder = false,
+                            paidOrder = false,
+                            confirmBtn = false,
+                            confirmMsg = true
+                        )
                     }
                 })
             val alert = dialogBuilder.create()

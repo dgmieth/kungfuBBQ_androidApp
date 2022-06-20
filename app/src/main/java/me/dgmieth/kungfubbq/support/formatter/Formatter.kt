@@ -31,7 +31,8 @@ class FormatObject {
                 return menu
             }
             //if more than one dish in array -> system follows new business rule
-            menu = "<p><strong>BOX MEAL</strong></p>"
+            val menuIntr = "<p><strong>BOX MEAL</strong></p>"
+            menu = "$menuIntr"
             var fifoIndex = 1
             val fifoIntro = "<p><strong>FIRST COME, FIRST SERVED</strong></p>"
             var fifo = "$fifoIntro"
@@ -46,7 +47,7 @@ class FormatObject {
                     fifoIndex += 1
                 }
             }
-            menu = "${menu}${if(fifo != fifoIntro) fifo else ""}"
+            menu = "${if(menu != menuIntr) menu else ""} ${if(fifo != fifoIntro) fifo else ""}"
             return menu
         }
         fun formatEventAddress(monthValue:Int,dayMonth:Int,time:String,street:String?,city:String?,state:String?,endTime:String,venue:String?): String {

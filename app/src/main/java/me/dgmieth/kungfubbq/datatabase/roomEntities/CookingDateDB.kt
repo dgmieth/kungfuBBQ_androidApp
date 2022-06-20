@@ -43,6 +43,10 @@ data class CookingDateDB (
     var cookingDateEndAmPm: String,
     @ColumnInfo(name = VENUE)
     var venue: String,
+    @ColumnInfo(name = MAYBE_GO)
+    var maybeGo: Int,
+    @ColumnInfo(name = EVENT_ONLY)
+    var eventOnly: Int,
         ){
     companion object{
         const val TABLE_NAME="CookingDates"
@@ -65,6 +69,8 @@ data class CookingDateDB (
         const val COOKING_STATUS_ID = "cookingStatusId"
         const val COOKING_STATUS = "cookingStatus"
         const val MENU_ID = "menuID"
+        const val MAYBE_GO = "maybeGo"
+        const val EVENT_ONLY = "eventOnly"
     }
 }
 @Entity(tableName = CookingDateDishesDB.TABLE_NAME,primaryKeys = ["dishId","cookingDateIdFk"], foreignKeys = arrayOf(

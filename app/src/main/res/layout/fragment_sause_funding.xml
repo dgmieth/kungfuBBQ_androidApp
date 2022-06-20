@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sauseFunding"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SauseFundingFragment">
+
+    <ImageView
+        android:id="@+id/sauseLogoBAndW2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.06"
+        android:scaleType="centerCrop"
+        android:src="@drawable/b_and_w_logo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/sauseScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel placerat sem. Maecenas sapien diam, laoreet at massa a, lobortis sodales quam. Suspendisse in augue vitae odio malesuada porttitor. Duis maximus fringilla est, nec sodales libero molestie vel. Nullam at ornare quam, ac consequat nisi. Quisque congue dignissim porttitor. Vivamus cursus lacinia justo ac finibus. Donec dolor quam, maximus non enim egestas, ultricies faucibus turpis. Nulla nunc enim, semper in aliquam vitae, elementum ut dolor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Ut eget nisl et mauris malesuada laoreet. Quisque vel blandit purus. Morbi semper eros vel orci suscipit, eget maximus odio dapibus.  Ut in finibus mi. Aliquam ut luctus eros. Mauris facilisis elementum risus, eu laoreet nulla ullamcorper sed. Curabitur mi arcu, laoreet in metus non, vestibulum ullamcorper libero. Nunc condimentum dui sed tellus vestibulum, consequat ornare magna semper. Mauris nec eros efficitur, sagittis tellus sit amet, dapibus urna. Nam vitae blandit ex. Pellentesque sodales dui egestas lacinia bibendum. Vivamus ac enim nec magna tincidunt scelerisque nec at libero.  Nullam consequat diam nec massa semper, at dignissim quam finibus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec maximus lacus in leo rutrum, vel varius neque laoreet. Nam varius iaculis sapien, eu interdum orci sollicitudin mattis. Maecenas ac felis at sapien tristique tempus. Nullam laoreet tincidunt enim, maximus consequat eros rhoncus dapibus. Etiam lacinia efficitur convallis.  Mauris nec eleifend augue. Vestibulum cursus, sem sed volutpat vestibulum, quam nulla ullamcorper sem, a iaculis urna libero nec tortor. In aliquam pulvinar turpis sit amet fermentum. Curabitur quis dui nisi. Donec vitae pharetra nulla. Nam metus leo, sodales at ex convallis, placerat accumsan erat. Morbi ultrices, odio blandit finibus eleifend, ipsum ipsum hendrerit ligula, in accumsan odio nunc quis nunc. In sollicitudin pretium lorem et euismod. Cras a accumsan diam, non tristique nibh. Curabitur fermentum feugiat dui, dapibus luctus mauris congue eget. Donec in diam sit amet dui mattis mollis eget in nibh.  Mauris quam nisi, consequat eget lacus nec, imperdiet iaculis dolor. Praesent bibendum facilisis velit, sed placerat orci posuere vel. Maecenas eleifend tellus a cursus pharetra. Sed vel libero lacinia, pretium turpis eget, rutrum eros. Quisque ut tincidunt ipsum, non interdum purus. Integer suscipit aliquam ex, eget rutrum enim mattis in. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nullam enim magna, vestibulum vitae magna vel, dictum fermentum ipsum. Proin at tellus in velit tempus tempus non varius erat. Mauris sagittis tellus vitae varius elementum.  Vivamus eget accumsan ante. Proin tincidunt sapien sapien, eget tempor dui finibus eu. Sed convallis eleifend elit ut luctus. Quisque at tempor est. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ultricies augue ligula, id aliquet lacus gravida quis. Praesent id massa nulla. Aliquam suscipit suscipit nisl, nec maximus nisi condimentum hendrerit. Duis placerat, enim eu faucibus gravida, lacus metus gravida erat, ac dignissim ante erat vitae magna. Aenean et tincidunt est. In hac habitasse platea dictumst. In hac habitasse platea dictumst.  In volutpat placerat nisl id consectetur. Sed dignissim maximus tellus. Nullam elementum vestibulum interdum. Sed hendrerit tortor cursus volutpat posuere. Donec gravida laoreet arcu, porta consectetur est pulvinar a. Curabitur vel dui quis justo dapibus ullamcorper. Integer et ligula eget risus egestas egestas accumsan nec enim. Vivamus id ligula quam. Morbi fermentum, lacus non faucibus condimentum, neque arcu tempus sem, quis scelerisque nisi sapien ultricies leo. Proin bibendum porta efficitur. Proin ac augue id velit porttitor congue a vel dui. Suspendisse rhoncus faucibus efficitur. Etiam mollis augue nec commodo posuere.  Morbi mattis neque ante, vitae aliquet turpis placerat non. Duis cursus feugiat sodales. Aenean vehicula diam a consectetur egestas. Ut ac ipsum pulvinar, mattis est a, pulvinar nibh. Quisque vulputate id nisl a cursus. Proin at ullamcorper eros. Nullam dui mauris, efficitur sit amet nulla non, scelerisque posuere mi. Ut molestie congue nibh non tincidunt. Nullam diam risus, rhoncus eget dignissim eget, tempus eu neque. Curabitur nec commodo velit.  Vestibulum vel viverra tortor. Suspendisse potenti. Mauris egestas sapien nec consequat accumsan. Cras porttitor, nulla sit amet laoreet consequat, magna sem imperdiet nibh, vel viverra arcu orci nec justo. Nam egestas efficitur elit nec ultricies. Mauris augue erat, condimentum at nulla non, mattis malesuada tellus. Vestibulum orci urna, ultrices ut porttitor quis, feugiat sit amet arcu. Proin porta mauris nec placerat tincidunt. Fusce efficitur, leo eget suscipit fermentum, orci erat viverra odio, sed ultricies sem lorem sed arcu. Duis dolor diam, fermentum vel porta quis, posuere a est. Pellentesque quis fringilla dui, vitae fringilla nunc. Morbi sed lectus eu nisi iaculis efficitur. Donec efficitur ut mauris non consequat. Sed rutrum ex vel ultricies fringilla. Donec odio turpis, ullamcorper nec eros ut, faucibus fringilla sem.  Nam tempor tellus a ipsum porta, nec tristique enim fringilla. Vivamus eu volutpat est, in vehicula tellus. Sed tellus elit, dignissim eget fermentum eu, sodales eu ligula. Ut ullamcorper neque ornare ante ullamcorper posuere. Quisque eleifend felis eget risus placerat, tristique cursus turpis volutpat. Mauris ac dignissim eros. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent id urna nec nulla blandit mollis. Proin tristique ultrices iaculis. Nullam sed gravida augue, at accumsan augue. Proin congue, nibh ac tincidunt maximus, lectus diam finibus nulla, accumsan ullamcorper urna mauris ut mi. Maecenas venenatis imperdiet tincidunt. Quisque scelerisque sed orci ac egestas. Fusce vestibulum, sapien a viverra luctus, ante elit varius odio, id euismod magna libero maximus enim."
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:id="@+id/sauseButtons"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="16dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                >
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".33" />
+
+                <Button
+                    android:id="@+id/sauseCancelBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/btn_height"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_negative_action"
+                    android:fontFamily="@font/palatino"
+                    android:text="@string/btn_cancel"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/btn_text_size"
+                    android:textStyle="bold" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".34" />
+
+                <Button
+                    android:id="@+id/sauseSendBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/btn_height"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_affimative_action"
+                    android:fontFamily="@font/palatino"
+                    android:text="@string/btn_send"
+                    android:textAllCaps="false"
+                    android:textColor="@color/i_black"
+                    android:textSize="@dimen/btn_text_size"
+                    android:textStyle="bold" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".33" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
