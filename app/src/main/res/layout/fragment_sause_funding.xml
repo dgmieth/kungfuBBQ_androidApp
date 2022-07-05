@@ -5,7 +5,7 @@
     android:id="@+id/sauseFunding"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SauseFundingFragment">
+    tools:context=".funding.SauseFundingFragment">
 
     <ImageView
         android:id="@+id/sauseLogoBAndW2"
@@ -29,21 +29,410 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/sauseFundingMainLinear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel placerat sem. Maecenas sapien diam, laoreet at massa a, lobortis sodales quam. Suspendisse in augue vitae odio malesuada porttitor. Duis maximus fringilla est, nec sodales libero molestie vel. Nullam at ornare quam, ac consequat nisi. Quisque congue dignissim porttitor. Vivamus cursus lacinia justo ac finibus. Donec dolor quam, maximus non enim egestas, ultricies faucibus turpis. Nulla nunc enim, semper in aliquam vitae, elementum ut dolor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Ut eget nisl et mauris malesuada laoreet. Quisque vel blandit purus. Morbi semper eros vel orci suscipit, eget maximus odio dapibus.  Ut in finibus mi. Aliquam ut luctus eros. Mauris facilisis elementum risus, eu laoreet nulla ullamcorper sed. Curabitur mi arcu, laoreet in metus non, vestibulum ullamcorper libero. Nunc condimentum dui sed tellus vestibulum, consequat ornare magna semper. Mauris nec eros efficitur, sagittis tellus sit amet, dapibus urna. Nam vitae blandit ex. Pellentesque sodales dui egestas lacinia bibendum. Vivamus ac enim nec magna tincidunt scelerisque nec at libero.  Nullam consequat diam nec massa semper, at dignissim quam finibus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec maximus lacus in leo rutrum, vel varius neque laoreet. Nam varius iaculis sapien, eu interdum orci sollicitudin mattis. Maecenas ac felis at sapien tristique tempus. Nullam laoreet tincidunt enim, maximus consequat eros rhoncus dapibus. Etiam lacinia efficitur convallis.  Mauris nec eleifend augue. Vestibulum cursus, sem sed volutpat vestibulum, quam nulla ullamcorper sem, a iaculis urna libero nec tortor. In aliquam pulvinar turpis sit amet fermentum. Curabitur quis dui nisi. Donec vitae pharetra nulla. Nam metus leo, sodales at ex convallis, placerat accumsan erat. Morbi ultrices, odio blandit finibus eleifend, ipsum ipsum hendrerit ligula, in accumsan odio nunc quis nunc. In sollicitudin pretium lorem et euismod. Cras a accumsan diam, non tristique nibh. Curabitur fermentum feugiat dui, dapibus luctus mauris congue eget. Donec in diam sit amet dui mattis mollis eget in nibh.  Mauris quam nisi, consequat eget lacus nec, imperdiet iaculis dolor. Praesent bibendum facilisis velit, sed placerat orci posuere vel. Maecenas eleifend tellus a cursus pharetra. Sed vel libero lacinia, pretium turpis eget, rutrum eros. Quisque ut tincidunt ipsum, non interdum purus. Integer suscipit aliquam ex, eget rutrum enim mattis in. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nullam enim magna, vestibulum vitae magna vel, dictum fermentum ipsum. Proin at tellus in velit tempus tempus non varius erat. Mauris sagittis tellus vitae varius elementum.  Vivamus eget accumsan ante. Proin tincidunt sapien sapien, eget tempor dui finibus eu. Sed convallis eleifend elit ut luctus. Quisque at tempor est. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ultricies augue ligula, id aliquet lacus gravida quis. Praesent id massa nulla. Aliquam suscipit suscipit nisl, nec maximus nisi condimentum hendrerit. Duis placerat, enim eu faucibus gravida, lacus metus gravida erat, ac dignissim ante erat vitae magna. Aenean et tincidunt est. In hac habitasse platea dictumst. In hac habitasse platea dictumst.  In volutpat placerat nisl id consectetur. Sed dignissim maximus tellus. Nullam elementum vestibulum interdum. Sed hendrerit tortor cursus volutpat posuere. Donec gravida laoreet arcu, porta consectetur est pulvinar a. Curabitur vel dui quis justo dapibus ullamcorper. Integer et ligula eget risus egestas egestas accumsan nec enim. Vivamus id ligula quam. Morbi fermentum, lacus non faucibus condimentum, neque arcu tempus sem, quis scelerisque nisi sapien ultricies leo. Proin bibendum porta efficitur. Proin ac augue id velit porttitor congue a vel dui. Suspendisse rhoncus faucibus efficitur. Etiam mollis augue nec commodo posuere.  Morbi mattis neque ante, vitae aliquet turpis placerat non. Duis cursus feugiat sodales. Aenean vehicula diam a consectetur egestas. Ut ac ipsum pulvinar, mattis est a, pulvinar nibh. Quisque vulputate id nisl a cursus. Proin at ullamcorper eros. Nullam dui mauris, efficitur sit amet nulla non, scelerisque posuere mi. Ut molestie congue nibh non tincidunt. Nullam diam risus, rhoncus eget dignissim eget, tempus eu neque. Curabitur nec commodo velit.  Vestibulum vel viverra tortor. Suspendisse potenti. Mauris egestas sapien nec consequat accumsan. Cras porttitor, nulla sit amet laoreet consequat, magna sem imperdiet nibh, vel viverra arcu orci nec justo. Nam egestas efficitur elit nec ultricies. Mauris augue erat, condimentum at nulla non, mattis malesuada tellus. Vestibulum orci urna, ultrices ut porttitor quis, feugiat sit amet arcu. Proin porta mauris nec placerat tincidunt. Fusce efficitur, leo eget suscipit fermentum, orci erat viverra odio, sed ultricies sem lorem sed arcu. Duis dolor diam, fermentum vel porta quis, posuere a est. Pellentesque quis fringilla dui, vitae fringilla nunc. Morbi sed lectus eu nisi iaculis efficitur. Donec efficitur ut mauris non consequat. Sed rutrum ex vel ultricies fringilla. Donec odio turpis, ullamcorper nec eros ut, faucibus fringilla sem.  Nam tempor tellus a ipsum porta, nec tristique enim fringilla. Vivamus eu volutpat est, in vehicula tellus. Sed tellus elit, dignissim eget fermentum eu, sodales eu ligula. Ut ullamcorper neque ornare ante ullamcorper posuere. Quisque eleifend felis eget risus placerat, tristique cursus turpis volutpat. Mauris ac dignissim eros. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent id urna nec nulla blandit mollis. Proin tristique ultrices iaculis. Nullam sed gravida augue, at accumsan augue. Proin congue, nibh ac tincidunt maximus, lectus diam finibus nulla, accumsan ullamcorper urna mauris ut mi. Maecenas venenatis imperdiet tincidunt. Quisque scelerisque sed orci ac egestas. Fusce vestibulum, sapien a viverra luctus, ante elit varius odio, id euismod magna libero maximus enim."
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
+            android:orientation="vertical"
+            android:weightSum="10">
 
             <LinearLayout
-                android:id="@+id/sauseButtons"
+                android:id="@+id/sauseFundingWhatLinear"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/sauseFundingWhatLinearTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <ImageView
+                        android:id="@+id/sauseFundingWhatIcon"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/funding_icon_height"
+                        android:layout_weight="2"
+
+                        android:src="@drawable/what" />
+
+                    <TextView
+                        android:id="@+id/sauseFundingWhatTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/font_palatino"
+                        android:gravity="center_vertical"
+                        android:paddingEnd="@dimen/funding_title_padding"
+                        android:paddingRight="@dimen/funding_title_padding"
+                        android:text="@string/what_title"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/funding_title_font_size"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/sauseFundingWhatText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/font_palatino"
+                    android:justificationMode="inter_word"
+                    android:paddingStart="@dimen/funding_text_padding"
+                    android:paddingLeft="@dimen/funding_text_padding"
+                    android:paddingEnd="@dimen/funding_text_padding"
+                    android:paddingRight="@dimen/funding_text_padding"
+                    android:text="@string/what_text"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/funding_text_font_size" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fadingEdge="horizontal|vertical"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/funding_logo_divider_padding"
+                android:paddingBottom="@dimen/funding_logo_divider_padding"
+                android:requiresFadingEdge="horizontal|vertical"
+                android:weightSum="5">
+
+                <ImageView
+                    android:id="@+id/logoFirstDivider1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="12dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/logo_divider" />
+
+                <ImageView
+                    android:id="@+id/logoFirstDivider2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="12dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/logo_divider" />
+
+                <ImageView
+                    android:id="@+id/logoFirstDivider3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="12dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/logo_divider" />
+
+                <ImageView
+                    android:id="@+id/logoFirstDivider4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/funding_logo_divider_height"
+                    android:layout_weight="1"
+                    android:src="@drawable/logo_divider" />
+
+                <ImageView
+                    android:id="@+id/logoFirstDivider5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="12dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/logo_divider" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/sauseFundingHistoryLinear"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/sauseFundingHistoryVertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <ImageView
+                        android:id="@+id/sauseFundingHistoryIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="60dp"
+                        android:layout_weight="2"
+                        android:src="@drawable/history" />
+
+                    <TextView
+                        android:id="@+id/sauseFundingHistoryTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/font_palatino"
+                        android:gravity="center_vertical"
+                        android:paddingEnd="8dp"
+                        android:paddingRight="8dp"
+                        android:text="Ok! Tell me about it..."
+                        android:textAlignment="textStart"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/sauseFundingHistoryText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/font_palatino"
+                    android:justificationMode="inter_word"
+                    android:paddingStart="12dp"
+                    android:paddingLeft="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingBottom="12dp"
+                    android:text="We wanted to produce one of our sauces in large scale. So, a couple of months ago we sent our recipe to a Lab to start studies and try outs of the formula. The Lab was able to reproduce it and we are finally able to mass produce it.  We want to order a first batch containing 10,000 sauce bottles. It will cost us U$ 5,000.00. This is the part where you can become a founding member. We will start pre-selling this sauce bottles. Every and each one of you that pre-orders one or more bottles will become a founding member of this sauce."
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/fontColor"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/logoSecondDivider"
+                android:layout_width="match_parent"
+                android:layout_height="12dp"
+                android:src="@drawable/logo_divider"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/sauseFundingBenefitsLinear"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/sauseFundingBenefitsVertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/sauseFundingBenefitsIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/funding_icon_height"
+                        android:layout_weight="2"
+                        android:src="@drawable/benefits" />
+
+                    <TextView
+                        android:id="@+id/sauseFundingBenefitsTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/font_palatino"
+                        android:gravity="center_vertical"
+                        android:paddingEnd="@dimen/funding_title_padding"
+                        android:paddingRight="@dimen/funding_title_padding"
+                        android:text="@string/benefits_title"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/funding_title_font_size"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/sauseFundingBenefitsText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/font_palatino"
+                    android:justificationMode="inter_word"
+                    android:paddingStart="@dimen/funding_text_padding"
+                    android:paddingLeft="@dimen/funding_text_padding"
+                    android:paddingEnd="@dimen/funding_text_padding"
+                    android:paddingRight="@dimen/funding_text_padding"
+                    android:text="@string/benefits_text"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/funding_text_font_size" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/funding_logo_divider_padding"
+                android:paddingBottom="@dimen/funding_logo_divider_padding"
+                android:weightSum="5">
+
+                <ImageView
+                    android:id="@+id/logoThirdDivider1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/funding_logo_divider_height"
+                    android:layout_weight="1"
+                    android:src="@drawable/logo_divider" />
+
+                <ImageView
+                    android:id="@+id/logoThirdDivider2"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/funding_logo_divider_height"
+                    android:layout_weight="1"
+                    android:src="@drawable/logo_divider" />
+
+                <ImageView
+                    android:id="@+id/logoThirdDivider3"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/funding_logo_divider_height"
+                    android:layout_weight="1"
+                    android:src="@drawable/logo_divider" />
+
+                <ImageView
+                    android:id="@+id/logoThirdDivider4"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/funding_logo_divider_height"
+                    android:layout_weight="1"
+                    android:src="@drawable/logo_divider" />
+
+                <ImageView
+                    android:id="@+id/logoThirdDivider5"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/funding_logo_divider_height"
+                    android:layout_weight="1"
+                    android:src="@drawable/logo_divider" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/sauseFundingKeepTrackLinear"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/sauseFundingKeepTrackVertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <ImageView
+                        android:id="@+id/keeptrackIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/funding_icon_height"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="2"
+                        android:src="@drawable/keeptrack" />
+
+                    <TextView
+                        android:id="@+id/keeptrackTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/font_palatino"
+                        android:gravity="center_vertical"
+                        android:paddingEnd="@dimen/funding_title_padding"
+                        android:paddingRight="@dimen/funding_title_padding"
+                        android:text="@string/keeptrack_title"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/funding_title_font_size"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/keeptrackText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/font_palatino"
+                    android:justificationMode="inter_word"
+                    android:paddingStart="@dimen/funding_text_padding"
+                    android:paddingLeft="@dimen/funding_text_padding"
+                    android:paddingEnd="@dimen/funding_text_padding"
+                    android:paddingRight="@dimen/funding_text_padding"
+                    android:text="@string/keeptrack_text"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/funding_text_font_size" />
+
+                <com.akexorcist.roundcornerprogressbar.TextRoundCornerProgressBar
+                    android:id="@+id/fundingProgressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="@dimen/funding_progressbar_horizontal_padding"
+                    android:layout_marginLeft="@dimen/funding_progressbar_horizontal_padding"
+                    android:layout_marginTop="@dimen/funding_progressbar_vertical_margin"
+                    android:layout_marginEnd="@dimen/funding_progressbar_horizontal_padding"
+                    android:layout_marginRight="@dimen/funding_progressbar_horizontal_padding"
+                    android:layout_marginBottom="@dimen/funding_progressbar_vertical_margin"
+                    app:rcAnimationEnable="true"
+                    app:rcBackgroundColor="@color/i_reda"
+                    app:rcBackgroundPadding="2dp"
+                    app:rcMax="100"
+                    app:rcProgress="0"
+                    app:rcProgressColor="@color/i_yellow"
+                    app:rcRadius="10dp"
+                    app:rcReverse="false"
+                    app:rcSecondaryProgress="0"
+                    app:rcSecondaryProgressColor="@color/i_gray"
+                    app:rcTextProgress="0"
+                    app:rcTextProgressColor="@color/i_black"
+                    app:rcTextProgressSize="20sp">
+
+                </com.akexorcist.roundcornerprogressbar.TextRoundCornerProgressBar>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/font_palatino"
+                        android:paddingStart="@dimen/funding_text_padding"
+                        android:paddingLeft="@dimen/funding_text_padding"
+                        android:text="Pre-Orders:"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/funding_amounts_font_size"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/fundingPreOrdersAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/font_palatino"
+                        android:text="U$ 1.3500,00"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/funding_amounts_font_size"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/font_palatino"
+                        android:text="Tips:"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/funding_amounts_font_size"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/fundingTipsAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/font_palatino"
+                        android:paddingEnd="@dimen/funding_text_padding"
+                        android:text="U$ 5.555,00"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/funding_amounts_font_size"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/fundingButtons"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
@@ -51,8 +440,7 @@
                 android:layout_marginEnd="16dp"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                >
+                app:layout_constraintStart_toStartOf="parent">
 
                 <Space
                     android:layout_width="wrap_content"
@@ -60,13 +448,13 @@
                     android:layout_weight=".33" />
 
                 <Button
-                    android:id="@+id/sauseCancelBtn"
+                    android:id="@+id/fundingCancelBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/btn_height"
                     android:layout_weight="1"
                     android:background="@drawable/button_negative_action"
                     android:fontFamily="@font/palatino"
-                    android:text="@string/btn_cancel"
+                    android:text="@string/funding_btns_pass"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="@dimen/btn_text_size"
@@ -78,13 +466,13 @@
                     android:layout_weight=".34" />
 
                 <Button
-                    android:id="@+id/sauseSendBtn"
+                    android:id="@+id/fundingSendBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/btn_height"
                     android:layout_weight="1"
                     android:background="@drawable/button_affimative_action"
                     android:fontFamily="@font/palatino"
-                    android:text="@string/btn_send"
+                    android:text="@string/funding_btns_want"
                     android:textAllCaps="false"
                     android:textColor="@color/i_black"
                     android:textSize="@dimen/btn_text_size"
@@ -97,4 +485,24 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/sauceFundingSpinnerLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/spinnerBlue"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:id="@+id/loginProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:background="@drawable/spiner_ic" />
+
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

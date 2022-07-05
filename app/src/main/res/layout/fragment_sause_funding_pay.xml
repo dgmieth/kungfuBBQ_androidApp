@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:foregroundTint="@color/secondary"
+    android:gravity="center"
+    tools:context=".funding.SauseFundingPayFragment">
+    <ImageView
+        android:id="@+id/sauceFundingPayLogoBAndW"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.06"
+        android:scaleType="centerCrop"
+        android:src="@drawable/b_and_w_logo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/sauceFundingPayCardNumberLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/pay_cardnumber_lbl"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_textsize"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/sauceFundingPayCardCodeLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/pay_cardcode_lbl"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_textsize"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sauceFundingPayCardNumber" />
+
+    <TextView
+        android:id="@+id/sauceFundingPayValidLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/pay_validthrough_lbl"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_textsize"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sauceFundingPayCardCode" />
+
+    <EditText
+        android:id="@+id/sauceFundingPayCardNumber"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/edit_text_height"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="32dp"
+        android:background="@color/white"
+        android:ems="10"
+        android:fontFamily="@font/palatino"
+        android:hint="1234 4567 8900 0000 "
+        android:inputType="number"
+        android:maxLength="19"
+        android:minHeight="48dp"
+        android:textAlignment="center"
+        android:textColor="@color/i_black"
+        android:textColorHint="@color/textEditHint"
+        android:textSize="@dimen/global_textsize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sauceFundingPayCardNumberLbl"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <EditText
+        android:id="@+id/sauceFundingPayCardCode"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/edit_text_height"
+        android:layout_marginStart="96dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="96dp"
+        android:background="@color/white"
+        android:ems="10"
+        android:fontFamily="@font/palatino"
+        android:hint="123"
+        android:imeOptions="actionDone"
+        android:inputType="number"
+        android:maxLength="4"
+        android:minHeight="48dp"
+        android:textAlignment="center"
+        android:textColor="@color/i_black"
+        android:textColorHint="@color/textEditHint"
+        android:textSize="@dimen/global_textsize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sauceFundingPayCardCodeLbl"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <NumberPicker
+        android:id="@+id/sauceFundingPayCardYear"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/number_pkr_height"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="75dp"
+        android:theme="@style/picker"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/sauceFundingPayCardMonth"
+        app:layout_constraintTop_toBottomOf="@+id/sauceFundingPayValidLbl" />
+
+    <NumberPicker
+        android:id="@+id/sauceFundingPayCardMonth"
+        android:layout_width="85dp"
+        android:layout_height="@dimen/number_pkr_height"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="4dp"
+        android:descendantFocusability="blocksDescendants"
+        android:theme="@style/picker"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sauceFundingPayValidLbl" />
+
+    <TextView
+        android:id="@+id/sauceFundingPayTipLbl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/pay_tip_lbl"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_textsize"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sauceFundingPayCardMonth" />
+
+    <LinearLayout
+        android:id="@+id/sauceFundingPayTipLayout"
+        android:layout_width="308dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sauceFundingPayTipLbl">
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25" />
+
+        <Button
+            android:id="@+id/sauceFundingPayTip15"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_short_height"
+            android:layout_weight="1"
+            android:background="@drawable/tip_buttons_layout"
+            android:backgroundTintMode="screen"
+            android:text="15%"
+            android:textColor="@color/tip_btn_text_color"
+            android:textStyle="bold"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25" />
+
+        <Button
+            android:id="@+id/sauceFundingPayTip20"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_short_height"
+            android:layout_weight="1"
+            android:background="@drawable/tip_buttons_layout"
+            android:text="20%"
+            android:textColor="@color/tip_btn_text_color"
+            android:textStyle="bold"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25" />
+
+        <Button
+            android:id="@+id/sauceFundingPayTipCustom"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_short_height"
+            android:layout_weight="1"
+            android:background="@drawable/tip_buttons_layout"
+            android:text="Custom"
+            android:textColor="@color/tip_btn_text_color"
+            android:textStyle="bold"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/sauceFundingPayQttyBottlesLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.25"
+        android:fontFamily="@font/palatino"
+        android:text="@string/funding_pay_bottles_qtty_label"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_textsize"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sauceFundingPayTipLayout" />
+
+    <TextView
+        android:id="@+id/sauceFundingPayQttyBottlesAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="38dp"
+        android:fontFamily="@font/palatino"
+        android:text="0"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_textsize"
+        app:layout_constraintBottom_toBottomOf="@+id/sauceFundingPayQttyBottlesLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/sauceFundingPayBottlesAmount" />
+
+    <TextView
+        android:id="@+id/sauceFundingPayBottlesAmountLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/funding_pay_bottles_amount_label"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_textsize"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sauceFundingPayQttyBottlesLabel" />
+
+    <TextView
+        android:id="@+id/sauceFundingPayBottlesAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="38dp"
+        android:fontFamily="@font/palatino"
+        android:text="U$ 0.00"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_textsize"
+        app:layout_constraintBottom_toBottomOf="@+id/sauceFundingPayBottlesAmountLbl"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/sauceFundingPayTipAmountLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/tip_amount_label"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_textsize"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sauceFundingPayBottlesAmountLbl" />
+
+    <TextView
+        android:id="@+id/sauceFundingPayTipAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="38dp"
+        android:fontFamily="@font/palatino"
+        android:text="U$ 0.00"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_textsize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sauceFundingPayBottlesAmount" />
+
+    <TextView
+        android:id="@+id/sauceFundingPayTotalAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="38dp"
+        android:fontFamily="@font/palatino"
+        android:text="U$ 0.00"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_textsize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sauceFundingPayTipAmount" />
+
+    <TextView
+        android:id="@+id/sauceFundingPayTotalAmountLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/palatino"
+        android:text="@string/pay_amount"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_textsize"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sauceFundingPayTipAmountLbl" />
+
+    <LinearLayout
+        android:id="@+id/sauceFundingPayButtons"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:descendantFocusability="blocksDescendants"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sauceFundingPayTotalAmountLbl">
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".33" />
+
+        <Button
+            android:id="@+id/sauceFundingPayCancelBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/btn_height"
+            android:layout_weight="1"
+            android:background="@drawable/button_negative_action"
+            android:fontFamily="@font/palatino"
+            android:text="@string/btn_cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/btn_text_size"
+            android:textStyle="bold" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".34" />
+
+        <Button
+            android:id="@+id/sauceFundingPayPayBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/btn_height"
+            android:layout_weight="1"
+            android:background="@drawable/button_affimative_action"
+            android:fontFamily="@font/palatino"
+            android:text="@string/btn_payorder"
+            android:textAllCaps="false"
+            android:textColor="@color/i_black"
+            android:textSize="@dimen/btn_text_size"
+            android:textStyle="bold" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".33" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/sauceFundingPaySpinnerLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/spinnerBlue"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ProgressBar
+            android:id="@+id/sauceFundingPayProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:background="@drawable/spiner_ic" />
+
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

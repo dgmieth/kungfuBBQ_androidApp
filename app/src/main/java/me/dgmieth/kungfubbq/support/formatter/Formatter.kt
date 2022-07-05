@@ -1,6 +1,5 @@
 package me.dgmieth.kungfubbq.support.formatter
 
-import android.text.Html
 //import com.onesignal.HTML
 import me.dgmieth.kungfubbq.datatabase.roomEntities.CookingDateDishesDB
 
@@ -9,7 +8,7 @@ const val TAG = "FORMATTER"
 class FormatObject {
     companion object{
         var shared = FormatObject()
-        private var mealBoxTotalAmount = 0.0
+        private var amount = 0.0
         private var dishesArray : MutableList<Int> = kotlin.collections.mutableListOf()
         private var address = ""
         private var timeVal = ""
@@ -19,13 +18,13 @@ class FormatObject {
             var menuIndex = 1
             //clearing list and total amount
             dishesArray.clear()
-            mealBoxTotalAmount = 0.0
+            amount = 0.0
             //if only one dish in array -> system follows first business rule
             if(ary.count()==1){
                 for(m in ary) {
                     menu = "${menu}<p>${menuIndex}- ${m.dishName}</p>"
                     menuIndex += 1
-                    mealBoxTotalAmount += m.dishPrice.toDouble()
+                    amount += m.dishPrice.toDouble()
                     dishesArray.add(m.dishId)
                 }
                 return menu
@@ -40,7 +39,7 @@ class FormatObject {
                 if(m.dishFifo==0){
                     menu = "${menu}<p>${menuIndex}- $${m.dishPrice} ${m.dishName}${if(m.dishDescription != "") " (${m.dishDescription})" else ""}</p>"
                     menuIndex += 1
-                    mealBoxTotalAmount += m.dishPrice.toDouble()
+                    amount += m.dishPrice.toDouble()
                     dishesArray.add(m.dishId)
                 }else{
                     fifo = "${fifo}<p>${fifoIndex}- $${m.dishPrice} ${m.dishName}${if(m.dishDescription != "") " (${m.dishDescription})" else ""}</p>"
@@ -84,10 +83,13 @@ class FormatObject {
             return this.dishesArray
         }
         fun returnMealBoxTotalAmount():Double{
-            return this.mealBoxTotalAmount
+            return this.amount
         }
         fun returnTotalAmountDue(mealsQtty:Int):Double{
-            return this.mealBoxTotalAmount*mealsQtty
+            return this.amount*mealsQtty
+        }
+        fun setTotalAmount(amount:Double){
+            this.amount = amount
         }
     }
 }

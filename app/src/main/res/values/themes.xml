@@ -12,20 +12,20 @@
 <!--        &lt;!&ndash; Status bar color. &ndash;&gt;-->
 <!--        <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>-->
         <!-- Fonts -->
-        <item name="android:textViewStyle">@style/PalatinoStyle</item>
-        <item name="android:buttonStyle">@style/PalatinoBtnStyle</item>
+        <item name="android:textViewStyle">@style/palatino_style</item>
+        <item name="android:buttonStyle">@style/palatino_btn_style</item>
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
     </style>
     <style name="AppTheme.Picker" parent="Theme.AppCompat.Light.NoActionBar" >
         <item name="android:textColorPrimary">@color/i_black</item>
         <item name="android:textSize">@dimen/global_textsize</item>
     </style>
-    <style name="PalatinoStyle" parent="android:Widget.TextView">
-        <item name="android:fontFamily">@font/palatino</item>
-        <item name="fontFamily">@font/palatino</item>
+    <style name="palatino_style" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/font_palatino</item>
+        <item name="fontFamily">@font/font_palatino</item>
     </style>
-    <style name="PalatinoBtnStyle" parent="android:Widget.Holo.Button">
-        <item name="android:fontFamily">@font/palatino</item>
+    <style name="palatino_btn_style" parent="android:Widget.Holo.Button">
+        <item name="android:fontFamily">@font/font_palatino</item>
         <item name="backgroundColor">@color/i_black</item>
     </style>
     <style name="AlertDialogTheme" parent="ThemeOverlay.AppCompat.Dialog.Alert">

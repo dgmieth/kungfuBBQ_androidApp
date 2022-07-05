@@ -32,7 +32,7 @@
             android:id="@+id/todayDay"
             android:layout_width="match_parent"
             android:layout_height="22dp"
-            android:fontFamily="sans-serif-medium"
+            android:fontFamily="@font/font_palatino"
             android:gravity="center"
             android:textColor="@color/i_black"
             android:textSize="18sp"

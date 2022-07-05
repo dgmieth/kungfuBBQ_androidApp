@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import me.dgmieth.kungfubbq.support.encryption.CryptLib
 import androidx.appcompat.app.AlertDialog
 import android.content.DialogInterface
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper

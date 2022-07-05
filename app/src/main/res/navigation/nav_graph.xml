@@ -195,7 +195,37 @@
         app:popUpTo="@id/payOrderFragment" />
     <fragment
         android:id="@+id/sauseFundingFragment"
-        android:name="me.dgmieth.kungfubbq.SauseFundingFragment"
+        android:name="me.dgmieth.kungfubbq.funding.SauseFundingFragment"
         android:label="Founder member"
-        tools:layout="@layout/fragment_sause_funding" />
+        tools:layout="@layout/fragment_sause_funding" >
+        <action
+            android:id="@+id/goToSauseFundingPayFragment"
+            app:destination="@id/sauseFundingPayFragment"
+            app:popUpTo="@id/sauseFundingPayFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/sauseFundingPayFragment"
+        android:name="me.dgmieth.kungfubbq.funding.SauseFundingPayFragment"
+        android:label="Payment"
+        tools:layout="@layout/fragment_sause_funding_pay">
+        <argument
+            android:name="bottleQtty"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <argument
+            android:name="price"
+            app:argType="float"
+            android:defaultValue="0" />
+        <argument
+            android:name="userEmail"
+            app:argType="string" />
+        <argument
+            android:name="userId"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="token"
+            app:argType="string" />
+    </fragment>
 </navigation>

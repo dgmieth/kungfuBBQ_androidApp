@@ -91,6 +91,7 @@ class UserInfoFragment : Fragment(R.layout.fragment_userinfo) {
                 showAlert("It was not possible to retrieve information from this app's database. Please restart the app.","Error!")
             }
         })
+
         viewModel?.getUser()
         _binding = FragmentUserinfoBinding.inflate(inflater, container, false)
         return binding.root

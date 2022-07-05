@@ -43,7 +43,7 @@ android {
         //versionName "2.8" // backgrounds, other ui details, button arrangement
         //versionName "2.9" // calendarView background change, calendarCtrl handling zero length result error
         //versionName "3.0" // selected date on calendar remains selected, venue and end times
-//        versionName "3.1" // remember my password inserted
+        //versionName "3.1" // remember my password inserted
         versionName "3.2" // event only capability added to calendar
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -119,5 +119,6 @@ dependencies {
     implementation("androidx.work:work-runtime-ktx:$work_version") {
         force = true
     }
-
+    //=================PROGRESS BAR
+    implementation 'com.akexorcist:round-corner-progress-bar:2.1.2'
 }

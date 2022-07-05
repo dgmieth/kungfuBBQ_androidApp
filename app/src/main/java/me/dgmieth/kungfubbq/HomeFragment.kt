@@ -15,7 +15,6 @@ import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import me.dgmieth.kungfubbq.databinding.FragmentHomeBinding
-import me.dgmieth.kungfubbq.datatabase.roomEntities.*
 import me.dgmieth.kungfubbq.httpCtrl.HttpCtrl
 import okhttp3.Call
 import okhttp3.Callback
@@ -51,7 +50,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         checkVersionCode()
-//        checkSauseFundingCampaignStatus()
+        checkSauceFundingCampaignStatus()
         selectedDate = LocalDate.now()
         Log.d(TAG,"checkVersionCode called, ${getString(R.string.kungfuServerUrlNoSchema)}")
         binding.homeLoginBtn.isVisible = !args.loggedIn
@@ -161,12 +160,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         })
     }
     //=====================================================================
-//checking version code
-    private fun checkSauseFundingCampaignStatus() {
+    //checking version code
+    private fun checkSauceFundingCampaignStatus() {
         if(!args.loggedIn){
             showHideSauseFundingBtn("off")
             return
         }
+        Log.d(TAG,"checkSauseFundingCampaignStatus")
         var httpUrl = HttpUrl.Builder()
             .scheme("https")
             .host("${getString(R.string.kungfuServerUrlNoSchema)}")
@@ -196,7 +196,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun showHideSauseFundingBtn(status : String){
         if(status=="off"){
             Handler(Looper.getMainLooper()).post {
-                binding.homeSauseFunding.isVisible = false
+                binding.homeSauseFunding.visibility = View.GONE
             }
         }
     }
