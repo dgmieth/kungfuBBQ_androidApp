@@ -43,7 +43,7 @@ class SauseFundingFragment : Fragment(R.layout.fragment_sause_funding) {
 
     private val DATA_FAILURE = "Data Request Failed"
     private val QTTY = "Quantity"
-    private var SAUCE_BATCH_COST : Double = 1.00
+    private var SAUCE_BATCH_COST : Double = 5709.00
 
     private var viewModel: RoomViewModel? = null
     private var bag = CompositeDisposable()
@@ -80,6 +80,8 @@ class SauseFundingFragment : Fragment(R.layout.fragment_sause_funding) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        formatWhatTextView()
+
         binding.fundingProgressBar.progress = 00.0F
         binding.fundingProgressBar.progressText = "0%"
         binding.fundingProgressBar.secondaryProgress = 0F
@@ -89,7 +91,7 @@ class SauseFundingFragment : Fragment(R.layout.fragment_sause_funding) {
         }
         binding.fundingSendBtn.setOnClickListener {
             val dec = DecimalFormat("#,###.00")
-            showAlert("Select how many bottles you would like to purchase. Each bottle costs U$ ${dec.format(price)}.",QTTY)
+            showAlert("Select how many bottles you would like to purchase. Each bottle costs $${dec.format(price)}.",QTTY)
         }
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -125,7 +127,7 @@ class SauseFundingFragment : Fragment(R.layout.fragment_sause_funding) {
                                 Log.d(TAG,"batchPrice is $SAUCE_BATCH_COST")
                                 val dec = DecimalFormat("#.##")
                                 val value = dec.format((msg.getDouble("totalAmount")/SAUCE_BATCH_COST)*100)
-                                binding.sauseFundingWhatText.text = String.format(getString(R.string.what_text),SAUCE_BATCH_COST)
+                                formatWhatTextView()
                                 binding.fundingProgressBar.progressText = "${(value).toFloat()}%"
                                 binding.fundingProgressBar.progress = ((msg.getDouble("totalAmount")/SAUCE_BATCH_COST)*100).toFloat()
                                 binding.fundingPreOrdersAmount.text = "U$ ${msg.getDouble("preOrders")}"
@@ -154,6 +156,11 @@ class SauseFundingFragment : Fragment(R.layout.fragment_sause_funding) {
     }
     //==========================================================
     //========== UI METHODS
+    private fun formatWhatTextView(){
+        Handler(Looper.getMainLooper()).post{
+            binding.sauseFundingWhatText.text = String.format(getString(R.string.what_text),SAUCE_BATCH_COST)
+        }
+    }
     private fun showSpinner(value: Boolean){
         Handler(Looper.getMainLooper()).post {
             binding.sauceFundingSpinnerLayout.visibility =  when(value){

@@ -71,8 +71,8 @@
     <string name="btn_confirm">Maybe I\'ll swing by!</string>
     <string name="msg_confirm_presence">We already know you may swing by &#128521;</string>
     <string name="pay_cardnumber_lbl">Credit Card Number</string>
-    <string name="pay_cardcode_lbl">Credit Card Code</string>
-    <string name="pay_validthrough_lbl">Valid through</string>
+    <string name="pay_cardcode_lbl">Security code</string>
+    <string name="pay_validthrough_lbl">Expiration</string>
     <string name="btn_paidorder">Checkout paid pre-order</string>
     <string name="calendar_no_cooking_msg">"Sorry! We are not cooking today... "</string>
     <string name="btn_register_register">Register</string>
@@ -106,15 +106,16 @@
     <string name="what_title">What? What do you mean?</string>
     <string name="what_text">Yes! You can help us Release Kungfu BBQ\'s first Sauce for retail!.\nA couple of months ago we sent our Peach Moonshine sauce recipe to the lab to bottle it, and now we are ready to order our first batch of about 2076 bottles! To begin the bottling process we need to pay $ %.2f.\nAnyone who preorders any number of these first bottles will be a \'Sauce Pioneer\', helping us found our first bottling contract.</string>
     <string name="benefits_title">Got\'cha! But what\'s in for me?</string>
-    <string name="benefits_text">1. Single print only, collectable Pioneer Token: this Token will display your order number, and will be redeemable for one free side of any sauce upon presenting it to us, any visit, any location. (Limit: one Token per guest, only awarded to each guest\'s first preorder during this campaign);\n2. A KungfuBBQ Ltd customized T-shirt;\n3. Your name will be on the first bottle you order with a custom message from our family. A true collectable.</string>
+    <string name="benefits_text">1. Single print only, collectable Pioneer Token: this Token will display your order number, and will be redeemable for one free side of any sauce upon presenting it to us, any visit, any location. (Limit: one Token per guest, only awarded upon each guest\'s first preorder during this campaign);\n2. A KungfuBBQ Ltd customized T-shirt;\n3. Your name will be on the first bottle you order with a custom message from our family. A true collectable.</string>
     <string name="keeptrack_title">Awesome\! But how will I\… I mean\… will I be able to\…</string>
     <string name="keeptrack_text">Upon purchasing, you will receive a receipt in your e-mail. When we receive the first batch we will contact you through mobile app notification, e-mail, phone and/or SMS to arrange the pick-up/delivery of your order.\nIn order to stay up to date on the progress of the campaign, check out the info below!</string>
     <string name="funding_btns_want">Let\'s do this!</string>
     <string name="funding_btns_pass">Maybe later</string>
     <string name="funding_pay_bottles_qtty_label">Bottle(s):</string>
     <string name="funding_pay_bottles_amount_label">Bottle(s) amount:</string>
-    <string name="funding_alert_tip_information">Every single penny we receive as tip on this payment will be added to the amount we need to purchased the first batch of our sauce &#128521;!</string>
+    <string name="funding_alert_tip_information">Every single penny we receive as a tip on this payment will be added to the amount we need to purchase the first batch of our sauce &#128521;!</string>
     <string name="shirt_size_alert_title">Inform T-Shirt size</string>
     <string name="shirt_size_error">Your sized wasn\'t saved.</string>
     <string name="extra_text_for_tshirt_size">Please select your t-shirt size: </string>
+    <string name="sauce_funding_tip_text">Leave a tip if you like!</string>
 </resources>

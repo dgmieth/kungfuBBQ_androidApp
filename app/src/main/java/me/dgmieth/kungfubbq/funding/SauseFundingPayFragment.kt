@@ -355,7 +355,7 @@ class SauseFundingPayFragment : Fragment(R.layout.fragment_sause_funding_pay) {
                                 showAlert("${getString(R.string.not_logged_in_message)}","${getString(R.string.not_logged_in)}")
                             }
                             else -> {
-                                showAlert(json.getString("msg"),"Error!")
+                                showAlert(json.getJSONObject("msg").getString("msg"),"Error!")
                             }
                         }
                     }
